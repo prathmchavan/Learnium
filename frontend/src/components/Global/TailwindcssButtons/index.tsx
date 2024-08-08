@@ -2,7 +2,7 @@
 import React from "react";
 import reactElementToJSXString from "react-element-to-jsx-string";
 import { toast, Toaster } from "sonner";
-import { ButtonsCard } from "./ui/tailwindcss-buttons";
+import { ButtonsCard } from "../../ui/tailwindcss-buttons";
 
 interface TailwindcssButtonsProps {
   name: string;
