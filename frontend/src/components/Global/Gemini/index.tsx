@@ -22,7 +22,7 @@ export function GoogleGeminiEffectDemo() {
       ref={ref}
     >
       <GoogleGeminiEffect
-      title="pc.ai"
+      title="Arpit.ai"
         pathLengths={[
           pathLengthFirst,
           pathLengthSecond,
