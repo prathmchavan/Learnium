@@ -30,7 +30,7 @@ const Navbar = () => {
 
             {/* Button at the end */}
             <div className="flex justify-end  items-center">
-                <TailwindcssButtons name="Login / Signup" />
+                <TailwindcssButtons name="Login / Signup" link="login"/>
             </div>
         </div>
     );
