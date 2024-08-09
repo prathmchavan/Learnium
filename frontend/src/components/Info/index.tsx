@@ -53,7 +53,7 @@ export function Info() {
     ];
 
     return (
-        <div className="my-32">
+        <div className="mt-32">
             <div className="text-center">
                 <h1 className="text-[#F6F6F6] text-4xl font-bold">Transforming Education Through Smart Systems, Quality <br /> Content, and Community Engagement</h1>
                 <h6 className="text-[#F6F6F6] py-10">Learnium offers a modern and inclusive educational platform that enhances learning through personalized paths,<br /> diverse resources, and collaborative engagement. Explore our features today!</h6>
@@ -62,7 +62,7 @@ export function Info() {
                 <Tabs tabs={tabs} />
             </div>
 
-            <div className=" my-64">
+            <div className=" mt-64 bg-[#0B0121] py-16">
                 <div className="my-20">
                     <h1 className="text-4xl text-center text-[#F6F6F6] font-bold">Discover, Engage, and Grow with Learnium</h1>
                 </div>
