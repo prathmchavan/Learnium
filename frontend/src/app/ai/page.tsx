@@ -1,28 +1,18 @@
-'use client';
+import Ai from '@/components/Ai'
+import { Boxes } from '@/components/ui/background-boxes'
+import React from 'react'
 
-import { callMenuSuggestionFlow } from '@/app/genkit';
-import { useState } from 'react';
-
-export default function Ai() {
-  const [menuItem, setMenu] = useState<string>('');
-
-  async function getMenuItem(formData: FormData) {
-    const theme = formData.get('theme')?.toString() ?? '';
-    const suggestion = await callMenuSuggestionFlow(theme);
-    setMenu(suggestion);
-  }
-
+const page = () => {
   return (
-    <main>
-      <form action={getMenuItem}>
-        <label>
-          Suggest a menu item for a restaurant with this theme:{' '}
-        </label>
-        <input type="text" name="theme" className='text-black' />
-        <button type="submit">Generate</button>
-      </form>
-      <br />
-      <pre>{menuItem}</pre>
-    </main>
-  );
+
+
+    // <div className="h-96 relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
+    //   <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+
+    //   <Boxes />
+    // </div>
+      <Ai />
+  )
 }
+
+export default page
