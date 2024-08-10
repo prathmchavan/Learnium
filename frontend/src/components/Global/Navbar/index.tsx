@@ -2,10 +2,15 @@
 import React from "react";
 import { TailwindcssButtons } from "../TailwindcssButtons";
 import Link from "next/link";
+import Image from "next/image";
+
 
 const Navbar = () => {
     return (
         <div className="bg-white bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-5 flex px-11 py-3">
+             <div className="flex justify-start  items-center">
+                    <Image src={'/logo/log.svg'} width={150} height={150} alt="logo"/>
+            </div>
             {/* Centered navigation items */}
             <ul className="flex flex-row justify-center items-center  gap-11 flex-grow text-[#E5E6FF]">
                 <li>
