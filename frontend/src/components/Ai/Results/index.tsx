@@ -1,90 +1,69 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useAptiContext } from '@/context/AptiContext';
 import React, { useEffect, useState } from 'react';
 
-interface Feedback {
-  questionId: number;
-  question: string;
-  correctAnswer: string;
-  userAnswer: string | undefined;
-}
-
 const Results: React.FC = () => {
-  const router = useRouter();
-  const [feedback, setFeedback] = useState<Feedback[]>([]);
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const answers = searchParams.get('answers');
-    const correctAnswers = searchParams.get('correctAnswers');
-    
-    if (answers && correctAnswers) {
-      const parsedAnswers = JSON.parse(decodeURIComponent(answers));
-      const parsedCorrectAnswers = JSON.parse(decodeURIComponent(correctAnswers));
-      
-      const feedbackData: Feedback[] = Object.keys(parsedCorrectAnswers).map((id) => {
-        const questionId = parseInt(id, 10);
-        return {
-          questionId,
-          question: `Question ${questionId}`, // Replace with actual question text if needed
-          correctAnswer: parsedCorrectAnswers[questionId],
-          userAnswer: parsedAnswers[questionId],
-        };
-      });
-      
-      setFeedback(feedbackData);
+    const { resu } = useAptiContext();
+    const [reportData, setReportData] = useState<any>(null);
+
+    useEffect(() => {
+        if (resu) {
+            setReportData(resu);
+
+        }
+    }, [resu]); 
+  
+
+    if (!reportData) {
+        return <div className="text-center">Loading results...</div>;
     }
-  }, []);
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const answers = searchParams.get('answers');
-  const correctAnswers = searchParams.get('correctAnswers');
+    const { reportCard, answerSheet } = reportData;
 
-  useEffect(() => {
-    if (answers && correctAnswers) {
-      const parsedAnswers = JSON.parse(decodeURIComponent(answers));
-      const parsedCorrectAnswers = JSON.parse(decodeURIComponent(correctAnswers));
-      
-      const feedbackData: Feedback[] = Object.keys(parsedCorrectAnswers).map((id) => {
-        const questionId = parseInt(id, 10);
-        return {
-          questionId,
-          question: `Question ${questionId}`, // Replace with actual question text if needed
-          correctAnswer: parsedCorrectAnswers[questionId],
-          userAnswer: parsedAnswers[questionId],
-        };
-      });
-      
-      setFeedback(feedbackData);
-    }
-  }, [answers, correctAnswers]);
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen ">
-      <h1 className="text-3xl font-bold mb-4">Test Results</h1>
-      <div className="w-full max-w-lg bg-gray-700 shadow-md rounded p-4">
-        {feedback.map((item, index) => (
-          <div key={index} className="mb-4">
-            <p className="text-lg">{item.question}</p>
-            <p className="text-sm text-green-500">
-              Correct Answer: {item.correctAnswer}
-            </p>
-            <p
-              className={`text-sm ${
-                item.userAnswer === item.correctAnswer ? 'text-green-500' : 'text-red-500'
-              }`}
-            >
-              Your Answer: {item.userAnswer || 'No answer selected'}
-            </p>
-            {item.userAnswer !== item.correctAnswer && (
-              <p className="text-sm text-yellow-500">
-                Feedback: Review this concept.
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen  p-4">
+            <h1 className="text-3xl font-bold mb-4">Test Results</h1>
+            
+            {/* Display the Quiz Report Card */}
+            <div className="w-full max-w-lg bg-gray-700 shadow-md rounded p-4 mb-4">
+                <h2 className="text-xl font-semibold mb-2">Quiz Report Card</h2>
+                <p className="text-lg font-medium mb-2">Total number of questions: {reportCard.totalQuestions}</p>
+                <p className="text-lg font-medium mb-2">Number of correct answers: {reportCard.correctAnswers}</p>
+                <p className="text-lg font-medium mb-2">Number of incorrect answers: {reportCard.incorrectAnswers}</p>
+                <p className="text-lg font-medium mb-2">Score: {reportCard.score}%</p>
+                <p className="text-lg font-medium mb-2">Feedback: {reportCard.feedback}</p>
+            </div>
+            
+            {/* Display the Answersheet */}
+            <div className="w-full max-w-lg bg-gray-700 shadow-md rounded p-4">
+                <h2 className="text-xl font-semibold mb-2">Answersheet</h2>
+                <table className="w-full table-auto border-collapse border border-gray-800">
+                    <thead>
+                        <tr>
+                            <th className="border border-gray-600 p-2">Question ID</th>
+                            <th className="border border-gray-600 p-2">Question Text</th>
+                            <th className="border border-gray-600 p-2">User Answer</th>
+                            <th className="border border-gray-600 p-2">Correct Answer</th>
+                            <th className="border border-gray-600 p-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {answerSheet.map((item : any) => (
+                            <tr key={item.questionId}>
+                                <td className="border border-gray-600 p-2">{item.questionId}</td>
+                                <td className="border border-gray-600 p-2">{item.questionText}</td>
+                                <td className="border border-gray-600 p-2">{item.userAnswer ?? 'No answer selected'}</td>
+                                <td className="border border-gray-600 p-2">{item.correctAnswer}</td>
+                                <td className={`border border-gray-600 p-2 ${item.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                                    {item.isCorrect ? 'Correct' : 'Incorrect'}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
 };
 
 export default Results;
