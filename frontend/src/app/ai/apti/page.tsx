@@ -4,9 +4,9 @@ import React from 'react'
 
 const page = () => {
   return (
-    <AptiProvider>
+    // <AptiProvider>
       <Apti />
-    </AptiProvider>
+    // {/* </AptiProvider> */}
   )
 }
 
