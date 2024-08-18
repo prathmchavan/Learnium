@@ -24,7 +24,7 @@ const Apti: React.FC = () => {
                 <DifficultySelector onSelect={handleDifficultySelect} />
             ) : (
                 <>
-                    <TestTimer duration={600} />
+                    <TestTimer duration={1200} />
                     <div className="w-full max-w-lg">
                         {questions.map((question) => (
                             <QuestionCard

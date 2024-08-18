@@ -1,4 +1,5 @@
 import { AptiProvider } from "@/context/AptiContext";
+import { OaProvider } from "@/context/OaContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -16,12 +17,14 @@ export default function AiLayout({
   children: React.ReactNode;
 }>) {
   return (
-  
-       <AptiProvider>
+    <AptiProvider>
+
+      <OaProvider>
 
         {children}
-       </AptiProvider>
-     
-   
+      </OaProvider>
+    </AptiProvider>
+
+
   );
 }

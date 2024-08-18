@@ -31,16 +31,16 @@ configureGenkit({
 });
 
 // Define a simple flow that prompts an LLM to generate menu suggestions.
-const menuSuggestionFlow = defineFlow(
+const questionGenerationFlow = defineFlow(
   {
-    name: 'menuSuggestionFlow',
+    name: 'questionGenerationFlow',
     inputSchema: z.string(),
     outputSchema: z.string(),
   },
   async (subject) => {
     // Construct a request and send it to the model API.
     const llmResponse = await generate({
-      prompt: `Generate 2 multiple-choice aptitude questions at the ${subject} with the following structure for each question:
+      prompt: `Generate 30 never repeating multiple-choice aptitude questions for  ${subject} difficulty level with the following structure for each question:
       {
     "id": 1,
     "text": "What is the capital of France?",
@@ -58,7 +58,7 @@ Please follow this format closely:
 2) text should be the question itself.
 3) options should be an array of four choices, each with a unique id ('a', 'b', 'c', 'd') and the corresponding text.
 4) correctAnswer should be the id of the correct option.
-The questions should be varied and cover topics commonly found in aptitude tests.
+5)The questions should be varied and cover topics commonly found in aptitude tests.
       `,
       model: gemini15Flash,
       config: {
@@ -74,9 +74,9 @@ The questions should be varied and cover topics commonly found in aptitude tests
   }
 );
 
-const ResultFlow = defineFlow(
+const resultFlow = defineFlow(
   {
-    name: 'menuSuggestionFlow',
+    name: 'resultFlow',
     inputSchema: z.string(),
     outputSchema: z.string(),
   },
@@ -111,19 +111,115 @@ const ResultFlow = defineFlow(
 );
 
 
-export async function callMenuSuggestionFlow(difficulty: string) {
+const oaquestionFlow = defineFlow(
+  {
+    name: 'oaquestionFlow',
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+  },
+  async (subject) => {
+    // Construct a request and send it to the model API.
+    const llmResponse = await generate({
+      prompt: `Please create 1 coding Online Assesment question of ${subject} difficulty which will be asked in real online assesment test , with the following structure for each question:
+      {
+    "id": 1,
+    "text": "What is the capital of France?"
+    }
+
+    Please follow this format closely:
+    1) Provide a unique id for each question.
+    2) text should be the question itself.
+    3) the question should be solvable in any language.
+        `,
+      model: gemini15Flash,
+      config: {
+        temperature: 1,
+      },
+    });
+
+    // Handle the response from the model API. In this sample, we just
+    // convert it to a string, but more complicated flows might coerce the
+    // response into structured output or chain the response into another
+    // LLM call, etc.
+    return llmResponse.text();
+  }
+);
+
+
+
+const oaresultFlow = defineFlow(
+  {
+    name: 'oaresultFlow',
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+  },
+  async (subject) => {
+    // Construct a request and send it to the model API.
+    const llmResponse = await generate({
+      prompt: `Please evaluate the user's answers and create a reportCard that includes:
+        1. A brief feedback message based on the useranswer. 
+        2. Create answersheet in that show user answer and correct answer.
+      
+        
+        the user answers and question set is in : ${subject} as well as provide the correct answer in user selected language that 
+        
+        Give me the above response in below json format
+        {
+        "reportCard": {
+          "feedback": "",
+          "answerSheet": [
+            {
+              "question": "",
+              "userAnswer": "",
+              "correctAnswer": ""
+            }
+          ]
+        }
+      }
+     
+        `,
+      model: gemini15Flash,
+      config: {
+      temperature: 1,
+    },
+    });
+
+// Handle the response from the model API. In this sample, we just
+// convert it to a string, but more complicated flows might coerce the
+// response into structured output or chain the response into another
+// LLM call, etc.
+return llmResponse.text();
+  }
+);
+
+export async function callQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(menuSuggestionFlow, difficulty);
+  const flowResponse = await runFlow(questionGenerationFlow, difficulty);
   console.log(flowResponse);
   return flowResponse;
 }
 
-
-export async function callResultFlow (data:string) {
+export async function callOaQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(ResultFlow, data);
+  const flowResponse = await runFlow(oaquestionFlow, difficulty);
+  console.log(flowResponse);
+  return flowResponse;
+}
+
+export async function callResultFlow(data: string) {
+  // Invoke the flow. The value you pass as the second parameter must conform to
+  // your flow's input schema.
+  const flowResponse = await runFlow(resultFlow, data);
+  console.log(flowResponse);
+  return flowResponse;
+}
+
+export async function callOaResultFlow(data: string) {
+  // Invoke the flow. The value you pass as the second parameter must conform to
+  // your flow's input schema.
+  const flowResponse = await runFlow(oaresultFlow, data);
   console.log(flowResponse);
   return flowResponse;
 }

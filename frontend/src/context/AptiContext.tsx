@@ -1,7 +1,8 @@
 'use client';
 import React, { createContext, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { callMenuSuggestionFlow , callResultFlow} from '@/app/genkit';
+import {   callQuestionGenerationFlow, callResultFlow} from '@/app/genkit';
+
 
 interface Option {
     id: string;
@@ -69,7 +70,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchQuestions = async (level: string) => {
         try {
             // Assuming 'getAIQuestions' is a function that calls the AI and returns the response
-            let response = await callMenuSuggestionFlow(level);
+            let response = await callQuestionGenerationFlow(level);
 
             // Ensure the response is valid JSON by removing any extra characters
             response = response.trim(); // Remove leading/trailing whitespace
@@ -110,6 +111,8 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         //     {}
         // );
         result();
+        
+        
 
         // router.push(`/ai/result`)
     };
@@ -134,7 +137,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
             setResult(parsedRes); // Set the result with the new structure
             // console.log(parsedRes);
-            router.push(`/ai/result`);
+            router.push(`/ai/apti/result`);
 
         } catch (error) {
             console.error("Error in result flow:", error);
