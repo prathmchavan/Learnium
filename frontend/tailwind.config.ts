@@ -17,6 +17,7 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+        
       animation: {
         "meteor-effect": "meteor 5s linear infinite",
         first: "moveVertical 30s ease infinite",

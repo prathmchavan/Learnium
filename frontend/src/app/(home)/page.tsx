@@ -9,7 +9,7 @@ export default function Home() {
     <div>
 
       <Hero/>
-      <GoogleGeminiEffectDemo/>
+      {/* <GoogleGeminiEffectDemo/> */}
       <Info/>
     </div>
   );
