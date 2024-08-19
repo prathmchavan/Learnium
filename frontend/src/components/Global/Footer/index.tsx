@@ -6,13 +6,15 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <BackgroundGradientAnimation containerClassName='h-full w-full'>
+    // <BackgroundGradientAnimation containerClassName='h-full w-full'>
+    <div className='bg-gradient-to-r from-[#5513ee47] via-[#000000] to-[#5513ee47]'>
+
       <div
         className="relative z-10 w-full bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-0 py-10 px-10"
       >
-           <div className="flex justify-start  items-center">
-                    <Image src={'/logo/log.svg'} width={150} height={150} alt="logo"/>
-            </div>
+            {/* <div className="flex justify-start  items-center">
+                      <Image src={'/models/test.png'} width={150} height={150} alt="logo"/>
+              </div> */}
         <div className="flex flex-col items-center justify-center w-full bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-5 py-10 px-10">
           <ul className="flex items-center justify-center gap-10 text-white font-bold">
             <li>
@@ -37,7 +39,8 @@ const Footer: React.FC = () => {
           </ul>
         </div>
       </div>
-    </BackgroundGradientAnimation>
+        </div>
+    // </BackgroundGradientAnimation>
   );
 };
 

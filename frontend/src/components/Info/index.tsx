@@ -55,12 +55,12 @@ export function Info() {
     ];
 
     return (
-        <div className="mt-32">
-            <div className="text-center">
+        <div className="mt-32 bg-gradient-to-r from-[#0d0dcf51] via-[#000000] to-[#0d0dcf51]">
+            <div className="text-center pt-16">
                 <h1 className="text-[#F6F6F6] text-4xl font-bold">Transforming Education Through Smart Systems, Quality <br /> Content, and Community Engagement</h1>
                 <h6 className="text-[#F6F6F6] py-10">Learnium offers a modern and inclusive educational platform that enhances learning through personalized paths,<br /> diverse resources, and collaborative engagement. Explore our features today!</h6>
             </div>
-            <div className="h-[20rem] md:h-[36rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start my-20 ">
+            <div className=" h-[20rem] md:h-[36rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start my-20 ">
                 <Tabs tabs={tabs} />
             </div>
 
