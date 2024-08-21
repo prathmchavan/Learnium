@@ -40,7 +40,7 @@ const questionGenerationFlow = defineFlow(
   async (subject) => {
     // Construct a request and send it to the model API.
     const llmResponse = await generate({
-      prompt: `Generate 30 never repeating multiple-choice aptitude questions for  ${subject} difficulty level with the following structure for each question:
+      prompt: `Generate 30 multiple-choice aptitude questions for  ${subject} difficulty level with the following structure for each question:
       {
     "id": 1,
     "text": "What is the capital of France?",
@@ -58,8 +58,7 @@ Please follow this format closely:
 2) text should be the question itself.
 3) options should be an array of four choices, each with a unique id ('a', 'b', 'c', 'd') and the corresponding text.
 4) correctAnswer should be the id of the correct option.
-5)The questions should be varied and cover topics commonly found in aptitude tests.
-      `,
+5)The questions should be varied and cover topics commonly found in aptitude tests.`,
       model: gemini15Flash,
       config: {
         temperature: 1,
@@ -85,15 +84,30 @@ const resultFlow = defineFlow(
     const llmResponse = await generate({
       prompt: `Please evaluate the user's answers and create a report card that includes:
         1. Total number of questions.
-        2. Number of correct answers.
-        3. Number of incorrect answers.
-        4. Score as a percentage.
-        5. A brief feedback message based on the score. 
+        2. Number of correct answers .
+        3. Number of incorrect answers .
+        4. Score as a percentage .
+        5. A brief feedback message based on the score . 
         6. Create answersheet in that show user answer and correct answer.
-      
+        format of above should be followed by below format :
+        {
+          "reportCard": {
+          "totalQuestions": 10,
+          "correctAnswers": 1,
+          "incorrectAnswers": 9,
+          "score": 10,
+          "feedback": "You answered 1 out of 10 questions correctly. Keep practicing and you'll improve!"  
+        },
+          "answerSheet": 
+     [
+       {
+          "questionId": 1,
+          "userAnswer": "a",
+          "correctAnswer": "a"
+        }
+      ]
         
         the user answers and question set is in : ${subject}
-        
         Give me the above response in json formate
         `,
       model: gemini15Flash,
@@ -180,15 +194,15 @@ const oaresultFlow = defineFlow(
         `,
       model: gemini15Flash,
       config: {
-      temperature: 1,
-    },
+        temperature: 1,
+      },
     });
 
-// Handle the response from the model API. In this sample, we just
-// convert it to a string, but more complicated flows might coerce the
-// response into structured output or chain the response into another
-// LLM call, etc.
-return llmResponse.text();
+    // Handle the response from the model API. In this sample, we just
+    // convert it to a string, but more complicated flows might coerce the
+    // response into structured output or chain the response into another
+    // LLM call, etc.
+    return llmResponse.text();
   }
 );
 
