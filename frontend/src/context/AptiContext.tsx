@@ -68,6 +68,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchQuestions = async (level: string) => {
         try {
+            
             let response = await callQuestionGenerationFlow(level);
 
             // Optional: Remove code block tags if present

@@ -7,12 +7,7 @@ import { generate } from '@genkit-ai/ai';
 import { configureGenkit } from '@genkit-ai/core';
 import { defineFlow, runFlow } from '@genkit-ai/flow';
 import { googleAI } from '@genkit-ai/googleai';
-
-// Import models from the Google AI plugin. The Google AI API provides access to
-// several generative models. Here, we import Gemini 1.5 Flash.
 import { gemini15Flash } from '@genkit-ai/googleai';
-import { Question } from '@/context/AptiContext';
-import { sub } from 'three/webgpu';
 
 configureGenkit({
   plugins: [
@@ -40,7 +35,7 @@ const questionGenerationFlow = defineFlow(
   async (subject) => {
     // Construct a request and send it to the model API.
     const llmResponse = await generate({
-      prompt: `Generate 30 multiple-choice aptitude questions for  ${subject} difficulty level with the following structure for each question:
+      prompt: `Generate 3 multiple-choice aptitude questions for  ${subject} difficulty level with the following structure for each question:
       {
     "id": 1,
     "text": "What is the capital of France?",
@@ -209,7 +204,7 @@ const oaresultFlow = defineFlow(
 export async function callQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(questionGenerationFlow, difficulty);
+  const flowResponse = await runFlow(questionGenerationFlow , difficulty);
   console.log(flowResponse);
   return flowResponse;
 }
@@ -217,7 +212,7 @@ export async function callQuestionGenerationFlow(difficulty: string) {
 export async function callOaQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(oaquestionFlow, difficulty);
+  const flowResponse = await runFlow(oaquestionFlow , difficulty);
   console.log(flowResponse);
   return flowResponse;
 }
