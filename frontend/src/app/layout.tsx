@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Global/Navbar";
-import { SparklesCore } from "@/components/ui/sparkels";
 import Footer from "@/components/Global/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+    <link rel="icon" href="/logo/log.svg" /> 
+  </head>
       <body className={inter.className}>
         <Navbar/>
        
