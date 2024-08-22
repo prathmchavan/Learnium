@@ -8,7 +8,7 @@ import { HeroHighlightDemo } from "../Global/HeroHighlight";
 export const Hero = () => {
     return (
 
-        <div className="relative flex items-center justify-between min-h-screen overflow-hidden">
+        <div className="relative flex items-center justify-between min-h-screen overflow-hidden bg-black">
             {/* <BackgroundBeams className="-z-50" /> */}
 
             {/* Text component of hero section */}
