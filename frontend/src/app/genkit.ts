@@ -35,25 +35,49 @@ const questionGenerationFlow = defineFlow(
   async (subject) => {
     // Construct a request and send it to the model API.
     const llmResponse = await generate({
-      prompt: `Generate 3 multiple-choice aptitude questions for  ${subject} difficulty level with the following structure for each question:
-      {
+      prompt: `Generate exactly 3 multiple-choice aptitude questions for the ${subject} difficulty level. Each question should adhere to the following structure:
+
+[
+  {
     "id": 1,
     "text": "What is the capital of France?",
     "options": [
-        { "id": "a", "text": "Berlin" },
-        { "id": "b", "text": "Madrid" },
-        { "id": "c", "text": "Paris" },
-        { "id": "d", "text": "Rome" }
+      { "id": "a", "text": "Berlin" },
+      { "id": "b", "text": "Madrid" },
+      { "id": "c", "text": "Paris" },
+      { "id": "d", "text": "Rome" }
     ],
     "correctAnswer": "c"
-      }
-Please follow this format closely:
-
-1) Provide a unique id for each question.
-2) text should be the question itself.
-3) options should be an array of four choices, each with a unique id ('a', 'b', 'c', 'd') and the corresponding text.
-4) correctAnswer should be the id of the correct option.
-5)The questions should be varied and cover topics commonly found in aptitude tests.`,
+  },
+  {
+    "id": 2,
+    "text": "If a train travels at 60 miles per hour, how far will it travel in 3 hours?",
+    "options": [
+      { "id": "a", "text": "120 miles" },
+      { "id": "b", "text": "180 miles" },
+      { "id": "c", "text": "240 miles" },
+      { "id": "d", "text": "300 miles" }
+    ],
+    "correctAnswer": "b"
+  },
+  {
+    "id": 3,
+    "text": "What is the next number in the sequence: 2, 4, 6, 8, ...?",
+    "options": [
+      { "id": "a", "text": "10" },
+      { "id": "b", "text": "12" },
+      { "id": "c", "text": "14" },
+      { "id": "d", "text": "16" }
+    ],
+    "correctAnswer": "a"
+  }
+]
+1.Ensure each question has a unique id.
+2.The text field should be the question itself.
+3.The options array must contain four choices, each with a unique id ('a', 'b', 'c', 'd') and corresponding text.
+4.The correctAnswer field should match the id of the correct option.
+5. The output must be a valid JSON array following the structure provided.
+ Please respond only with the JSON format as specified above without any additional explanations or characters..`,
       model: gemini15Flash,
       config: {
         temperature: 1,
@@ -204,7 +228,7 @@ const oaresultFlow = defineFlow(
 export async function callQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(questionGenerationFlow , difficulty);
+  const flowResponse = await runFlow(questionGenerationFlow, difficulty);
   console.log(flowResponse);
   return flowResponse;
 }
@@ -212,7 +236,7 @@ export async function callQuestionGenerationFlow(difficulty: string) {
 export async function callOaQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(oaquestionFlow , difficulty);
+  const flowResponse = await runFlow(oaquestionFlow, difficulty);
   console.log(flowResponse);
   return flowResponse;
 }
