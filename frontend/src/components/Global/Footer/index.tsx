@@ -7,7 +7,7 @@ import React from 'react';
 const Footer: React.FC = () => {
   return (
     // <BackgroundGradientAnimation containerClassName='h-full w-full'>
-    <div className='bg-gradient-to-r from-[#5513ee47] via-[#000000] to-[#5513ee47]'>
+    <div className='bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]'>
 
       <div
         className="relative z-10 w-full bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-0 py-10 px-10"
