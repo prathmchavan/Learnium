@@ -27,7 +27,7 @@ const QuestionCard: React.FC<Props> = ({ question, onAnswerSelect }) => {
 
   return (
     <div className=" shadow-md rounded p-4 mb-4">
-      <p className="text-lg mb-4">{question.text}</p>
+      <p className="text-lg mb-4"> {question.id}) {question.text}</p>
       {question.options.map((option) => (
         <div key={option.id} className="mb-2">
           <input

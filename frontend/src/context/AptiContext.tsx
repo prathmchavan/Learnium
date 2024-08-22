@@ -1,8 +1,7 @@
 'use client';
 import React, { createContext, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {   callQuestionGenerationFlow, callResultFlow} from '@/app/genkit';
-
+import { callQuestionGenerationFlow, callResultFlow } from '@/app/genkit';
 
 interface Option {
     id: string;
@@ -22,17 +21,17 @@ interface ReportCard {
     incorrectAnswers: number;
     score: number;
     feedback: string;
-  }
-  
-  interface AnswerSheetItem {
+}
+
+interface AnswerSheetItem {
     questionId: number;
     questionText: string;
     userAnswer: string | null;
     correctAnswer: string;
     isCorrect: boolean;
-  }
-  
-  interface AptiContextType {
+}
+
+interface AptiContextType {
     difficulty: string | null;
     questions: Question[];
     answers: { [key: number]: string };
@@ -40,13 +39,13 @@ interface ReportCard {
     handleDifficultySelect: (level: string) => void;
     startTest: () => void;
     handleAnswerSelect: (questionId: number, selectedOption: string) => void;
-    submitTest: () => void;
+    // submitTest: () => void;
+    fetchResults: () => void;
     resu: {
-      reportCard: ReportCard;
-      answerSheet: AnswerSheetItem[];
+        reportCard: ReportCard;
+        answerSheet: AnswerSheetItem[];
     } | null;
-  }
-  
+}
 
 const AptiContext = createContext<AptiContextType | undefined>(undefined);
 
@@ -58,7 +57,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [resu, setResult] = useState<{
         reportCard: ReportCard;
         answerSheet: AnswerSheetItem[];
-      } | null>(null);
+    } | null>(null);
 
     const router = useRouter();
 
@@ -69,21 +68,20 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchQuestions = async (level: string) => {
         try {
-            // Assuming 'getAIQuestions' is a function that calls the AI and returns the response
             let response = await callQuestionGenerationFlow(level);
 
-            // Ensure the response is valid JSON by removing any extra characters
-            response = response.trim(); // Remove leading/trailing whitespace
-            response = response.replace(/^```json|```$/g, ''); // Remove markdown code block tags if present
+            // Optional: Remove code block tags if present
+            response = response
+                .replace(/^```json|```$/g, '')
+                .trim();
 
-            const parsedResponse = JSON.parse(response); // Parse the cleaned JSON string
-
-            const fetchedQuestions: Question[] = parsedResponse.map((item: any) => ({
+            const fetchedQuestions: Question[] = JSON.parse(response).map((item: any) => ({
                 id: item.id,
                 text: item.text,
                 options: item.options,
                 correctAnswer: item.correctAnswer,
             }));
+
             setQuestions(fetchedQuestions);
 
         } catch (error) {
@@ -102,49 +100,26 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }));
     };
 
-    const submitTest = () => {
-        // const correctAnswers = questions.reduce<{ [key: number]: string }>(
-        //     (acc, question) => {
-        //         acc[question.id] = question.correctAnswer;
-        //         return acc;
-        //     },
-        //     {}
-        // );
-        result();
-        
-        
 
-        // router.push(`/ai/result`)
-    };
-
-    const result = async () => {
+    const fetchResults = async () => {
         try {
-            // Structure the data as an object
-            const data = {
-                questions: questions,
-                answers: answers
-            };
-    
-            // Convert the structured object to a JSON string
-            const dataString = JSON.stringify(data);
-    
-            // Call the result flow with the stringified object
-            let res = await callResultFlow(dataString);
-            res = res.trim(); // Remove leading/trailing whitespace
-            res = res.replace(/^```json|```$/g, ''); // Remove markdown code block tags if present
-            // Parse the response as JSON
+            const data = JSON.stringify({ questions, answers });
+
+            let res = await callResultFlow(data);
+            res = res
+                .replace(/^```json|```$/g, '')
+                .trim();
+
             const parsedRes = JSON.parse(res);
-    
-            setResult(parsedRes); // Set the result with the new structure
-            // console.log(parsedRes);
+
+            setResult(parsedRes);
             router.push(`/ai/apti/result`);
 
         } catch (error) {
-            console.error("Error in result flow:", error);
+            console.error("Error in fetching results:", error);
         }
     };
-    
-    
+
     return (
         <AptiContext.Provider
             value={{
@@ -155,7 +130,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 handleDifficultySelect,
                 startTest,
                 handleAnswerSelect,
-                submitTest,
+                fetchResults,
                 resu
             }}
         >

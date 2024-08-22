@@ -108,7 +108,7 @@ const resultFlow = defineFlow(
       ]
         
         the user answers and question set is in : ${subject}
-        Give me the above response in json formate
+        Give me the above response in json formate and don't provide me your e **Explanation:** ,i just want the above respons json response.
         `,
       model: gemini15Flash,
       config: {

@@ -14,11 +14,11 @@ const Apti: React.FC = () => {
         handleDifficultySelect,
         startTest,
         handleAnswerSelect,
-        submitTest,
+        fetchResults,
     } = useAptiContext();
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center justify-center min-h-screen  bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]">
             <h1 className="text-3xl font-bold mb-4">Select Difficulty Level</h1>
             {!testStarted ? (
                 <DifficultySelector onSelect={handleDifficultySelect} />
@@ -36,7 +36,7 @@ const Apti: React.FC = () => {
                     </div>
                     <button
                         className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
-                        onClick={submitTest}
+                        onClick={fetchResults}
                     >
                         Submit Test
                     </button>
