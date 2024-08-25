@@ -5,9 +5,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-
-
-
 interface Question {
     id: number;
     text: string;
