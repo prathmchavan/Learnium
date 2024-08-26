@@ -4,10 +4,13 @@ import { TailwindcssButtons } from "../TailwindcssButtons";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuthContext } from "@/context/AuthContext";
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
+
 
 const Navbar = () => {
-    const { user ,logout } = useAuthContext();
+    const { userToken, logout ,user } = useAuthContext();
 
+ 
 
     return (
         <div className="bg-white bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-5 flex px-11 py-3">
@@ -36,15 +39,44 @@ const Navbar = () => {
                 </li>
             </ul>
 
-            {!user && (
+            {!userToken && (
                 <div className="flex justify-end items-center">
                     <TailwindcssButtons name="Login / Signup" link="login" />
                 </div>
             )}
 
-            {user && (
+            {userToken && (
                 <div className="flex justify-end items-center">
-                    <TailwindcssButtons name="Logout" onClick={logout} />
+
+                    <Dropdown placement="bottom-start" className="bg-gray-900">
+                        <DropdownTrigger>
+                            <User
+                                as="button"
+                                avatarProps={{
+                                    isBordered: true,
+                                    src: user?.about?.profilePicture ? user.about.profilePicture : 'https://ui-avatars.com/api/?name=' + `${user?.about.name}`,
+
+                                }}
+                                className="transition-transform"
+                                name={`${user?.about.name}`}
+                            />
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="User Actions" variant="shadow" color="success">
+                            <DropdownItem key="profile" className="h-14 gap-2">
+                                <p className="font-bold">Signed in as</p>
+                                <p className="font-bold">{user?.contact.email}</p>
+                            </DropdownItem>
+                            <DropdownItem key="settings" className="hover:text-white" href="/profile">
+                                My Profile
+                            </DropdownItem>
+                            <DropdownItem key="help_and_feedback">
+                                Help & Feedback
+                            </DropdownItem>
+                            <DropdownItem key="logout" color="danger" onClick={logout}>
+                                Log Out
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                 </div>
             )}
         </div>
