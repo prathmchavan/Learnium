@@ -1,47 +1,168 @@
 'use client'
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { cn } from "@/lib/utils";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { useAuthContext } from "@/context/AuthContext";
 import { Avatar } from "@nextui-org/react";
-
+import { ApiUrl, EnviromentId, ProjectId } from "@/constant/secrets";
 
 const AboutComponent = () => {
     const { user, userToken } = useAuthContext();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+  
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-
-
+        e.preventDefault();
+        // Handle form submission (updating name, bio, etc.)
     };
-    const updateAvatar = () => {
 
 
+    const updateAvatar = async () => {
+        try {
+            const file = fileInputRef.current?.files?.[0];
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            // Step 1: Generate a Presigned URL by making a POST request to your API endpoint
+            const response = await fetch(`${ApiUrl}storage-accounts/Avatar/upload`, {
+                method: 'POST',
+                headers: {
+                    projectId: ProjectId,
+                    environmentId: EnviromentId,
+                },
+                body: JSON.stringify({
+                    name: file.name,
+                    size: file.size,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to generate presigned URL");
+            }
+
+            const { url, fields } = await response.json();
+
+            // Step 2: Use the URL and fields to upload the file
+            const formData = new FormData();
+            Object.entries(fields).forEach(([key, value]) => {
+                formData.append(key, value as string);
+            });
+            formData.append('file', file);
+
+            const uploadResponse = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+
+            // console.log("this is upload response", uploadResponse);
+
+            if (!uploadResponse.ok) {
+                throw new Error("Failed to upload file");
+            }
+
+            //step 3.  file name storing in db
+
+            const res = await fetch(`${ApiUrl}user/${userToken}`, {
+                method: 'PATCH',
+                headers: {
+                   // Set Content-Type to application/json
+                    projectId: ProjectId,
+                    environmentId: EnviromentId,
+                },
+                body: JSON.stringify({
+                    about: {
+                        name:`${user?.about.name}`,
+                        bio:`${user?.about.bio}`,
+                        profilePicture:`${user?.about.profilePicture}`,
+                        filename: `${file.name}`  // Updated to 'profilePicture' instead of 'filename'
+                    }
+                }),
+            });
+
+            // console.log(res)
+
+            fetchAvatarUrl(user.about.filename);
+         
+            alert("Avatar uploaded successfully!");
+        } catch (error) {
+            console.error("Error uploading avatar:", error);
+            alert("There was an error uploading your avatar. Please try again.");
+        }
     };
+
+    const fetchAvatarUrl = async (filename: string) => {
+        try {
+            // console.log("filename inside", filename)
+            const response = await fetch(`${ApiUrl}storage-accounts/Avatar/download?name=${encodeURIComponent(filename)}`, {
+                method: 'GET',
+                headers: {
+                    projectId: ProjectId,
+                    environmentId: EnviromentId,
+                },
+            });
+
+            const data = await response.text();
+            const cleanUrl = data.replace(/^"(.*)"$/, '$1'); // Removes surrounding double quotes if any
+
+            // console.log("from iWnsie",data);
+
+            const res = await fetch(`${ApiUrl}user/${userToken}`, {
+                method: 'PATCH',
+                headers: {
+                   // Set Content-Type to application/json
+                    projectId: ProjectId,
+                    environmentId: EnviromentId,
+                },
+                body: JSON.stringify({
+                    about: {
+                        name:`${user?.about.name}`,
+                        bio:`${user?.about.bio}`,
+                        profilePicture:cleanUrl,
+                        filename: `${user.about.filename}`  // Updated to 'profilePicture' instead of 'filename'
+                    }
+                }),
+            });
+
+            // console.log(res)
+            return cleanUrl;
+        } catch (error) {
+            console.error("Error fetching avatar URL:", error);
+            return null;
+        }
+    }
+
+
     return (
         <>
             {userToken && (
-
                 <div className="flex justify-center ">
                     <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName=" w-auto">
-                    <h2 className="font-bold text-xl text-neutral-200">About Section</h2>
-
+                        <h2 className="font-bold text-xl text-neutral-200">About Section</h2>
 
                         <form className="my-8" onSubmit={handleSubmit}>
-
                             {/* profile pic section */}
                             <div className="flex justify-center">
-
-                            <Avatar 
-                            as="button"
-                            src={user?.about.profilePicture}
-                            name="test" 
-                            className="w-56 h-56 text-large"
-                            isBordered
-                            color="success"
-                            isFocusable
-                            onClick={updateAvatar}
-                            />
+                                <Avatar
+                                    as="button"
+                                    src={user?.about.profilePicture}
+                                    name="Profile Picture"
+                                    className="w-56 h-56 text-large"
+                                    isBordered
+                                    color="success"
+                                    isFocusable
+                                    onClick={() => fileInputRef.current?.click()}
+                                />
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={updateAvatar} // Call updateAvatar on file selection
+                                />
                             </div>
                             {/* name and bio section */}
                             <LabelInputContainer className="mb-4">
@@ -77,7 +198,5 @@ const LabelInputContainer = ({ children, className }: { children: React.ReactNod
         {children}
     </div>
 );
-
-
 
 export default AboutComponent;
