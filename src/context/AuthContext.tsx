@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     console.log("i am here")
 					return;
 				}
-                console.log(Token);
+                // console.log(Token);
 				const self = await getSelf(Token  );
 				
 				setUser(self);

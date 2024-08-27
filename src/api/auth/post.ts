@@ -22,7 +22,7 @@ export const signupUser = async (
         }
       );
   
-      console.log(res.data);
+      // console.log(res.data);
       return res.data;
     } catch (error: any) {
       console.error("Signup error:", error.response?.data || error.message);
@@ -39,7 +39,7 @@ export const loginUser = async (email: string, password: string) => {
                 password,
               }
             });
-		console.log(res.data);
+		// console.log(res.data);
 		return res.data;
 	} catch (error: any) {
 		console.log(error);

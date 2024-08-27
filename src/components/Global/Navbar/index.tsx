@@ -54,7 +54,7 @@ const Navbar = () => {
                                 as="button"
                                 avatarProps={{
                                     isBordered: true,
-                                    src: user?.about?.profilePicture ? user.about.profilePicture : 'https://ui-avatars.com/api/?name=' + `${user?.about.name}`,
+                                    src: user?.about.profilePicture ? user.about.profilePicture : 'https://ui-avatars.com/api/?name=' + `${user?.about.name}`,
 
                                 }}
                                 className="transition-transform"
