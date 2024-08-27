@@ -30,10 +30,10 @@ export default function RootLayout({
         <AuthProvider>
 
         <Navbar/>
-        </AuthProvider>
        
         {children}
         <Footer/>
+        </AuthProvider>
         </Providers>
         </body>
     </html>

@@ -1,4 +1,5 @@
-import { AuthProvider } from "@/context/AuthContext";
+
+import ProfileLayout from "@/components/Profile/Layout";
 import { Metadata } from "next";
 
 export const metadata:Metadata ={
@@ -6,13 +7,15 @@ export const metadata:Metadata ={
     description:"Personalised your learnium"
 }
 
-export default function ProfileLayout({
+export default function ProfilePageLayout({
     children ,
 }: Readonly<{children:React.ReactNode;}>){
     return(
-        <AuthProvider>
+        
+        <ProfileLayout>
 
         {children}
-        </AuthProvider>
+        </ProfileLayout>
+        
     );
 }
