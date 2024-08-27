@@ -1,9 +1,10 @@
 import React from 'react'
+import AboutComponent from './About';
 
 const ProfileComponent = () => {
   return (
     <div>
-      <h1>profile ProfileComponent working properly</h1>
+      <AboutComponent/>
     </div>
   )
 }

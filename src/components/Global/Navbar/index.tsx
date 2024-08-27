@@ -66,7 +66,7 @@ const Navbar = () => {
                                 <p className="font-bold">Signed in as</p>
                                 <p className="font-bold">{user?.contact.email}</p>
                             </DropdownItem>
-                            <DropdownItem key="settings" className="hover:text-white" href="/profile">
+                            <DropdownItem key="settings" className="hover:text-white" href="/profile/about">
                                 My Profile
                             </DropdownItem>
                             <DropdownItem key="help_and_feedback">
