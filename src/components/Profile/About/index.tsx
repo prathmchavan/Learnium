@@ -7,16 +7,47 @@ import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { useAuthContext } from "@/context/AuthContext";
 import { Avatar } from "@nextui-org/react";
 import { ApiUrl, EnviromentId, ProjectId } from "@/constant/secrets";
+import { axiosInst } from "@/utils/axios";
+
+interface Data {
+    fullname: string,
+    bio: string
+}
 
 const AboutComponent = () => {
     const { user, userToken } = useAuthContext();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [data, setData] = useState<Data>({ fullname: "", bio: "" })
 
-  
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Handle form submission (updating name, bio, etc.)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
     };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const res = await axiosInst.patch(`/user/${userToken}`, {
+                about: {
+                    name: data.fullname || user?.about.name,
+                    bio: data.bio || user?.about.bio,
+                    profilePicture: user?.about.profilePicture,
+                    filename: user?.about.filename,
+                }
+            });
+
+            // Handle success - return or log the response
+            console.log("User data updated successfully", res.data);
+           window.location.reload();
+            return res.data;
+
+        } catch (error: any) {
+            // Handle error - log or show an error message
+            console.error("Error updating user data:", error.message);
+            throw new Error(error.message);
+        }
+    };
+
 
 
     const updateAvatar = async () => {
@@ -65,28 +96,13 @@ const AboutComponent = () => {
             }
 
             //step 3.  file name storing in db
+            console.log("file name before backend req", file.name)
 
-            const res = await fetch(`${ApiUrl}user/${userToken}`, {
-                method: 'PATCH',
-                headers: {
-                   // Set Content-Type to application/json
-                    projectId: ProjectId,
-                    environmentId: EnviromentId,
-                },
-                body: JSON.stringify({
-                    about: {
-                        name:`${user?.about.name}`,
-                        bio:`${user?.about.bio}`,
-                        profilePicture:`${user?.about.profilePicture}`,
-                        filename: `${file.name}`  // Updated to 'profilePicture' instead of 'filename'
-                    }
-                }),
-            });
-
-            // console.log(res)
-
-            fetchAvatarUrl(user.about.filename);
          
+            // console.log("backend res after updating the filename", user?.about.filename)
+
+            fetchAvatarUrl(file.name);
+
             alert("Avatar uploaded successfully!");
         } catch (error) {
             console.error("Error uploading avatar:", error);
@@ -108,25 +124,18 @@ const AboutComponent = () => {
             const data = await response.text();
             const cleanUrl = data.replace(/^"(.*)"$/, '$1'); // Removes surrounding double quotes if any
 
-            // console.log("from iWnsie",data);
+            // console.log("from inside", data);
 
-            const res = await fetch(`${ApiUrl}user/${userToken}`, {
-                method: 'PATCH',
-                headers: {
-                   // Set Content-Type to application/json
-                    projectId: ProjectId,
-                    environmentId: EnviromentId,
-                },
-                body: JSON.stringify({
-                    about: {
-                        name:`${user?.about.name}`,
-                        bio:`${user?.about.bio}`,
-                        profilePicture:cleanUrl,
-                        filename: `${user.about.filename}`  // Updated to 'profilePicture' instead of 'filename'
-                    }
-                }),
-            });
-
+            const res = await axiosInst.patch(`/user/${userToken}`,{
+                about: {
+                    name: `${user?.about.name}`,
+                    bio: `${user?.about.bio}`,
+                    profilePicture: cleanUrl,
+                    filename: `${filename}`  // Updated to 'profilePicture' instead of 'filename'
+                }
+            })
+         
+            window.location.reload();
             // console.log(res)
             return cleanUrl;
         } catch (error) {
@@ -148,13 +157,16 @@ const AboutComponent = () => {
                             <div className="flex justify-center">
                                 <Avatar
                                     as="button"
-                                    src={user?.about.profilePicture}
+                                    src={user?.about.profilePicture || user?.about.name}
                                     name="Profile Picture"
                                     className="w-56 h-56 text-large"
                                     isBordered
                                     color="success"
                                     isFocusable
-                                    onClick={() => fileInputRef.current?.click()}
+                                    onClick={(e) => {
+                                        e.preventDefault(); // Prevent form submission
+                                        fileInputRef.current?.click();
+                                    }}
                                 />
                                 <input
                                     type="file"
@@ -167,11 +179,11 @@ const AboutComponent = () => {
                             {/* name and bio section */}
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="fullname">Full Name</Label>
-                                <Input id="fullname" name="fullname" placeholder={user?.about.name} type="text" className=" placeholder:text-white" />
+                                <Input id="fullname" name="fullname" placeholder={user?.about.name} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="bio">Bio</Label>
-                                <Input id="bio" name="bio" placeholder={user?.about.bio} type="text" className=" placeholder:text-white" />
+                                <Input id="bio" name="bio" placeholder={user?.about.bio} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
 
                             <button className="bg-gradient-to-br from-zinc-900 to-zinc-900 block w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] relative group" type="submit">

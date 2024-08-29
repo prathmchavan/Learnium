@@ -1,22 +1,52 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { cn } from "@/lib/utils";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { useAuthContext } from "@/context/AuthContext";
-import { Avatar } from "@nextui-org/react";
+import { axiosInst } from "@/utils/axios";
+
+interface Data {
+    degree: string,
+    institution: string,
+    yearOfGraduation: string,
+    fieldOfStudy:string
+}
 
 
 const EducationComponent = () => {
     const { user, userToken } = useAuthContext();
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [data, setData] = useState<Data>({
+        degree: "",
+        institution: "",
+        yearOfGraduation: "",
+        fieldOfStudy:""
+    });
 
-
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await axiosInst.patch(`/user/${userToken}`, {
+              education:{
+                degree: data.degree || user?.education.degree,
+                institution : data.institution || user?.education.institution,
+                yearOfGraduation:data.yearOfGraduation || user?.education.yearOfGraduation,
+                fieldOfStudy : data.fieldOfStudy || user?.education.fieldOfStudy
+              }
+            });
+            window.location.reload();
+            return res;
+        } catch (error: any) {
+            throw error.message;
+        }
     };
-    const updateAvatar = () => {
 
-
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData((prevData) => ({
+            ...prevData,
+            [e.target.name]: e.target.value
+        }));
     };
     return (
         <>
@@ -31,19 +61,19 @@ const EducationComponent = () => {
                             {/* name and bio section */}
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="degree">Degree</Label>
-                                <Input id="degree" name="degree" placeholder={user?.education.degree} type="text" className=" placeholder:text-white" />
+                                <Input id="degree" name="degree" placeholder={user?.education.degree} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="institution">Institution</Label>
-                                <Input id="institution" name="institution" placeholder={user?.education.institution} type="text" className=" placeholder:text-white" />
+                                <Input id="institution" name="institution" placeholder={user?.education.institution} type="text" className=" placeholder:text-white" onChange={handleChange}/>
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
-                                <Label htmlFor="yearofgrad">Year Of Graduation</Label>
-                                <Input id="yearofgrad" name="yearofgrad" placeholder={user?.education.yearOfGraduation} type="text" className=" placeholder:text-white" />
+                                <Label htmlFor="yearOfGraduation">Year Of Graduation</Label>
+                                <Input id="yearOfGraduation" name="yearOfGraduation" placeholder={user?.education.yearOfGraduation} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
-                                <Label htmlFor="fieldofstudy">Field Of Study</Label>
-                                <Input id="fieldofstudy" name="fieldofstudy" placeholder={user?.education.fieldOfStudy} type="text" className=" placeholder:text-white" />
+                                <Label htmlFor="fieldOfStudy">Field Of Study</Label>
+                                <Input id="fieldOfStudy" name="fieldOfStudy" placeholder={user?.education.fieldOfStudy} type="text" className=" placeholder:text-white" onChange={handleChange}/>
                             </LabelInputContainer>
                            
                             <button className="bg-gradient-to-br from-zinc-900 to-zinc-900 block w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] relative group" type="submit">

@@ -1,23 +1,51 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { cn } from "@/lib/utils";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { useAuthContext } from "@/context/AuthContext";
-import { Avatar } from "@nextui-org/react";
+import { axiosInst } from "@/utils/axios";
 
+
+interface Data {
+    website: string,
+    github: string,
+    linkedin: string
+}
 
 const SocialComponent = () => {
     const { user, userToken } = useAuthContext();
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [data, setData] = useState<Data>({
+        website: "",
+        github: "",
+        linkedin: "",
+    });
 
-
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await axiosInst.patch(`/user/${userToken}`, {
+                links:{
+                    website:data.website || user?.links.website,
+                    github: data.github || user?.links.github,
+                    linkedin: data.linkedin || user?.links.linkedin
+                }
+            });
+            window.location.reload();
+            return res;
+        } catch (error: any) {
+            throw error.message;
+        }
     };
-    const updateAvatar = () => {
 
-
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData((prevData) => ({
+            ...prevData,
+            [e.target.name]: e.target.value
+        }));
     };
+
     return (
         <>
             {userToken && (
@@ -31,15 +59,15 @@ const SocialComponent = () => {
                             {/* name and bio section */}
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="linkedin">LinkedIn</Label>
-                                <Input id="linkedin" name="linkedin" placeholder={user?.links.linkedin} type="text" className=" placeholder:text-white" />
+                                <Input id="linkedin" name="linkedin" placeholder={user?.links.linkedin} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="github">Github</Label>
-                                <Input id="github" name="github" placeholder={user?.links.github} type="text" className=" placeholder:text-white" />
+                                <Input id="github" name="github" placeholder={user?.links.github} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="website">Website</Label>
-                                <Input id="website" name="website" placeholder={user?.links.website} type="text" className=" placeholder:text-white" />
+                                <Input id="website" name="website" placeholder={user?.links.website} type="text" className=" placeholder:text-white"  onChange={handleChange}/>
                             </LabelInputContainer>
                             
                            
