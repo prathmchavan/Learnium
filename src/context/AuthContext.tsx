@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			try {
 				const Token = getUser();
 				if (!Token) {
-                    console.log("i am here")
+                    // console.log("i am here")
 					return;
 				}
                 // console.log(Token);
@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = () => {
         localStorage.removeItem("user");
         setUser(null);
-        router.replace("/");
+        window.location.replace('/')
     };
 
 
