@@ -7,11 +7,11 @@ import { axiosInst } from "@/utils/axios";
 interface Event {
   title: string;
   description: string;
-  link: string;
+  url: string;
   image: string;
   date: string;
   eventType: string;
-  eventCategory: string;
+  category: string;
   eventFormat: string;
 }
 
@@ -34,7 +34,7 @@ export function EventComponent() {
       };
 
       const res = await axiosInst.get('/events', { params });
-      setEvents(res.data); // Assuming the response is an array of events
+      setEvents(res.data.data); 
     } catch (error: any) {
       console.error("Failed to fetch events:", error.message);
     }
@@ -45,7 +45,7 @@ export function EventComponent() {
     return events.filter(event => {
       const matchesType = selectedType.size === 0 || selectedType.has(event.eventType);
       const matchesFormat = selectedFormat.size === 0 || selectedFormat.has(event.eventFormat);
-      const matchesCategory = selectedCategory.size === 0 || selectedCategory.has(event.eventCategory);
+      const matchesCategory = selectedCategory.size === 0 || selectedCategory.has(event.category);
       return matchesType && matchesFormat && matchesCategory;
     });
   }, [events, selectedType, selectedFormat, selectedCategory]);
