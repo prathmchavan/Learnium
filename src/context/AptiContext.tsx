@@ -88,11 +88,13 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setQuestions(fetchedQuestions);
 
         } catch (error:any) {
-            console.log(error.message)
-            enqueueSnackbar({
-                message: error?.response?.data?.message || "Some error occurred, please try again",
-                variant: "error"
-              });
+            console.log("error at question generation",error?.response?.data?.message )
+            // enqueueSnackbar({
+            //     message: error?.response?.data?.message || "Some error occurred, please try again",
+            //     variant: "error"
+            //   });
+
+            throw new Error(error.response.data.message)
             }
     };
 
