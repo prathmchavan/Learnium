@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { callQuestionGenerationFlow, callResultFlow } from '@/app/genkit';
+import { enqueueSnackbar } from 'notistack';
 
 interface Option {
     id: string;
@@ -82,12 +83,17 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 options: item.options,
                 correctAnswer: item.correctAnswer,
             }));
-
+            
+            console.log(response)
             setQuestions(fetchedQuestions);
 
-        } catch (error) {
-            console.error("Error fetching questions:", error);
-        }
+        } catch (error:any) {
+            console.log(error.message)
+            enqueueSnackbar({
+                message: error?.response?.data?.message || "Some error occurred, please try again",
+                variant: "error"
+              });
+            }
     };
 
     const startTest = () => {
@@ -146,4 +152,4 @@ export const useAptiContext = () => {
         throw new Error('useAptiContext must be used within an AptiProvider');
     }
     return context;
-};
+}
