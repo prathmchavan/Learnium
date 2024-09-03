@@ -1,3 +1,4 @@
+'use client'
 import { AptiProvider } from "@/context/AptiContext";
 import { OaProvider } from "@/context/OaContext";
 import type { Metadata } from "next";
