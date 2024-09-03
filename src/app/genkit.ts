@@ -228,9 +228,14 @@ const oaresultFlow = defineFlow(
 export async function callQuestionGenerationFlow(difficulty: string) {
   // Invoke the flow. The value you pass as the second parameter must conform to
   // your flow's input schema.
-  const flowResponse = await runFlow(questionGenerationFlow, difficulty);
-  console.log(flowResponse);
-  return flowResponse;
+  try {
+    
+    const flowResponse = await runFlow(questionGenerationFlow, difficulty);
+    console.log(flowResponse);
+    return flowResponse;
+  } catch (error:any) {
+    throw new Error(error.message)
+  } 
 }
 
 export async function callOaQuestionGenerationFlow(difficulty: string) {
