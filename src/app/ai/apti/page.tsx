@@ -1,3 +1,4 @@
+"use client"
 import Apti from '@/components/Ai/Apti'
 import { AptiProvider } from '@/context/AptiContext'
 import React from 'react'

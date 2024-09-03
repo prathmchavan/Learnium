@@ -1,3 +1,4 @@
+"use client"
 import Oa from '@/components/Ai/Oa'
 import { OaProvider } from '@/context/OaContext'
 import React from 'react'

@@ -1,3 +1,4 @@
+"use client"
 import Results from '@/components/Ai/Results'
 import { AptiProvider } from '@/context/AptiContext'
 import React from 'react'
