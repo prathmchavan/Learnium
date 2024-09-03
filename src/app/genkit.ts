@@ -114,7 +114,7 @@ const resultFlow = defineFlow(
           "totalQuestions": 10,
           "correctAnswers": 1,
           "incorrectAnswers": 9,
-          "score": 10,
+          "score": 1,
           "feedback": "You answered 1 out of 10 questions correctly. Keep practicing and you'll improve!"  
         },
           "answerSheet": 
