@@ -1,3 +1,4 @@
+'use client'
 import Ai from '@/components/Ai'
 import { Boxes } from '@/components/ui/background-boxes'
 import React from 'react'
