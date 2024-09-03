@@ -1,24 +1,22 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import DropDown from '@/components/Global/DropDown';
-import { PlaceholdersAndVanishInput } from '@/components/ui/placeholder-and-vanish-input';
+
 interface Event {
   title: string;
   description: string;
-  link: string;
+  url: string;
   image: string;
   date: string;
   eventType: string;
-  eventCategory: string;
+  category: string;
   eventFormat: string;
 }
-
 
 interface EventNavProps {
   data: Event[];
   setSelectedType: React.Dispatch<React.SetStateAction<Set<string>>>;
   setSelectedFormat: React.Dispatch<React.SetStateAction<Set<string>>>;
   setSelectedCategory: React.Dispatch<React.SetStateAction<Set<string>>>;
-  onSearchResults?: (results: Event[]) => void; // Optional prop
 }
 
 const EventNav = ({
@@ -26,24 +24,14 @@ const EventNav = ({
   setSelectedType,
   setSelectedFormat,
   setSelectedCategory,
-  onSearchResults,
 }: EventNavProps) => {
-  const eventTypes = Array.from(new Set(data.map(event => event.eventType)));
-  const eventFormats = Array.from(new Set(data.map(event => event.eventFormat)));
-  const eventCategories = Array.from(new Set(data.map(event => event.eventCategory)));
+  const eventTypes = useMemo(() => Array.from(new Set(data.map(event => event.eventType))), [data]);
+  const eventFormats = useMemo(() => Array.from(new Set(data.map(event => event.eventFormat))), [data]);
+  const eventCategories = useMemo(() => Array.from(new Set(data.map(event => event.category))), [data]);
 
-  const placeholders = [
-    "Search the event"
-  ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-  };
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submitted");
-  };
+  const memoizedSetSelectedType = useCallback(setSelectedType, []);
+  const memoizedSetSelectedFormat = useCallback(setSelectedFormat, []);
+  const memoizedSetSelectedCategory = useCallback(setSelectedCategory, []);
 
   return (
     <div className='flex gap-16'>
@@ -51,26 +39,20 @@ const EventNav = ({
         title='Event Type'
         placeholder='Select Event Type'
         options={eventTypes}
-        onSelectionChange={setSelectedType}
+        onSelectionChange={memoizedSetSelectedType}
       />
       <DropDown
         title='Event Format'
         placeholder='Select Event Format'
         options={eventFormats}
-        onSelectionChange={setSelectedFormat}
+        onSelectionChange={memoizedSetSelectedFormat}
       />
       <DropDown
         title='Category'
         placeholder='Select Category'
         options={eventCategories}
-        onSelectionChange={setSelectedCategory}
+        onSelectionChange={memoizedSetSelectedCategory}
       />
-
-      {/* <PlaceholdersAndVanishInput
-        placeholders={placeholders}
-        onChange={handleChange}
-        onSubmit={onSubmit}
-      /> */}
     </div>
   );
 };

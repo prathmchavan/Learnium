@@ -11,11 +11,11 @@ export const HoverEffect = ({
     items: {
         title: string;
         description: string;
-        link: string;
+        url: string;
         image: string;
         date: string;
         eventType: string;
-        eventCategory: string;
+        category: string;
         eventFormat: string;
     }[];
     className?: string;
@@ -31,8 +31,9 @@ export const HoverEffect = ({
         >
             {items.map((item, idx) => (
                 <Link
-                    href={item?.link}
-                    key={item?.link}
+                    href={item?.url}
+                    key={item?.url}
+                    target="_blank"
                     className="relative group  block p-2 h-full w-full"
                     onMouseEnter={() => setHoveredIndex(idx)}
                     onMouseLeave={() => setHoveredIndex(null)}
@@ -67,7 +68,7 @@ export const HoverEffect = ({
                         </CardDescription>
                         <CardDetails hovered={hoveredIndex === idx}>
                             <CardEventCategory hovered={hoveredIndex === idx}>
-                                {item.eventCategory}
+                                {item.category}
                             </CardEventCategory>
                             <CardDate hovered={hoveredIndex === idx}>
                                 {item.date}
@@ -144,7 +145,7 @@ export const CardDescription = ({
         <p
             className={cn(
                 "mt-8 text-zinc-400 tracking-wide leading-relaxed text-sm",
-                hovered ? "text-zinc-200" : "text-zinc-400",
+                hovered ? "text-white" : "text-zinc-400",
                 className
             )}
         >
@@ -186,7 +187,7 @@ export const CardDetails = ({
         <div
             className={cn(
                 "mt-4 text-sm text-zinc-400 space-y-2",
-                hovered && "text-zinc-200",
+                hovered && "text-white",
                 className
             )}
         >
@@ -205,7 +206,7 @@ export const CardDate = ({
     hovered?: boolean;
 }) => {
     return (
-        <p className={cn("text-zinc-400 text-xs", hovered ? "text-zinc-200" : "text-zinc-400", className)}>
+        <p className={cn("text-zinc-400 text-xs", hovered ? "text-white" : "text-zinc-400", className)}>
             <span className="font-semibold">Date: </span>
             {children}
         </p>
@@ -222,7 +223,7 @@ export const CardEventType = ({
     hovered?: boolean;
 }) => {
     return (
-        <p className={cn("text-zinc-400 text-xs", hovered ? "text-zinc-200" : "text-zinc-400", className)}>
+        <p className={cn("text-zinc-400 text-xs", hovered ? "text-white" : "text-zinc-400", className)}>
             <span className="font-semibold">Event Type: </span>
             {children}
         </p>
@@ -239,7 +240,7 @@ export const CardEventCategory = ({
     hovered?: boolean;
 }) => {
     return (
-        <p className={cn("text-zinc-400 text-xs", hovered ? "text-zinc-200" : "text-zinc-400", className)}>
+        <p className={cn("text-zinc-400 text-xs", hovered ? "text-white" : "text-zinc-400", className)}>
             <span className="font-semibold">Category: </span>
             {children}
         </p>
@@ -256,7 +257,7 @@ export const CardEventFormat = ({
     hovered?: boolean;
 }) => {
     return (
-        <p className={cn("text-zinc-400 text-xs", hovered ? "text-zinc-200" : "text-zinc-400", className)}>
+        <p className={cn("text-zinc-400 text-xs", hovered ? "text-white" : "text-zinc-400", className)}>
             <span className="font-semibold">Format: </span>
             {children}
         </p>
