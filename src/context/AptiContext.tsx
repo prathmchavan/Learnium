@@ -62,21 +62,19 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const router = useRouter();
 
-    const handleDifficultySelect = (level: string) => {
+    const handleDifficultySelect = async(level: string) => {
         setDifficulty(level);
-        fetchQuestions(level);
+        await fetchQuestions(level);
     };
 
     const fetchQuestions = async (level: string) => {
         try {
             
-            let response = await callQuestionGenerationFlow(level);
-
+            let response = await callQuestionGenerationFlow(level)
             // Optional: Remove code block tags if present
             response = response
                 .replace(/^```json|```$/g, '')
                 .trim();
-
             const fetchedQuestions: Question[] = JSON.parse(response).map((item: any) => ({
                 id: item.id,
                 text: item.text,
@@ -86,14 +84,12 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
             
             console.log(response)
             setQuestions(fetchedQuestions);
-
         } catch (error:any) {
             console.log("error at question generation",error )
             // enqueueSnackbar({
             //     message: error?.response?.data?.message || "Some error occurred, please try again",
             //     variant: "error"
             //   });
-
             throw new Error(error)
             }
     };
