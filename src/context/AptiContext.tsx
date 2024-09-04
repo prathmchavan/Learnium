@@ -72,7 +72,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             console.log(level,"this is difficulty")
             
-            const response = await axios.post(`http://localhost:3000/q`, { level });
+            const response = await axios.post(`https://genkit-backend.onrender.com/q`, { level });
 
             // // Optional: Remove code block tags if present
             // response = response
@@ -110,7 +110,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchResults = async () => {
         try {
             const data = JSON.stringify({ questions, answers });
-            const res = await  axios.post(`http://localhost:3000/result`, { data });
+            const res = await  axios.post(`https://genkit-backend.onrender.com/result`, { data });
             // let res = await callResultFlow(data);
             // res = res
             //     .replace(/^```json|```$/g, '')
