@@ -3,7 +3,9 @@ import React, { createContext, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 // import { callQuestionGenerationFlow, callResultFlow } from '@/app/genkit';
 import { enqueueSnackbar } from 'notistack';
+import axios from 'axios';
 import { callQuestionGenerationFlow, callResultFlow } from '@/ai/genkit';
+
 
 interface Option {
     id: string;
@@ -70,13 +72,13 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchQuestions = async (level: string) => {
         try {
+            console.log(level,"this is difficulty")
             
-            let response = await callQuestionGenerationFlow(level)
-            // Optional: Remove code block tags if present
-            response = response
-                .replace(/^```json|```$/g, '')
-                .trim();
-            const fetchedQuestions: Question[] = JSON.parse(response).map((item: any) => ({
+            const response = await axios.post(`http://localhost:3000/q`, { level });
+
+            // // Optional: Remove code block tags if present
+            // response = response
+            const fetchedQuestions: Question[] = response.data.map((item: any) => ({
                 id: item.id,
                 text: item.text,
                 options: item.options,
@@ -110,15 +112,13 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchResults = async () => {
         try {
             const data = JSON.stringify({ questions, answers });
+            const res = await  axios.post(`http://localhost:3000/result`, { data });
+            // let res = await callResultFlow(data);
+            // res = res
+            //     .replace(/^```json|```$/g, '')
+            // const parsedRes = JSON.parse(res.data);
 
-            let res = await callResultFlow(data);
-            res = res
-                .replace(/^```json|```$/g, '')
-                .trim();
-
-            const parsedRes = JSON.parse(res);
-
-            setResult(parsedRes);
+            setResult(res.data);
             router.push(`/ai/apti/result`);
 
         } catch (error) {
