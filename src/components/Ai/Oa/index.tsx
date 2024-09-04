@@ -12,30 +12,32 @@ const Oa: React.FC = () => {
         handleDifficultySelect,
         startTest,
         submitTest,
-        questions
+        questions // Now a single object or null
     } = useOaContext();
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
             {!testStarted ? (
                 <>
-                <h1 className="text-3xl font-bold mb-4">Select Difficulty Level</h1>
-                <DifficultySelector onSelect={handleDifficultySelect} />
+                    <h1 className="text-3xl font-bold mb-4">Select Difficulty Level</h1>
+                    <DifficultySelector onSelect={handleDifficultySelect} />
                 </>
             ) : (
                 <>
                     <TestTimer duration={1200} />
                     <div className="w-full max-w-lg text-white">
-                        {questions.map((question) => (
-                            <div key={question.id} className="mb-4 text-white">
+                        {questions ? (
+                            <div className="mb-4 text-white">
                                 <h3 className="text-lg font-semibold">
-                                    Question {question.id}
+                                    Question {questions.id}
                                 </h3>
                                 <p className="text-base">
-                                    {question.text}
+                                    {questions.text}
                                 </p>
                             </div>
-                        ))}
+                        ) : (
+                            <p className="text-white">Loading question...</p>
+                        )}
                     </div>
                     <div className="w-full max-w-lg mt-4">
                         <EditorComponent />

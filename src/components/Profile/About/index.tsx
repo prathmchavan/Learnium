@@ -68,6 +68,7 @@ const AboutComponent = () => {
                 body: JSON.stringify({
                     name: file.name,
                     size: file.size,
+                    expiresIn:3000
                 }),
             });
 
