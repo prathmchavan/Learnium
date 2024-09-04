@@ -15,7 +15,9 @@ configureGenkit({
     // by passing in a config object; if you don't, the Google AI plugin uses
     // the value from the GOOGLE_GENAI_API_KEY environment variable, which is
     // the recommended practice.
-    googleAI(),
+    googleAI({
+      apiKey: "AIzaSyAWkxQfA2zgSdR6IDoMH7Lx1diGO4h6g_M"
+    }),
 
   ],
 
