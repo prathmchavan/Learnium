@@ -1,7 +1,7 @@
 // app/api/generateQuestions/route.ts
 
+import { callQuestionGenerationFlow } from '@/ai/genkit';
 import { NextResponse } from 'next/server';
-import { callQuestionGenerationFlow } from '@/app/genkit'; // Ensure this path is correct
 
 export async function POST(request: Request) {
   try {

@@ -1,7 +1,8 @@
 // app/api/generateResults/route.ts
 
+import { callResultFlow } from '@/ai/genkit';
 import { NextResponse } from 'next/server';
-import { callResultFlow } from '@/app/genkit'; // Ensure this path is correct
+// import { callResultFlow } from '@/app/genkit'; // Ensure this path is correct
 
 export async function POST(request: Request) {
   try {
