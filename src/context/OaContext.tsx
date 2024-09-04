@@ -1,7 +1,7 @@
 "use client"
 
 
-import { callOaQuestionGenerationFlow, callOaResultFlow } from "@/app/genkit";
+import { callOaQuestionGenerationFlow, callOaResultFlow } from "@/ai/genkit";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
