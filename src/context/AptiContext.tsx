@@ -1,10 +1,8 @@
 "use client"
-import React, { createContext, useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
-// import { callQuestionGenerationFlow, callResultFlow } from '@/app/genkit';
-import { enqueueSnackbar } from 'notistack';
+import React, { createContext, useContext, useState  } from 'react';
 import axios from 'axios';
-import { callQuestionGenerationFlow, callResultFlow } from '@/ai/genkit';
+import { useRouter } from 'next/navigation';
+
 
 
 interface Option {

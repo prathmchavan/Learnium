@@ -1,7 +1,5 @@
 "use client"
 
-
-import { callOaQuestionGenerationFlow, callOaResultFlow } from "@/ai/genkit";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -32,7 +30,7 @@ interface Result {
 
 
 interface OaContextTypes {
-    questions: Question[];
+    questions: Question | null;
     testStarted: boolean;
     difficulty: string | null
     handleDifficultySelect: (level: string) => void;
@@ -57,7 +55,7 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
     const router = useRouter();
 
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<Question | null>( null);
     const [testStarted, setTestStarted] = useState<boolean>(false);
     const [difficulty, setDifficulty] = useState<string | null>(null);
 
@@ -75,32 +73,12 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     }
     const fetchQuestions = async (level: string) => {
         try {
-            let res = await callOaQuestionGenerationFlow(level);
-            res = res
-                .replace(/^\s*```json\s*/i, '')  // Remove leading ```json, case-insensitive
-                .replace(/\s*```$/i, '')         // Remove trailing ```, case-insensitive
-                .trim();                        // Trim any extra whitespace
 
-
-            // Remove any remaining backticks or special characters
-            res = res.replace(/`+/g, '').trim(); // Remove any backticks and extra whitespace
-
-            // Ensure that any extra whitespace or formatting issues are removed
-            res = res.replace(/[\r\n]+/g, ''); // Remove newline characters
-
-            // Parse the cleaned response as JSON
-            const parsedRes = JSON.parse(res);
+            const response = await axios.post(`https://genkit-backend.onrender.com/qoa`, { level });
+            
 
             // Handle parsed response as either an array or a single object
-            const fetchedQuestions: Question[] = Array.isArray(parsedRes)
-                ? parsedRes.map((item: any) => ({
-                    id: item.id,
-                    text: item.text
-                }))
-                : [{
-                    id: parsedRes.id,
-                    text: parsedRes.text
-                }];
+            const fetchedQuestions: Question = response.data
 
             setQuestions(fetchedQuestions);
         } catch (error: any) {
@@ -121,12 +99,11 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
                 lag: selectedLanguage
             };
 
-            const dataString = JSON.stringify(data);
+            
 
-            let res = await callOaResultFlow(dataString);
-            res = res.trim().replace(/^```json|```$/g, '');
-            const parsedRes = JSON.parse(res);
-            setResult(parsedRes);
+            const res = await  axios.post(`https://genkit-backend.onrender.com/resultoa`, { data });
+       
+            setResult(res.data);
             router.push('/ai/oa/result')
         } catch (error: any) {
             console.log("Error in result flow:", error.message);
