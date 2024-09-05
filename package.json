@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint": "next lint"
   },
-  "name": "frontend",
+  "name": "Learnium - Ai powered learning",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
