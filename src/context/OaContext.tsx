@@ -1,5 +1,6 @@
 "use client"
 
+import { ApiUrl_Gen } from "@/constant/secrets";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -74,7 +75,7 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     const fetchQuestions = async (level: string) => {
         try {
 
-            const response = await axios.post(`https://genkit-backend.onrender.com/qoa`, { level });
+            const response = await axios.post(`${ApiUrl_Gen}/qoa`, { level });
             
 
             // Handle parsed response as either an array or a single object
@@ -101,7 +102,7 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
             
 
-            const res = await  axios.post(`https://genkit-backend.onrender.com/resultoa`, { data });
+            const res = await  axios.post(`${ApiUrl_Gen}/resultoa`, { data });
        
             setResult(res.data);
             router.push('/ai/oa/result')

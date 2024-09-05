@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState  } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { ApiUrl_Gen } from '@/constant/secrets';
 
 
 
@@ -72,7 +73,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             console.log(level,"this is difficulty")
             
-            const response = await axios.post(`https://genkit-backend.onrender.com/q`, { level });
+            const response = await axios.post(`${ApiUrl_Gen}/q`, { level });
 
             // // Optional: Remove code block tags if present
             // response = response
@@ -110,7 +111,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchResults = async () => {
         try {
             const data = JSON.stringify({ questions, answers });
-            const res = await  axios.post(`https://genkit-backend.onrender.com/result`, { data });
+            const res = await  axios.post(`${ApiUrl_Gen}/result`, { data });
             // let res = await callResultFlow(data);
             // res = res
             //     .replace(/^```json|```$/g, '')
