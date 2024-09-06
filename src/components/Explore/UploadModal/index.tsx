@@ -1,11 +1,12 @@
-// import { MainButton, MainInput } from "@/components";
-// import InputComp from "@/components/Global/Input/InputComp";
-
+"use client"
+import { useAuthContext } from "@/context/AuthContext";
 import { getUser } from "@/hooks/get-user";
-import { axiosInst } from "@/utils/axios";
+import { uploadToS3 } from "@/hooks/upload-s3";
+import {  axiosInstGen } from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
+
 
 interface VideoObj {
     raw: File | null,
@@ -15,6 +16,7 @@ interface VideoObj {
 export const UploadModal = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
 
     const [progress, setProgress] = useState(0);
+    const {  userToken } = useAuthContext(); // Ensure `updateUser` exists in your context
 
     const handleClose = () => setOpen(false);
     const [video, setVideo] = useState<VideoObj>({
@@ -56,19 +58,16 @@ export const UploadModal = ({ open, setOpen }: { open: boolean, setOpen: any }) 
 
         try {
             console.log(video);
-            const videoLoc = await uploadToS3(`${Date.now()}_${video.raw?.name.split(" ").join("_")}`, video.raw as File, "onlymess-explore");
+            const videoLoc = await uploadToS3(`${Date.now()}_${video.raw?.name.split(" ").join("_")}`, video.raw as File);
             setProgress(80);
             console.log(videoLoc);
 
-            const res = await axiosInst.post("/reel", {
+            const res = await axiosInstGen.post("/reel", {
                 video: videoLoc,
                 caption: desc.caption,
                 description: desc.description,
-                thumbnail: ""
-            }, {
-                headers: {
-                    Authorization: "Bearer " + getUser()
-                }
+                thumbnail: "",
+                ownerId: userToken
             });
             setProgress(100);
 
@@ -141,6 +140,32 @@ export const UploadModal = ({ open, setOpen }: { open: boolean, setOpen: any }) 
                         width="100%"
                         value={desc.description}
                     /> */}
+                       <div>
+                        <label htmlFor="caption" className="block text-sm font-medium text-gray-700">
+                            Caption
+                        </label>
+                        <input
+                            id="caption"
+                            type="text"
+                            placeholder="Mouth watering..."
+                            className="text-black block w-full px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+                            value={desc.caption}
+                            onChange={(e) => setDesc((c) => ({ ...c, caption: e.target.value }))}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                            Description
+                        </label>
+                        <input
+                            id="description"
+                            type="text"
+                            placeholder="A wonderful treat for all..."
+                            className="block w-full  text-black px-3 py-2 mt-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+                            value={desc.description}
+                            onChange={(e) => setDesc((c) => ({ ...c, description: e.target.value }))}
+                        />
+                    </div>
                     <h1>caption and description</h1>
                     {loading ? (
                         <div className="mt-4">
@@ -148,14 +173,14 @@ export const UploadModal = ({ open, setOpen }: { open: boolean, setOpen: any }) 
                         </div>
                     ) : (
                         // <MainButton title="Upload!" onClick={handleUpload} />
-                        <button>upload</button>
-                    )}
+                        <button
+                        onClick={handleUpload}
+                        className="px-4 py-2 font-semibold text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                    >
+                        Upload!
+                    </button>                    )}
                 </div>
             </div>
         </div>
     );
 };
-function uploadToS3(arg0: string, arg1: File, arg2: string) {
-    throw new Error("Function not implemented.");
-}
-

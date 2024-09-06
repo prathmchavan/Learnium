@@ -23,7 +23,7 @@ const Navbar = () => {
                     <Link href={'/'}>Home</Link>
                 </li>
                 <li>
-                    <Link href={'/ai'}>Arpit.ai</Link>
+                    <Link href={'/ai'}>Learny.ai</Link>
                 </li>
                 <li>
                     <Link href={'/community'}>Community</Link>

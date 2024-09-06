@@ -22,48 +22,49 @@ export const Video = ({
     const [play, setPlay] = useState<boolean>(false);
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
-    // useEffect(() => {
-    //     if (parentRef.current) {
-    //         const observer = new IntersectionObserver(entries => {
-    //             entries.forEach(entry => {
-    //                 if (entry.isIntersecting) {
-    //                     setPlay(true);
-    //                     setCurrent(() => reel);
-    //                     videoRef.current?.play();
-    //                 } else {
-    //                     setPlay(false);
-    //                     videoRef.current?.pause();
-    //                 }
-    //             });
-    //         }, {
-    //             root: parentRef.current,
-    //             threshold: 0.6,
-    //             rootMargin: "0px"
-    //         });
+    useEffect(() => {
+        if (parentRef.current) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setPlay(true);
+                        setCurrent(() => reel);
+                        videoRef.current?.play();
+                    } else {
+                        setPlay(false);
+                        videoRef.current?.pause();
+                    }
+                });
+            }, {
+                root: parentRef.current,
+                threshold: 0.6,
+                rootMargin: "0px"
+            });
 
-    //         const reelInst = document.getElementById(`reel-${id}`);
-    //         if (reelInst) {
-    //             observer.observe(reelInst);
-    //         }
+            const reelInst = document.getElementById(`reel-${id}`);
+            if (reelInst) {
+                observer.observe(reelInst);
+            }
 
-    //         return () => {
-    //             if (reelInst) {
-    //                 observer.unobserve(reelInst);
-    //             }
-    //         };
-    //     }
-    // }, [parentRef, id, reel, setCurrent]);
+            return () => {
+                if (reelInst) {
+                    observer.unobserve(reelInst);
+                }
+            };
+        }
+        return console.log("")
+    }, [parentRef, id, reel, setCurrent]);
 
     return (
         <div
-            className={`relative w-full h-full scroll-snap-start overflow-hidden`}
+            className={`relative w-full h-full snap-start overflow-hidden object-cover`}
             id={`reel-${id}`}
         >
             <video
                 ref={videoRef}
                 src={reel.video}
                 loop
-                className="absolute inset-0 w-full h-full object-cover z-10"
+                className="absolute inset-0 w-full h-[600px] object-cover z-10"
                 onClick={() => {
                     if (videoRef.current) {
                         videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
@@ -71,7 +72,7 @@ export const Video = ({
                 }}
             />
             <Description
-                reelId={reel.id}
+                reelId={reel._id}
                 id={reel.ownerId}
                 name={reel.owner?.name ?? ""}
                 avatar={reel.owner?.avatar ?? ""}
@@ -80,7 +81,7 @@ export const Video = ({
                 current={current}
             />
             <Interaction
-                reelId={reel.id}
+                reelId={reel._id}
                 current={current}
                 title={reel.caption}
                 description={reel.description}

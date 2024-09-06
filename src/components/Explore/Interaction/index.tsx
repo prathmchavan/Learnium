@@ -1,6 +1,7 @@
+"use client"
 import { ExploreContext, Reel } from "@/context/explore";
 import { getUser } from "@/hooks/get-user";
-import { axiosInst } from "@/utils/axios";
+import { axiosInst, axiosInstGen } from "@/utils/axios";
 import { usePathname } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useContext, useEffect, useState } from "react";
@@ -18,35 +19,35 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
         const fetchLikedAndSaved = async () => {
             try {
                 setLoading(true);
-                const res = await axiosInst.get(`/reel/${reelId}/likes`, {
+                const res = await axiosInstGen.get(`/reel/${reelId}/likes`, {
                     headers: {
                         Authorization: "Bearer " + getUser(),
                     },
                 });
                 setLiked(res.data.liked);
 
-                const res2 = await axiosInst.get("/reel/collection", {
-                    headers: {
-                        Authorization: "Bearer " + getUser(),
-                    },
-                });
-                if (res2.data.collection.reels?.includes(reelId)) {
-                    setSaved(true);
-                }
+                // const res2 = await axiosInstGen.get("/reel/collection", {
+                //     headers: {
+                //         Authorization: "Bearer " + getUser(),
+                //     },
+                // });
+                // if (res2.data.collection.reels?.includes(reelId)) {
+                //     setSaved(true);
+                // }
             } catch (error) {
                 console.log(error);
             } finally {
                 setLoading(false);
             }
         };
-        if (reelId === current?.id) {
+        if (reelId === current?._id) {
             fetchLikedAndSaved();
         }
     }, [current]);
 
     useEffect(() => {
         const countLikes = () => {
-            const reel = reels.find((reel) => reel.id === reelId);
+            const reel = reels.find((reel) => reel._id === reelId);
             if (reel) {
                 setLikeCount(reel.likes.length);
             }
@@ -62,7 +63,7 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
         }
         try {
             setLiked(() => !like);
-            const res = await axiosInst.put(`/reel/like/${reelId}`, {}, {
+            const res = await axiosInstGen.put(`/reel/like/${reelId}`, {}, {
                 headers: {
                     Authorization: "Bearer " + getUser(),
                 },
@@ -81,11 +82,11 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
         }
         try {
             setSaved(() => !save);
-            const res = await axiosInst.put(`/reel/add-to-collection/${reelId}`, {}, {
-                headers: {
-                    Authorization: "Bearer " + getUser(),
-                },
-            });
+            // const res = await axiosInst.put(`/reel/add-to-collection/${reelId}`, {}, {
+            //     headers: {
+            //         Authorization: "Bearer " + getUser(),
+            //     },
+            // });
         } catch (error) {
             setSaved(save);
         }

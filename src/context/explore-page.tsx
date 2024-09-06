@@ -3,7 +3,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { Reel } from "./explore";
 import { useParams } from "next/navigation";
-import { axiosInst } from "@/utils/axios";
+import { axiosInst, axiosInstGen } from "@/utils/axios";
 import { enqueueSnackbar } from "notistack";
 
 
@@ -52,7 +52,7 @@ export const ExplorePageProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const fetchReel = async () => {
             try {
-                const res = await axiosInst.get(`/reel/${treatId}`)
+                const res = await axiosInstGen.get(`/reel/${treatId}`)
                 console.log(res);
                 setReel(() => res.data.reel);
                 setPostedBy(() => res.data.postedBy);

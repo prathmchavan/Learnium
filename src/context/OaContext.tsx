@@ -75,7 +75,7 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     const fetchQuestions = async (level: string) => {
         try {
 
-            const response = await axios.post(`${ApiUrl_Gen}/qoa`, { level });
+            const response = await axios.post(`${ApiUrl_Gen}/ai/qoa`, { level });
             
 
             // Handle parsed response as either an array or a single object
@@ -102,7 +102,7 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
             
 
-            const res = await  axios.post(`${ApiUrl_Gen}/resultoa`, { data });
+            const res = await  axios.post(`${ApiUrl_Gen}/ai/resultoa`, { data });
        
             setResult(res.data);
             router.push('/ai/oa/result')

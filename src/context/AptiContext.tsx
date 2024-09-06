@@ -73,7 +73,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             console.log(level,"this is difficulty")
             
-            const response = await axios.post(`${ApiUrl_Gen}/q`, { level });
+            const response = await axios.post(`${ApiUrl_Gen}/ai/q`, { level });
 
             // // Optional: Remove code block tags if present
             // response = response
@@ -111,7 +111,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchResults = async () => {
         try {
             const data = JSON.stringify({ questions, answers });
-            const res = await  axios.post(`${ApiUrl_Gen}/result`, { data });
+            const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
             // let res = await callResultFlow(data);
             // res = res
             //     .replace(/^```json|```$/g, '')
