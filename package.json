@@ -11,6 +11,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.645.0",
     "@monaco-editor/react": "^4.6.0",
     "@nextui-org/avatar": "^2.0.32",
     "@nextui-org/dropdown": "^2.1.29",

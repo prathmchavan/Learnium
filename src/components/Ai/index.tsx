@@ -19,7 +19,7 @@ export default function Ai() {
             text: "With",
         },
         {
-            text: "Arpit.ai.",
+            text: "Learny.ai",
             className: "text-blue-500 dark:text-blue-500",
         },
     ];

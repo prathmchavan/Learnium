@@ -1,5 +1,6 @@
+"use client"
 import { useEffect, useState } from "react";
-import { axiosInst } from "@/utils/axios";
+import {  axiosInstGen } from "@/utils/axios";
 import { getUser } from "@/hooks/get-user";
 import { enqueueSnackbar } from "notistack";
 
@@ -13,11 +14,7 @@ export const Description = ({ reelId, id, avatar, name, caption, description, cu
             const follow = following;
             try {
                 setLoading(true);
-                const res = await axiosInst.get(`/user/is-following/${id}`, {
-                    headers: {
-                        Authorization: "Bearer " + getUser()
-                    }
-                });
+                const res = await axiosInstGen.get(`/user/is-following/${id}`);
                 setFollowing(res.data.following);
             } catch (error) {
                 console.error(error);
@@ -40,11 +37,7 @@ export const Description = ({ reelId, id, avatar, name, caption, description, cu
         }
         try {
             setFollowing(!foll);
-            await axiosInst.put(`/user/follow/${id}`, {}, {
-                headers: {
-                    Authorization: "Bearer " + getUser()
-                }
-            });
+            await axiosInstGen.put(`/user/follow/${id}`);
         } catch (error) {
             console.error(error);
             setFollowing(foll);

@@ -15,14 +15,19 @@ interface Data {
 }
 
 const AboutComponent = () => {
-    const { user, userToken } = useAuthContext();
+    const { user, userToken } = useAuthContext(); // Ensure `updateUser` exists in your context
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [data, setData] = useState<Data>({ fullname: "", bio: "" })
+    const [data, setData] = useState<Data>({ fullname: "", bio: "" });
+    const expTime = 604800;
+    // Ref to store the timer ID for URL rotation
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+    // Handle input changes for fullname and bio
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
     };
 
+    // Handle form submission to update user data
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -36,20 +41,18 @@ const AboutComponent = () => {
                 }
             });
 
-            // Handle success - return or log the response
+            // Update the user context with the new data
             console.log("User data updated successfully", res.data);
-           window.location.reload();
+            // updateUser(res.data); // Ensure this updates the context appropriately
             return res.data;
 
         } catch (error: any) {
-            // Handle error - log or show an error message
             console.error("Error updating user data:", error.message);
             throw new Error(error.message);
         }
     };
 
-
-
+    // Function to handle avatar upload
     const updateAvatar = async () => {
         try {
             const file = fileInputRef.current?.files?.[0];
@@ -57,18 +60,20 @@ const AboutComponent = () => {
                 alert("Please select a file to upload.");
                 return;
             }
+            console.log(expTime)
 
-            // Step 1: Generate a Presigned URL by making a POST request to your API endpoint
+            // Step 1: Generate a Pre-signed URL with 1-week expiration
             const response = await fetch(`${ApiUrl}storage-accounts/Avatar/upload`, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     projectId: ProjectId,
                     environmentId: EnviromentId,
                 },
                 body: JSON.stringify({
                     name: file.name,
                     size: file.size,
-                    expiresIn:3000
+                    expiresIn: expTime // 1 week in seconds
                 }),
             });
 
@@ -78,7 +83,7 @@ const AboutComponent = () => {
 
             const { url, fields } = await response.json();
 
-            // Step 2: Use the URL and fields to upload the file
+            // Step 2: Upload the file to S3 using the pre-signed URL
             const formData = new FormData();
             Object.entries(fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
@@ -90,19 +95,14 @@ const AboutComponent = () => {
                 body: formData,
             });
 
-            // console.log("this is upload response", uploadResponse);
-
             if (!uploadResponse.ok) {
                 throw new Error("Failed to upload file");
             }
 
-            //step 3.  file name storing in db
-            console.log("file name before backend req", file.name)
+            console.log("File uploaded successfully:", file.name);
 
-         
-            // console.log("backend res after updating the filename", user?.about.filename)
-
-            fetchAvatarUrl(file.name);
+            // Step 3: Fetch the new avatar URL and update the user profile
+            await fetchAvatarUrl(file.name);
 
             alert("Avatar uploaded successfully!");
         } catch (error) {
@@ -111,10 +111,44 @@ const AboutComponent = () => {
         }
     };
 
+    // Helper function to parse expiration time from pre-signed URL
+    const getExpirationTime = (url: string): Date | null => {
+        try {
+            const urlObj = new URL(url);
+            const searchParams = urlObj.searchParams;
+            const amzDate = searchParams.get('X-Amz-Date');
+            const amzExpires = searchParams.get('X-Amz-Expires');
+
+            if (!amzDate || !amzExpires) return null;
+
+            // Parse amzDate (format: YYYYMMDDTHHMMSSZ)
+            const year = parseInt(amzDate.substring(0, 4));
+            const month = parseInt(amzDate.substring(4, 6)) - 1; // JavaScript months are 0-based
+            const day = parseInt(amzDate.substring(6, 8));
+            const hour = parseInt(amzDate.substring(9, 11));
+            const minute = parseInt(amzDate.substring(11, 13));
+            const second = parseInt(amzDate.substring(13, 15));
+
+            const amzDateParsed = new Date(Date.UTC(year, month, day, hour, minute, second));
+            const expiresIn = parseInt(amzExpires, 10);
+
+            if (isNaN(expiresIn)) return null;
+
+            // Calculate exact expiration time
+            const expirationTime = new Date(amzDateParsed.getTime() + expiresIn * 1000);
+            return expirationTime;
+        } catch (error) {
+            console.error("Error parsing expiration time from URL:", error);
+            return null;
+        }
+    }
+
+    // Function to fetch the avatar's pre-signed URL and update the user profile
     const fetchAvatarUrl = async (filename: string) => {
         try {
-            // console.log("filename inside", filename)
-            const response = await fetch(`${ApiUrl}storage-accounts/Avatar/download?name=${encodeURIComponent(filename)}`, {
+
+            console.log(expTime)
+            const response = await fetch(`${ApiUrl}storage-accounts/Avatar/download?name=${encodeURIComponent(filename)}&expiresIn=${expTime}`, {
                 method: 'GET',
                 headers: {
                     projectId: ProjectId,
@@ -122,22 +156,29 @@ const AboutComponent = () => {
                 },
             });
 
+            if (!response.ok) {
+                throw new Error("Failed to fetch avatar URL");
+            }
+
             const data = await response.text();
             const cleanUrl = data.replace(/^"(.*)"$/, '$1'); // Removes surrounding double quotes if any
+            console.log(cleanUrl)
 
-            // console.log("from inside", data);
-
-            const res = await axiosInst.patch(`/user/${userToken}`,{
+            // Update the user profile with the new pre-signed URL
+            const res = await axiosInst.patch(`/user/${userToken}`, {
                 about: {
-                    name: `${user?.about.name}`,
-                    bio: `${user?.about.bio}`,
+                    name: user?.about.name,
+                    bio: user?.about.bio,
                     profilePicture: cleanUrl,
-                    filename: `${filename}`  // Updated to 'profilePicture' instead of 'filename'
+                    filename: filename
                 }
-            })
-         
-            window.location.reload();
-            // console.log(res)
+            });
+
+            console.log("Avatar URL updated successfully", res.data);
+
+            // Update the user context with the new data
+            // updateUser(res.data); // Ensure this updates the context appropriately
+
             return cleanUrl;
         } catch (error) {
             console.error("Error fetching avatar URL:", error);
@@ -145,6 +186,45 @@ const AboutComponent = () => {
         }
     }
 
+    useEffect(() => {
+        const url = user?.about.profilePicture;
+        const filename = user?.about.filename;
+
+        if (!url || !filename) return;
+
+        const expirationTime = getExpirationTime(url);
+        if (!expirationTime) {
+            console.error("Could not determine expiration time for the pre-signed URL.");
+            return;
+        }
+
+        const now = new Date();
+        const refreshTime = new Date(expirationTime.getTime() - 12 * 60 * 60 * 1000); // 12 hours before expiration
+
+        const delay = refreshTime.getTime() - now.getTime();
+
+        if (delay <= 0) {
+            // If it's already past the refresh time, refresh immediately
+            fetchAvatarUrl(filename);
+        } else {
+            // Set a timer to refresh the URL at the calculated refresh time
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+            }
+
+            timerRef.current = setTimeout(() => {
+                fetchAvatarUrl(filename);
+            }, delay);
+        }
+
+        // Cleanup the timer when the component unmounts or dependencies change
+        return () => {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
+        };
+    }, [user?.about.profilePicture, user?.about.filename]);
 
     return (
         <>
@@ -154,7 +234,7 @@ const AboutComponent = () => {
                         <h2 className="font-bold text-xl text-neutral-200">About Section</h2>
 
                         <form className="my-8" onSubmit={handleSubmit}>
-                            {/* profile pic section */}
+                            {/* Profile Picture Section */}
                             <div className="flex justify-center">
                                 <Avatar
                                     as="button"
@@ -174,20 +254,37 @@ const AboutComponent = () => {
                                     ref={fileInputRef}
                                     accept="image/*"
                                     className="hidden"
-                                    onChange={updateAvatar} // Call updateAvatar on file selection
+                                    onChange={updateAvatar} // Trigger avatar upload on file selection
                                 />
                             </div>
-                            {/* name and bio section */}
+                            {/* Full Name and Bio Sections */}
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="fullname">Full Name</Label>
-                                <Input id="fullname" name="fullname" placeholder={user?.about.name} type="text" className=" placeholder:text-white" onChange={handleChange} />
+                                <Input
+                                    id="fullname"
+                                    name="fullname"
+                                    placeholder={user?.about.name}
+                                    type="text"
+                                    className="placeholder:text-white"
+                                    onChange={handleChange}
+                                />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="bio">Bio</Label>
-                                <Input id="bio" name="bio" placeholder={user?.about.bio} type="text" className=" placeholder:text-white" onChange={handleChange} />
+                                <Input
+                                    id="bio"
+                                    name="bio"
+                                    placeholder={user?.about.bio}
+                                    type="text"
+                                    className="placeholder:text-white"
+                                    onChange={handleChange}
+                                />
                             </LabelInputContainer>
 
-                            <button className="bg-gradient-to-br from-zinc-900 to-zinc-900 block w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] relative group" type="submit">
+                            <button
+                                className="bg-gradient-to-br from-zinc-900 to-zinc-900 block w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] relative group"
+                                type="submit"
+                            >
                                 Save &rarr;
                                 <BottomGradient />
                             </button>
@@ -199,6 +296,7 @@ const AboutComponent = () => {
     )
 }
 
+// Component for gradient effect on the button
 const BottomGradient = () => (
     <>
         <span className="group-hover:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
@@ -206,6 +304,7 @@ const BottomGradient = () => (
     </>
 );
 
+// Wrapper for label and input elements
 const LabelInputContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div className={cn("flex flex-col space-y-2 w-full", className)}>
         {children}

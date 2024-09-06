@@ -29,7 +29,7 @@ export const ExplorePagePage = () => {
                                 }}
                             />
                             <Description
-                                reelId={reel.id}
+                                reelId={reel._id}
                                 id={reel.ownerId}
                                 name={reel.owner?.name ?? ""}
                                 avatar={reel.owner?.avatar ?? ""}
@@ -38,7 +38,7 @@ export const ExplorePagePage = () => {
                                 current={reel}
                             />
                             <Interaction
-                                reelId={reel.id}
+                                reelId={reel._id}
                                 current={reel}
                                 title={reel.caption}
                                 description={reel.description}

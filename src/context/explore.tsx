@@ -5,13 +5,13 @@ import { fetchReels } from "@/hooks/explore";
 import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from "react"
 
 export interface Reel {
-    id: number,
+    _id: number,
     video: string,
     thumbnail: string,
     caption: string,
     description: string,
     likes: number[],
-    ownerId: number,
+    ownerId: string,
     owner: {
         name: string,
         avatar: string,
@@ -41,7 +41,7 @@ export const ExploreProvider = ({ children }: { children: ReactNode }) => {
         try {
             const res = await fetchReels(page);
             setReels((reels) => ([...reels, ...res]));
-            console.log(res);
+            console.log("i am here",res);
             return res;
         } catch (error) {
             console.log(error);
