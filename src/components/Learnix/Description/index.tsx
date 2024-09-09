@@ -71,7 +71,7 @@ export const Description = ({ reelId, id, avatar, name, caption, description, cu
     };
 
     return (
-        <div className="absolute flex flex-col bottom-5 left-2 gap-3 max-w-2/3 w-full z-50">
+        <div className="absolute flex flex-col bottom-5 left-5 gap-3 max-w-2/3 w-full z-50">
             <div className="flex items-center gap-3">
                 <div className="flex items-center gap-3">
                     <Avatar
