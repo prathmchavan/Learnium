@@ -39,7 +39,7 @@ export const LearnixProvider = ({ children }: { children: ReactNode }) => {
         try {
             const res = await fetchReels(page);
             setReels((reels) => ([...reels, ...res]));
-            console.log("i am here",res);
+            // console.log("i am here",res);
             return res;
         } catch (error) {
             console.log(error);
