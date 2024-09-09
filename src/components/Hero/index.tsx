@@ -1,29 +1,42 @@
+"use client"
 import React from "react";
-import { BackgroundBeams } from "../ui/background-beams";
-import { Cover } from "../ui/cover";
 import { GlobeDemo } from "../Global/GlobeDemo";
-import { TailwindcssButtons } from "../Global/TailwindcssButtons";
-import { HeroHighlightDemo } from "../Global/HeroHighlight";
+import { motion } from "framer-motion";
+import { HeroHighlight, Highlight } from "../ui/hero-highlight";
 
 export const Hero = () => {
     return (
-
-        <div className="relative flex items-center justify-between min-h-screen overflow-hidden bg-black">
-            {/* <BackgroundBeams className="-z-50" /> */}
-
-            {/* Text component of hero section */}
-            <div className=" flex-col mx-5 flex-1 flex justify-start">
-                <div>
-                    <HeroHighlightDemo />
+        <HeroHighlight className="m-0 p-0">
+            <div className="flex flex-col lg:flex-row items-center justify-between w-full">
+                <div className="lg:w-1/2 px-4">
+                    <motion.h1
+                        initial={{
+                            opacity: 0,
+                            y: 20,
+                        }}
+                        animate={{
+                            opacity: 1,
+                            y: [20, -5, 0],
+                        }}
+                        transition={{
+                            duration: 0.5,
+                            ease: [0.4, 0.0, 0.2, 1],
+                        }}
+                        className="text-2xl md:text-4xl lg:text-5xl font-bold text-white dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-left"
+                    >
+                        Transforming Education For
+                        <Highlight className="text-black dark:text-white mx-2">
+                            All Learners
+                        </Highlight>
+                    </motion.h1>
+                    <h1 className="my-5 text-[#F6F6F6]">
+                        Learnium is revolutionizing education in Tier 2 and Tier 3 cities by providing smart, inclusive, and interactive learning experiences. Join us today and discover a world of knowledge!
+                    </h1>
                 </div>
-
-
+                <div className="lg:w-1/2 flex justify-center mt-10 lg:mt-0">
+                    <GlobeDemo />
+                </div>
             </div>
-
-            {/* GitHub globe component */}
-            {/* <div className="flex-1 flex justify-end">
-                <GlobeDemo />
-            </div> */}
-        </div>
+        </HeroHighlight>
     );
 };

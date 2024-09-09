@@ -19,12 +19,12 @@ export default function Ai() {
             text: "With",
         },
         {
-            text: "Learny.ai",
+            text: "Learni.AI",
             className: "text-blue-500 dark:text-blue-500",
         },
     ];
     return (
-        <div className="flex flex-col items-center justify-center h-[40rem] z-20">
+        <div className="flex flex-col items-center justify-center h-[40rem] z-20 bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]">
             <p className="text-white dark:text-neutral-200 text-xs sm:text-base  ">
                 The road to achieve big starts from here
             </p>
