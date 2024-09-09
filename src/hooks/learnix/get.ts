@@ -1,4 +1,4 @@
-import {  axiosInstGen } from "@/utils/axios";
+import {  axiosInstGen, axiosInstGendev } from "@/utils/axios";
 
 
 

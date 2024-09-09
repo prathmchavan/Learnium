@@ -1,13 +1,11 @@
-import { ExplorePage } from "@/components/Explore";
+import { LearnixPage } from "@/components/Learnix";
 
 const Page: React.FC = () => {
-
     return (
         <>
-            <ExplorePage />
+            <LearnixPage />
         </>
     )
-    
 };
 
 export default Page;

@@ -249,6 +249,7 @@ const AboutComponent = () => {
                                         fileInputRef.current?.click();
                                     }}
                                 />
+                        
                                 <input
                                     type="file"
                                     ref={fileInputRef}

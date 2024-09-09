@@ -9,7 +9,7 @@ import { IconArrowNarrowLeft, IconUpload } from "@tabler/icons-react";
 
 // import { ArrowBackIcon, UploadIcon } from "@/components/icons"; // Assume you have these icons available
 
-export const ExploreHeader = () => {
+export const LearnixHeader = () => {
     const [open, setOpen] = useState<boolean>(false);
     const router = useRouter();
     const pathname = usePathname();

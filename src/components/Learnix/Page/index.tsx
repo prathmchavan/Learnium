@@ -1,18 +1,14 @@
 "use client";
-
 import { useContext, useRef } from "react";
 import { Video } from "..";
-import { ExploreContext, Reel } from "@/context/explore";
-import { ExploreHeader } from "../Header";
+import { LearnixContext, Reel } from "@/context/learnix";
+import { LearnixHeader } from "../Header";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 
-export const ExplorePage = () => {
-    const { reels, setCurrent, current } = useContext(ExploreContext);
+export const LearnixPage = () => {
+    const { reels, setCurrent, current } = useContext(LearnixContext);
     const parentRef = useRef<HTMLDivElement | null>(null);
-
-
-
-    return (
+  return (
         <div className=" flex justify-center ">
             <BackgroundGradient className="max-w-md w-[600px] h-[600px] flex justify-center items-center" containerClassName="w-auto">
 
@@ -23,7 +19,7 @@ export const ExplorePage = () => {
                         ref={parentRef}
                     >
 
-                        <ExploreHeader />
+                        <LearnixHeader />
                         {/* Reels Container */}
                         <div
                             className="w-full h-full overflow-y-scroll no-scrollbar snap-y snap-mandatory overflow-x-hidden relative"

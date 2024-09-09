@@ -1,6 +1,6 @@
 "use client";
 
-import { Reel } from "@/context/explore";
+import { Reel } from "@/context/learnix";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { Description } from "../Description";
 import { Interaction } from "../Interaction";

@@ -1,11 +1,12 @@
-import { ExplorePageLayout } from "@/components/ExplorePage";
+
+import { LearnixPageLayout } from "@/components/LearnixPage";
 import { ReactNode } from "react"
 
 const Layout = ({children}: {children: ReactNode}) => {
     return (
-        <ExplorePageLayout>
+        <LearnixPageLayout>
             {children}
-        </ExplorePageLayout>
+        </LearnixPageLayout>
     )
 };
 

@@ -1,20 +1,19 @@
 "use client"
-import { ExploreContext, Reel } from "@/context/explore";
+import { LearnixContext, Reel } from "@/context/learnix";
 import { getUser } from "@/hooks/get-user";
-import { axiosInst, axiosInstGen } from "@/utils/axios";
+import { axiosInst, axiosInstGen, axiosInstGendev } from "@/utils/axios";
+import { IconBookmark, IconBookmarkFilled, IconHeart ,IconHeartFilled, IconShare3 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useContext, useEffect, useState } from "react";
-// import { BookmarkIcon, BookmarkBorderIcon, FavoriteIcon, FavoriteBorderIcon, ShareIcon, CircularProgressIcon } from "@/components/icons"; // Replace with your icons
 
 export const Interaction = ({ reelId, current, title, description, video }: { reelId: number | string, current: Reel, title: string, description: string, video: string }) => {
     const [liked, setLiked] = useState<boolean>(false);
     const [saved, setSaved] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
-    const { reels } = useContext(ExploreContext);
+    const { reels } = useContext(LearnixContext);
     const pathname = usePathname();
-
     useEffect(() => {
         const fetchLikedAndSaved = async () => {
             try {
@@ -25,7 +24,6 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
                     },
                 });
                 setLiked(res.data.liked);
-
                 // const res2 = await axiosInstGen.get("/reel/collection", {
                 //     headers: {
                 //         Authorization: "Bearer " + getUser(),
@@ -44,7 +42,6 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
             fetchLikedAndSaved();
         }
     }, [current]);
-
     useEffect(() => {
         const countLikes = () => {
             const reel = reels.find((reel) => reel._id === reelId);
@@ -54,7 +51,6 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
         };
         countLikes();
     }, [reels, reelId]);
-
     const handleLike = async () => {
         const like = liked;
         if (!getUser()) {
@@ -73,7 +69,6 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
             setLiked(like);
         }
     };
-
     const handleSave = async () => {
         const save = saved;
         if (!getUser()) {
@@ -91,13 +86,12 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
             setSaved(save);
         }
     };
-
     const shareTreat = async () => {
         try {
             const shareData = {
                 title: title ?? "Something mouth watering!",
                 text: `Have a look at this treat I found for you! ${description}`,
-                url: `https://onlymess.in/explore/${reelId}`,
+                url: `https://onlymess.in/Learnix/${reelId}`,
             };
 
             if (navigator.share) {
@@ -111,9 +105,8 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
             enqueueSnackbar({ message: "Please try sharing once more!", variant: "warning" });
         }
     };
-
     return (
-        <div className="absolute flex flex-col bottom-5 right-2 gap-3 z-[999]">
+        <div className="absolute flex flex-col bottom-5 right-6 gap-3 z-[999]">
             {loading ? (
                 // <CircularProgressIcon className="h-3 w-3" />
                 <h1>loader</h1>
@@ -123,28 +116,25 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
                         <button onClick={handleLike} className="focus:outline-none">
                             {liked ? (
                                 // <FavoriteIcon className="text-red-500" />
-                                <h1>fav</h1>
+                                <IconHeartFilled 
+                                color="red"
+                                />
                             ) : (
                                 // <FavoriteBorderIcon className="text-gray-500" />
-                                <h1>fav border</h1>
+                                <IconHeart />
                             )}
                         </button>
                         <p className="text-white">{likeCount}</p>
                     </div>
-
                     <button onClick={handleSave} className="focus:outline-none">
                         {saved ? (
-                            // <BookmarkIcon className="text-white" />
-                            <h1>bookmark</h1>
+                           <IconBookmark/>
                         ) : (
-                            // <BookmarkBorderIcon className="text-gray-500" />
-                            <h1>bookmark borderr</h1>
+                            <IconBookmarkFilled/>
                         )}
                     </button>
-
                     <button onClick={shareTreat} className="focus:outline-none">
-                        {/* <ShareIcon className="text-gray-500" /> */}
-                        <h1>shhareicon</h1>
+                        <IconShare3/>
                     </button>
                 </div>
             )}
