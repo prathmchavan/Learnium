@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { Reel } from "./explore";
+import { Reel } from "./learnix";
 import { useParams } from "next/navigation";
 import { axiosInst, axiosInstGen } from "@/utils/axios";
 import { enqueueSnackbar } from "notistack";
@@ -25,7 +25,7 @@ export interface User {
     state: string | null,
 }
 
-interface ExplorePageContext {
+interface LearnixPageContext {
     reel: Reel | null,
     postedBy: User | null
     like: Function,
@@ -33,7 +33,7 @@ interface ExplorePageContext {
     share: Function
 }
 
-export const ExplorePageContext = createContext<ExplorePageContext>({
+export const LearnixPageContext = createContext<LearnixPageContext>({
     reel: null,
     postedBy: null,
     like: () => { },
@@ -41,7 +41,7 @@ export const ExplorePageContext = createContext<ExplorePageContext>({
     share: () => { }
 });
 
-export const ExplorePageProvider = ({ children }: { children: ReactNode }) => {
+export const LearnixPageProvider = ({ children }: { children: ReactNode }) => {
     const {
         id: treatId
     } = useParams();
@@ -76,7 +76,7 @@ export const ExplorePageProvider = ({ children }: { children: ReactNode }) => {
     }
 
     return (
-        <ExplorePageContext.Provider
+        <LearnixPageContext.Provider
             value={{
                 reel,
                 postedBy,
@@ -86,6 +86,6 @@ export const ExplorePageProvider = ({ children }: { children: ReactNode }) => {
             }}
         >
             {children}
-        </ExplorePageContext.Provider>
+        </LearnixPageContext.Provider>
     )
 }

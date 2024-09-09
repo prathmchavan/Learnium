@@ -1,4 +1,4 @@
-import { ApiUrl, ApiUrl_Gen, EnviromentId, ProjectId } from "@/constant/secrets";
+import { ApiUrl, ApiUrl_Gen, ApiUrl_Gendev, EnviromentId, ProjectId } from "@/constant/secrets";
 import axios from "axios";
 
 
@@ -19,3 +19,8 @@ export const axiosInstGen = axios.create({
   });
   
 
+  export const axiosInstGendev = axios.create({
+	baseURL: ApiUrl_Gendev,
+	
+  });
+  

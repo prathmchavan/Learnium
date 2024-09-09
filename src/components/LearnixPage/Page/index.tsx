@@ -1,18 +1,18 @@
 "use client";
 
-import { Description } from "@/components/Explore/Description";
-import { ExploreHeader } from "@/components/Explore/Header";
-import { Interaction } from "@/components/Explore/Interaction";
-import { ExplorePageContext } from "@/context/explore-page";
+import { Description } from "@/components/Learnix/Description";
+import { LearnixHeader } from "@/components/Learnix/Header";
+import { Interaction } from "@/components/Learnix/Interaction";
+import { LearnixPageContext } from "@/context/learnix-page";
 import { useContext, useRef } from "react";
 
-export const ExplorePagePage = () => {
+export const LearnixPagePage = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const { reel } = useContext(ExplorePageContext);
+    const { reel } = useContext(LearnixPageContext);
 
     return (
         <div className="w-screen h-screen flex justify-center items-center bg-black relative">
-            <ExploreHeader />
+            <LearnixHeader />
             <div className="w-full md:w-[400px] h-full md:h-[700px] bg-gray-300 rounded-lg shadow-lg flex flex-row overflow-hidden">
                 <div className="flex-1 h-full relative">
                     {reel ? (

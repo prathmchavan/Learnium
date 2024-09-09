@@ -1,7 +1,5 @@
 "use client";
-
-
-import { fetchReels } from "@/hooks/explore";
+import { fetchReels } from "@/hooks/learnix";
 import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from "react"
 
 export interface Reel {
@@ -19,19 +17,19 @@ export interface Reel {
     }
 };
 
-interface ExploreContextInt {
+interface LearnixContextInt {
     reels: Reel[],
     current: Reel | null,
     setCurrent: Dispatch<SetStateAction<Reel | null>>
 };
 
-export const ExploreContext = createContext<ExploreContextInt>({
+export const LearnixContext = createContext<LearnixContextInt>({
     reels: [],
     current: null,
     setCurrent: () => { }
 });
 
-export const ExploreProvider = ({ children }: { children: ReactNode }) => {
+export const LearnixProvider = ({ children }: { children: ReactNode }) => {
 
     const [reels, setReels] = useState<Reel[]>([]);
     const [current, setCurrent] = useState<Reel | null>(null);
@@ -52,7 +50,7 @@ export const ExploreProvider = ({ children }: { children: ReactNode }) => {
     }, [])
 
     return (
-        <ExploreContext.Provider
+        <LearnixContext.Provider
             value={{
                 reels,
                 current,
@@ -60,6 +58,6 @@ export const ExploreProvider = ({ children }: { children: ReactNode }) => {
             }}
         >
             {children}
-        </ExploreContext.Provider>
+        </LearnixContext.Provider>
     )
 }
