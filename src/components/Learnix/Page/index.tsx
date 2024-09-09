@@ -9,16 +9,13 @@ export const LearnixPage = () => {
     const { reels, setCurrent, current } = useContext(LearnixContext);
     const parentRef = useRef<HTMLDivElement | null>(null);
   return (
-        <div className=" flex justify-center ">
-            <BackgroundGradient className="max-w-md w-[600px] h-[600px] flex justify-center items-center" containerClassName="w-auto">
-
-
-                <div className="w-full h-[600px] bg-black rounded-3xl overflow-hidden">
+        <div className=" flex justify-center my-2">
+            <BackgroundGradient className="max-w-md w-[600px] h-[670px] flex justify-center items-center" containerClassName="w-auto">
+                <div className="w-full h-[670px] bg-black rounded-3xl overflow-hidden">
                     <div
                         className="w-full h-full flex flex-col overflow-hidden"
                         ref={parentRef}
                     >
-
                         <LearnixHeader />
                         {/* Reels Container */}
                         <div
@@ -36,10 +33,8 @@ export const LearnixPage = () => {
                                 />
                             ))}
                         </div>
-
                     </div>
                 </div>
-                {/* </div> */}
             </BackgroundGradient>
         </div>
     );
