@@ -5,14 +5,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuthContext } from "@/context/AuthContext";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
+import { usePathname } from "next/navigation";
 
 
 const Navbar = () => {
     const { userToken, logout ,user } = useAuthContext();
+    const path = usePathname();
 
- 
+    if (path === '/learnix') {
+        return null;
+    }
 
     return (
+     
         <div className="bg-white bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-5 flex px-11 py-3">
             <div className="flex justify-start items-center">
                 <Image src={'/logo/log.svg'} width={150} height={150} alt="logo" />

@@ -32,6 +32,9 @@ export const LearnixHeader = () => {
                         }
                     }}
                     />
+                    <h1>
+                        LearniX
+                    </h1>
                 
                 </div>
                 <div className="flex items-center ">

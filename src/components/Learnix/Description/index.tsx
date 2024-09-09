@@ -109,10 +109,10 @@ export const Description = ({ reelId, id, avatar, name, caption, description, cu
                     )}
                 </div>
                 <button
-                    className="text-gray-300 text-xs pt-2 "
+                    className="text-gray-300 text-xs  "
                     onClick={() => setExpanded((e) => !e)}
                 >
-                    {expanded ?(<IconArrowBarUp color="red" />) : (<IconArrowBarDown color="green" />)}
+                    {expanded ? <h1> less</h1> : <h1>more</h1>}
                 </button>
             </div>
         </div>

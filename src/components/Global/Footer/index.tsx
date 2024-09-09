@@ -1,10 +1,18 @@
+"use client"
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 
 const Footer: React.FC = () => {
+  const path = usePathname();
+
+  if(path === '/learnix')
+  {
+    return null;
+  }
   return (
     // <BackgroundGradientAnimation containerClassName='h-full w-full'>
     <div className='bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]'>
