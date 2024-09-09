@@ -1,6 +1,5 @@
 "use client"
 import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -14,28 +13,23 @@ const Footer: React.FC = () => {
     return null;
   }
   return (
-    // <BackgroundGradientAnimation containerClassName='h-full w-full'>
     <div className='bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]'>
-
       <div
         className="relative z-10 w-full bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-0 py-10 px-10"
       >
-            {/* <div className="flex justify-start  items-center">
-                      <Image src={'/models/test.png'} width={150} height={150} alt="logo"/>
-              </div> */}
         <div className="flex flex-col items-center justify-center w-full bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-5 py-10 px-10">
           <ul className="flex items-center justify-center gap-10 text-white font-bold">
             <li>
-              <Link href={"/"}>Community</Link>
+              <Link href={"/community"}>Community</Link>
             </li>
             <li>
-              <Link href={"/"}>Projects</Link>
+              <Link href={"/projects"}>Projects</Link>
             </li>
             <li>
-              <Link href={"/"}>Events</Link>
+              <Link href={"/events"}>Events</Link>
             </li>
             <li>
-              <Link href={"/"}>Courses</Link>
+              <Link href={"/learnix"}>LearniX</Link>
             </li>
           </ul>
           <hr className="w-full border-t border-gray-200 my-4" />
@@ -48,7 +42,6 @@ const Footer: React.FC = () => {
         </div>
       </div>
         </div>
-    // </BackgroundGradientAnimation>
   );
 };
 

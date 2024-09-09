@@ -6,7 +6,7 @@ import { GlobeDemo } from "../GlobeDemo";
 
 export function HeroHighlightDemo() {
   return (
-    <HeroHighlight>
+    // <HeroHighlight>
       <div className="flex flex-col lg:flex-row items-center justify-between w-full">
         {/* Text and Highlight Section */}
         <div className="lg:w-1/2 px-4">
@@ -41,6 +41,6 @@ export function HeroHighlightDemo() {
           <GlobeDemo />
         </div>
       </div>
-    </HeroHighlight>
+    // </HeroHighlight>
   );
 }

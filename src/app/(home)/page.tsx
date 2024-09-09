@@ -6,7 +6,7 @@ import React from "react";
 export default function Home() {
 
   return (
-    <div>
+    <div className=" overflow-y-hidden overflow-hidden no-scrollbar">
 
       <Hero/>
       {/* <GoogleGeminiEffectDemo/> */}
