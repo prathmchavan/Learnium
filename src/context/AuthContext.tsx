@@ -103,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
