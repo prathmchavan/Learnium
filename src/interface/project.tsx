@@ -10,4 +10,7 @@ export interface Project {
     thumbnailUrl: string | null;
     thumbnailName:string | null;
     userId: string ;
+    commentId: string | null;
+    gitLink: string | null
+
 }

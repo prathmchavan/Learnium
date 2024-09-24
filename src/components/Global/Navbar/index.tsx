@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { TailwindcssButtons } from "../TailwindcssButtons";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,14 +17,14 @@ const Navbar = () => {
     }
 
     return (
-        <div className={`py-5 ${path === '/' ? '' : 'bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]'}`}>
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg  border-opacity-20  shadow-lg flex px-11 py-3 rounded-2xl top-5 mx-5">
+        <div className="py-5" >
+            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg  border-opacity-20  shadow-lg flex px-11 py-3 rounded-2xl top-5 mx-5 md:flex-row flex-col">
                 <div className="flex justify-start items-center">
                     <Link href={"/"}>
                         <Image src={'/logo/log.svg'} width={150} height={150} alt="logo" />
                     </Link>
                 </div>
-                <ul className="flex flex-row justify-center items-center gap-11 flex-grow text-[#E5E6FF]">
+                <ul className="flex md:flex-row flex-col gap-3 mb-5 justify-center items-center md:gap-11 flex-grow text-[#E5E6FF]">
                     <li>
                         <Link href={'/ai'}>Learni.AI</Link>
                     </li>
@@ -47,7 +47,7 @@ const Navbar = () => {
                     </div>
                 )}
                 {userToken && (
-                    <div className="flex justify-end items-center">
+                    <div className="flex justify-end items-center ">
                         <Dropdown placement="bottom-start" className="bg-gray-900">
                             <DropdownTrigger>
                                 <User

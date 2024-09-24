@@ -34,7 +34,7 @@ export const Hero = () => {
                     </h1>
                 </div>
                 <div className="lg:w-1/2 flex justify-center mt-10 lg:mt-0">
-                    <GlobeDemo />
+                    <GlobeDemo/>
                 </div>
             </div>
         </HeroHighlight>

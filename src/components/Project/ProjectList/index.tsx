@@ -12,40 +12,35 @@ import UploadCard from "../UploadProject/UploadCard";
 
 const ProjectListComponent = () => {
     const { projects, fetchProject } = useProjectContext();
-
     const [filteredProjects, setFilteredProjects] = useState(projects);
     const [filters, setFilters] = useState<{ category: string[], technology: string[] }>({
         category: [],
         technology: []
     });
-
     useEffect(() => {
         fetchProject();
     }, []);
-
     useEffect(() => {
         applyFilters();
     }, [filters, projects]);
-
     const applyFilters = () => {
         let filtered = projects;
-
         // Filter by category
         if (filters.category.length > 0) {
             filtered = filtered.filter(project =>
                 filters.category.includes(project.category)
             );
         }
-
         // Filter by technology
         if (filters.technology.length > 0) {
             filtered = filtered.filter(project =>
                 filters.technology.some(tech => project.technologyUsed.includes(tech))
             );
         }
-
         setFilteredProjects(filtered);
     };
+
+    
     return (
         <div>
             <SparkelTitle />
@@ -57,7 +52,6 @@ const ProjectListComponent = () => {
                             <div className="flex items-center space-x-4 p-4 bg-gradient-to-l from-[#381d77b0] to-gray-900 rounded-lg mb-4">
                                 {/* Rank */}
                                 <h1 className="text-2xl text-purple-600/90 font-bold">#{index + 1}</h1>
-
                                 {/* Image */}
                                 <div className="w-24 h-16 relative">
                                     <Image
@@ -68,7 +62,6 @@ const ProjectListComponent = () => {
                                         className="rounded-lg"
                                     />
                                 </div>
-
                                 {/* Title and Description */}
                                 <div className="flex-1">
                                     <h2 className="text-xl font-bold text-white">{project.title}</h2>
@@ -76,7 +69,7 @@ const ProjectListComponent = () => {
                                     <div className="flex space-x-4 mt-2">
                                         <div className="flex gap-2 text-center">
                                             <IconMessageCircleFilled />
-                                            <h1>{project.commentsCount}</h1>
+                                            <h1>{project.commentId ? project.commentId.length : 0}</h1>
                                         </div>
                                         <div className="flex gap-2 text-center">
                                             <IconBookmarkFilled />
@@ -84,7 +77,6 @@ const ProjectListComponent = () => {
                                         </div>
                                     </div>
                                 </div>
-
                                 {/* Upvotes */}
                                 <div className="flex flex-col items-center">
                                     <div className="flex-row gap-2 text-center">

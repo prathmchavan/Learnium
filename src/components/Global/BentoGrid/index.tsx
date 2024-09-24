@@ -30,10 +30,10 @@ export function BentoGridDemo() {
 
 const items = [
   {
-    title: "Explore Our Courses",
-    description: "Discover a wide range of courses tailored to meet your learning needs. From beginner to advanced levels, our courses are designed by educators for students like you. Start your learning journey today and gain the skills you need to succeed.",
-    link: "course",
-    linkname:"View All"
+    title: "Explore LearniX",
+    description: "Discover short, engaging educational videos designed for quick learning. Perfect for on-the-go learners, explore various subjects like tech skills, science, and exam tips in a fun and easy-to-digest format.",
+    link: "learnix",
+    linkname:"Watch Now"
     // icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
   },
   {
