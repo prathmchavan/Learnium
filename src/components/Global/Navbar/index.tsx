@@ -24,7 +24,7 @@ const Navbar = () => {
                         <Image src={'/logo/log.svg'} width={150} height={150} alt="logo" />
                     </Link>
                 </div>
-                <ul className="flex md:flex-row flex-col gap-3 mb-5 justify-center items-center md:gap-11 flex-grow text-[#E5E6FF]">
+                <ul className="flex md:flex-row flex-col gap-3 justify-center items-center md:gap-11 flex-grow text-[#E5E6FF]">
                     <li>
                         <Link href={'/ai'}>Learni.AI</Link>
                     </li>

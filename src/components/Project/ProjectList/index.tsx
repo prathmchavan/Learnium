@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import FilterSection from "../FilterSection";
-import { GlareCard } from "@/components/ui/glare-card";
 import UploadCard from "../UploadProject/UploadCard";
 
 const ProjectListComponent = () => {
@@ -73,7 +72,7 @@ const ProjectListComponent = () => {
                                         </div>
                                         <div className="flex gap-2 text-center">
                                             <IconBookmarkFilled />
-                                            <h1>{project.bookmarksCount}</h1>
+                                            <h1>{project.bookmarksCount.length ? project.bookmarksCount.length : 0}</h1>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +80,7 @@ const ProjectListComponent = () => {
                                 <div className="flex flex-col items-center">
                                     <div className="flex-row gap-2 text-center">
                                         <IconStarFilled size={28} color="gold" />
-                                        <h1>{project.upvotes}</h1>
+                                        <h1>{project.upvotes.length ? project.upvotes.length : 0}</h1>
                                     </div>
                                 </div>
                             </div>
