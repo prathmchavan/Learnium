@@ -4,9 +4,8 @@ export interface Project {
     description: string;
     technologyUsed: string[];
     category: string;
-    commentsCount: number;
-    bookmarksCount:number;
-    upvotes: number;
+    bookmarksCount:string[] ;
+    upvotes:  string[];
     thumbnailUrl: string | null;
     thumbnailName:string | null;
     userId: string ;
