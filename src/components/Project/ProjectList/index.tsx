@@ -87,9 +87,7 @@ const ProjectListComponent = () => {
                         </Link>
                     ))}
                 </div>
-       
                 <UploadCard/>
-
             </div>
         </div>
     )
