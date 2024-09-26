@@ -25,9 +25,9 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
     const [saved, setSaved] = useState<boolean>(false);
     const [comments, setComments] = useState<any[]>([]); // Initialize as an array
     const [comment, setComment] = useState<string>();
-    const { getProject } = useProjectContext();
+    const { getProject ,fetchProjectOwner } = useProjectContext();
     const [projectOwner, setProjectOwner] = useState<any>();
-
+    
     useEffect(() => {
         let isMounted = true;
 
@@ -38,8 +38,8 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                     setProject(fetchedProject);
                     const currentUser = getUser();
                     if (fetchedProject && currentUser && Array.isArray(fetchedProject.upvotes) && fetchedProject.upvotes.includes(currentUser) && Array.isArray(fetchedProject.bookmarksCount) && fetchedProject.bookmarksCount.includes(currentUser)) {
-                        setLiked(true); // User has already liked the project
-                        setSaved(true); // User has already saved the project
+                        setLiked(true);
+                        setSaved(true);
                     }
                 }
             } catch (error: any) {
@@ -67,10 +67,11 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
         };
         fetchProject();
         fetchComment();
+
         return () => {
             isMounted = false; // Cleanup
         };
-    }, [params.id, getProject]);
+    }, [params.id, getProject, project]);
 
     const fetchUser = async (userId: string) => {
         try {
@@ -275,7 +276,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                     }
                     className=""
                 >
-                    Project Owner
+                    {project.userId}
                 </Chip>
                 <div className="mt-6">
                     <h2 className="text-2xl font-semibold">Project Description :</h2>
