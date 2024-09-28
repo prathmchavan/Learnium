@@ -7,6 +7,7 @@ export interface ProjectForm {
     thumbnailName?: string;
     userId?: string;
     gitLink?: string;
-    // Add any other fields that are optional here
+    bookmarksCount?:string[];
+    upvotes? : string[];
   }
   

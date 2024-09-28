@@ -10,8 +10,9 @@ import {
 import { ProjectForm } from "@/interface/projectForm";
 import { Input, Button, Chip ,Kbd} from "@nextui-org/react";
 import { ApiUrl, EnviromentId, ProjectId } from "@/constant/secrets";
-import { axiosInst } from "@/utils/axios";
 import { FileUpload } from "@/components/ui/file-upload";
+import { useProjectContext } from "@/context/ProjectContext";
+import { getUser } from "@/hooks/get-user";
 
 
 
@@ -26,10 +27,11 @@ export function UploadModal() {
         userId: "",
         gitLink: ""
     });
-
+    const {createProject} = useProjectContext();
     const [techInput, setTechInput] = useState("");
     const [files, setFiles] = useState<File[]>([]);
     const expTime = 604800;
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -63,16 +65,24 @@ export function UploadModal() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await fetch("/api/projects", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (response.ok) {
+            const userId = getUser(); // Fetch userId using getUser hook
+    
+            // Ensure userId is available before submission
+            if (userId && (typeof userId === 'string' || typeof userId === 'number')) {
+                const updatedFormData = {
+                    ...formData,
+                    bookmarksCount: [],
+                    upvotes:[],
+                    userId: String(userId), // Add userId directly
+                };
+    
+                console.log(updatedFormData.userId, "this is userId");
+    
+                // Call createProject with updated formData
+                await createProject(updatedFormData);
+    
                 alert("Project submitted successfully");
+    
                 // Reset formData after submission
                 setFormData({
                     title: "",
@@ -84,12 +94,14 @@ export function UploadModal() {
                     userId: "",
                     gitLink: ""
                 });
+            } else {
+                console.error("User ID not available. Please log in or try again.");
             }
         } catch (error) {
             console.error("Error submitting project:", error);
         }
     };
-
+    
     const handleFileUpload = async (files: File[]) => {
         try {
             setFiles(files);
@@ -105,41 +117,29 @@ export function UploadModal() {
                     size: files[0].size,
                 }),
             });
-
             if (!response.ok) {
                 throw new Error("Failed to generate presigned URL");
             }
-
             const { url, fields } = await response.json();
-
             // Step 2: Use the URL and fields to upload the file
             const formData = new FormData();
             Object.entries(fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
             });
             formData.append('file', files[0]);
-
             const uploadResponse = await fetch(url, {
                 method: 'POST',
                 body: formData,
             });
-
             // console.log("this is upload response", uploadResponse);
-
             if (!uploadResponse.ok) {
                 throw new Error("Failed to upload file");
             }
-
             //step 3.  file name storing in db
-            console.log("file name before backend req", files[0].name)
-
-         
+            console.log("file name before backend req", files[0].name)         
             // console.log("backend res after updating the filename", user?.about.filename)
-
             fetchResume(files[0].name);
-
-            alert("Avatar uploaded successfully!");
-            
+            alert("Avatar uploaded successfully!");           
         } catch (error) {
             
         }

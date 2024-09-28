@@ -1,5 +1,4 @@
 "use client"
-import DropDown from "@/components/Global/DropDown";
 import { SparkelTitle } from "@/components/Global/SparkelTitle";
 import { useProjectContext } from "@/context/ProjectContext";
 import { IconBookmarkFilled, IconMessageCircleFilled, IconStarFilled } from "@tabler/icons-react";
@@ -39,7 +38,7 @@ const ProjectListComponent = () => {
         setFilteredProjects(filtered);
     };
 
-    
+
     return (
         <div>
             <SparkelTitle />
@@ -72,8 +71,9 @@ const ProjectListComponent = () => {
                                         </div>
                                         <div className="flex gap-2 text-center">
                                             <IconBookmarkFilled />
-                                            <h1>{project.bookmarksCount.length ? project.bookmarksCount.length : 0}</h1>
+                                            <h1>{project?.bookmarksCount?.length ? project.bookmarksCount.length : 0}</h1>
                                         </div>
+
                                     </div>
                                 </div>
                                 {/* Upvotes */}
@@ -87,7 +87,7 @@ const ProjectListComponent = () => {
                         </Link>
                     ))}
                 </div>
-                <UploadCard/>
+                <UploadCard />
             </div>
         </div>
     )
