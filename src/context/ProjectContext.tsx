@@ -3,6 +3,7 @@
 import { createContext, ReactNode, useContext , useState} from "react";
 import { axiosInst } from "@/utils/axios";
 import { Project } from "@/interface/project";
+import { ProjectForm } from "@/interface/projectForm";
 
 interface ProjectContextTypes {
     projects: Project[]; 
@@ -28,7 +29,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     const [projects, setProjects] = useState<Project[]>([]);
 
  // Create a new project with the given project data
- const createProject = async (newProjectData: Partial<Project>) => {
+ const createProject = async (newProjectData: Partial<ProjectForm>) => {
     try {
         const res = await axiosInst.post("/projects", newProjectData);
         console.log("Project created:", res.data);
