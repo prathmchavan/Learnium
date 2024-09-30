@@ -244,8 +244,23 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         <span>Give Learni Star</span>
                     </button>
                 </div>
+                <div className="my-10">
+                <Chip
+                    variant="shadow"
+                    color="secondary"
+                    avatar={
+                        <Avatar
+                        name="JW"
+                        src=""
+                        />
+                    }
+                    className=""
+                    >
+                    {project.userId}
+                </Chip>
+                    </div>
                 <Divider className="bg-white w-full my-10" orientation="horizontal" />
-                <Image alt="test" src="/images/any.jpg" width={500} height={200} className="w-full rounded-lg" />
+                {/* <Image alt="test" src="/images/any.jpg" width={500} height={200} className="w-full rounded-lg" /> */}
                 <div className="flex justify-between items-center mt-8">
                     <div className="flex space-x-4">
                         <button onClick={handleSave}>
@@ -265,19 +280,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         </Link>
                     </div>
                 </div>
-                <Chip
-                    variant="shadow"
-                    color="secondary"
-                    avatar={
-                        <Avatar
-                            name="JW"
-                            src=""
-                        />
-                    }
-                    className=""
-                >
-                    {project.userId}
-                </Chip>
                 <div className="mt-6">
                     <h2 className="text-2xl font-semibold">Project Description :</h2>
                     <p className="mt-2 text-gray-400">{project.description}</p>
