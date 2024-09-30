@@ -144,6 +144,7 @@ export function UploadModal() {
             
         }
     };
+    
     const fetchResume = async (filename: string) => {
         try {
             // console.log("filename inside", filename)
@@ -188,7 +189,7 @@ export function UploadModal() {
                         💻 🧑‍💻
                     </div>
                 </ModalTrigger>
-                <ModalBody className="bg-gradient-to-t from-[#232526] to-[#414345] h-full no-scrollbar overflow-y-auto">
+                <ModalBody className="bg-gradient-to-b from-[#000000] to-[#401479] h-full no-scrollbar overflow-y-auto">
                     <ModalContent>
                         <h4 className="text-lg md:text-2xl text-neutral-100 font-bold text-center mb-8">
                             Share Us Your{" "}
@@ -201,7 +202,7 @@ export function UploadModal() {
                             <h1 className="text-3xl font-bold mb-6">Submit Your Project</h1>
                             <form onSubmit={handleSubmit} className="space-y-10 mt-10">
                                 {/* Title */}
-                                <div>
+                                <div className="flex gap-3 flex-col">
                                     <Input
                                         fullWidth
                                         label="Title"
@@ -210,7 +211,7 @@ export function UploadModal() {
                                         name="title"
                                         value={formData.title}
                                         onChange={handleInputChange}
-                                        className="w-full"
+                                        className="w-full light"
                                         color="success"
                                         isClearable
                                         isRequired
@@ -293,11 +294,7 @@ export function UploadModal() {
                                         isRequired
                                     />
                                 </div>
-                                <div className="my-5 flex justify-center align-middle flex-col">
-                                    <h1 className="font-bold text-xl">Upload Image of Project :</h1>
-                                <FileUpload onChange={handleFileUpload} />
-                                {/* <h3>Your Resume: {user?.professional.filename}</h3> */}
-                            </div>
+                              
                                 {/* Submit Button */}
                                 <Button type="submit" className="w-full bg-blue-500 text-white py-2 mt-4">
                                     Submit Project

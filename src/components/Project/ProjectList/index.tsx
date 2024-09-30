@@ -51,7 +51,7 @@ const ProjectListComponent = () => {
                                 {/* Rank */}
                                 <h1 className="text-2xl text-purple-600/90 font-bold">#{index + 1}</h1>
                                 {/* Image */}
-                                <div className="w-24 h-16 relative">
+                                {/* <div className="w-24 h-16 relative">
                                     <Image
                                         src={''}
                                         alt={project.thumbnailName || 'Image'}
@@ -59,7 +59,7 @@ const ProjectListComponent = () => {
                                         objectFit="cover"
                                         className="rounded-lg"
                                     />
-                                </div>
+                                </div> */}
                                 {/* Title and Description */}
                                 <div className="flex-1">
                                     <h2 className="text-xl font-bold text-white">{project.title}</h2>
