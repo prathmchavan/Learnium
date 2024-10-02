@@ -1,0 +1,35 @@
+/* quillStyles.css */
+
+/* Style the entire container background and text color */
+.ql-container {
+    background-color: #ffffff !important; /* White background for the editor */
+    color: #000000 !important; /* Black text color */
+  }
+  
+  /* Style the editor text area */
+  .ql-editor {
+    background-color: #ffffff !important; /* White background for the text area */
+    color: #000000 !important; /* Black text color */
+  }
+  
+  /* Style the toolbar */
+  .ql-toolbar {
+    background-color: #ffffff !important; /* White background for the toolbar */
+  }
+  
+  /* Style toolbar icons (stroke and fill colors) */
+  .ql-toolbar .ql-stroke {
+    stroke: #000000 !important; /* Black stroke color for toolbar icons */
+  }
+  
+  .ql-toolbar .ql-fill {
+    fill: #000000 !important; /* Black fill color for toolbar icons */
+  }
+  
+  /* Change the placeholder color */
+  .ql-editor.ql-blank::before {
+    color: #000000 !important; /* Black placeholder color */
+    opacity: 0.6; /* Optional: Adjust opacity for placeholder text */
+  }
+  
+  

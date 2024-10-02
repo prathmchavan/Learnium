@@ -3,7 +3,6 @@ import { Divider } from "@nextui-org/divider";
 import { useProjectContext } from "@/context/ProjectContext";
 import { Project } from "@/interface/project";
 import {
-    IconArrowBigRightFilled,
     IconBookmark,
     IconBookmarkFilled,
     IconBrandGithub,
@@ -11,7 +10,6 @@ import {
     IconStar,
     IconStarFilled,
 } from "@tabler/icons-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { getUser } from "@/hooks/get-user";
@@ -25,8 +23,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
     const [saved, setSaved] = useState<boolean>(false);
     const [comments, setComments] = useState<any[]>([]); // Initialize as an array
     const [comment, setComment] = useState<string>();
-    const { getProject ,fetchProjectOwner } = useProjectContext();
-    const [projectOwner, setProjectOwner] = useState<any>();
+    const { getProject} = useProjectContext();
     
     useEffect(() => {
         let isMounted = true;
@@ -168,7 +165,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             setSaved(previousSavedState);
         }
     };
-    const shareTreat = async () => {
+    const shareProject = async () => {
         try {
             const shareData = {
                 title: project.title ?? "Something mouth watering!",
@@ -256,7 +253,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                     }
                     className=""
                     >
-                    {project.userId}
+                    {/* {project.owner?.about.name} */} Owner
                 </Chip>
                     </div>
                 <Divider className="bg-white w-full my-10" orientation="horizontal" />
@@ -266,7 +263,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         <button onClick={handleSave}>
                             {saved ? <IconBookmarkFilled size={20} color="green" /> : <IconBookmark size={20} />}
                         </button>
-                        <button onClick={shareTreat}>
+                        <button onClick={shareProject}>
                             <IconShare size={20} />
                         </button>
                     </div>

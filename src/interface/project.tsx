@@ -11,5 +11,6 @@ export interface Project {
     userId: string ;
     commentId: string | null;
     gitLink: string | null
+    // owner: any;
 
 }
