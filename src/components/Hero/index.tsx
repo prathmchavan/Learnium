@@ -25,7 +25,7 @@ export const Hero = () => {
                         className="text-2xl md:text-4xl lg:text-5xl font-bold text-white dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-left"
                     >
                         Transforming Education For
-                        <Highlight className="text-black dark:text-white mx-2">
+                        <Highlight className="text-black dark:text-white mx-8">
                             All Learners
                         </Highlight>
                     </motion.h1>
