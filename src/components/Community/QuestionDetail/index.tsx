@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { EditorState } from 'draft-js';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './quillStyles.css'; // Import the CSS file
+import './quillstyles.css'; 
 import { LeftSection } from '../LeftSection';
 import { RightSection } from '../RightSection';
 
