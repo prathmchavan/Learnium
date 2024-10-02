@@ -51,28 +51,45 @@ export default function Ai() {
             <div className="flex justify-center align-middle">
                 <Image src={'/images/robot.png'} width={1000} height={900} alt="image" />
             </div>
-            <div ref={testSectionRef} className="flex flex-row justify-center align-middle gap-24 mb-8" >
-                <div className="flex flex-col justify-center align-middle gap-y-5">
-                    <h1 className="text-center text-4xl font-semibold i">Aptitude Test</h1>
-                    <p className="text-center italic">The aptitude test evaluates your problem-<br />sovling , reasoning and analytical skills, helping <br /> you identify key areas of improvement in <br /> cognitive abilities</p>
-                    <Link href={'/ai/apti'} className="mx-auto">
-                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
-                            Take aptitude test
-                        </button>
-                    </Link>
-                </div>
-                <Divider orientation="vertical" className="bg-purple-800 w-0.5 h-56" />
-                <div className="flex flex-col justify-center align-middle gap-y-5">
-                    <h1 className="text-center text-4xl font-semibold ">OA Test</h1>
-                    <p className="text-center italic">The OA test focuses on subject-specific <br /> knowledge,testing your proficiency in areas like <br /> math , language and technical skills . tailored to <br />yoru learning goals</p>
-                    <Link href={'/ai/oa'} className="mx-auto">
-                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
-                            Take OA test
-                        </button>
-                    </Link>
-                </div>
+            <div ref={testSectionRef} className="flex flex-col items-center justify-center gap-24 mb-8">
+    <div className="flex flex-row justify-center items-center gap-24 w-full">
+        <div className="flex flex-col items-center gap-y-5">
+            <h1 className="text-center text-4xl font-semibold">Aptitude Test</h1>
+            <p className="text-center italic">
+                The aptitude test evaluates your problem-solving,<br />
+                reasoning, and analytical skills, helping you<br />
+                identify key areas of improvement in<br />
+                cognitive abilities.
+            </p>
+            <Link href={'/ai/apti'} className="mx-auto">
+                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
+                    Take aptitude test
+                </button>
+            </Link>
+        </div>
+        <Divider orientation="vertical" className="bg-purple-800 w-0.5 h-56" />
+        <div className="flex flex-col items-center gap-y-5">
+            <h1 className="text-center text-4xl font-semibold">OA Test</h1>
+            <p className="text-center italic">
+                The OA Test (Online Assessment Test) is
+                a coding challenge where you solve<br />
+                programming questions using a specific coding language.
+                It tests your ability to write correct and <br/>
+                efficient code in a set time.
+                The test helps assess problem-solving skills<br/>
+                and coding knowledge, often used to prepare for
+                technical job roles.
+            </p>
+            <Link href={'/ai/oa'} className="mx-auto">
+                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
+                    Take OA test
+                </button>
+            </Link>
+        </div>
+    </div>
+</div>
 
-            </div>
+
             <div className="flex justify-center items-center min-h-screen">
                 <div className="flex flex-col justify-center items-center my-24 border-2 border-[#6439db] w-[500px] rounded-2xl p-8">
                     <h1 className="text-center text-4xl font-semibold my-5">How it Works...?</h1>
