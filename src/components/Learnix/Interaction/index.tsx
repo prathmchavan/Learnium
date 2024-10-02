@@ -86,12 +86,12 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
             setSaved(save);
         }
     };
-    const shareTreat = async () => {
+    const shareLearnix = async () => {
         try {
             const shareData = {
                 title: title ?? "Something mouth watering!",
                 text: `Have a look at this treat I found for you! ${description}`,
-                url: `https://onlymess.in/Learnix/${reelId}`,
+                url: `https://learnix.coolify.top/Learnix/${reelId}`,
             };
 
             if (navigator.share) {
@@ -133,7 +133,7 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
                             <IconBookmarkFilled/>
                         )}
                     </button>
-                    <button onClick={shareTreat} className="focus:outline-none">
+                    <button onClick={shareLearnix} className="focus:outline-none">
                         <IconShare3/>
                     </button>
                 </div>

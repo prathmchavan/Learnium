@@ -1,14 +1,21 @@
-"use client"
+"use client";
 
-import { IconMessageCircle, IconThumbUp, IconEye } from '@tabler/icons-react';
+import { IconMessageCircle, IconThumbUp, IconEye, IconStarFilled, IconStar, IconThumbUpFilled } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Editor, EditorState } from 'draft-js';
+import { EditorState } from 'draft-js';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import './quillStyles.css'; // Import the CSS file
+import { LeftSection } from '../LeftSection';
+import { RightSection } from '../RightSection';
 
-export default function QuestionDetail({params} :{params:{id: string}}) {
-    const [editorState, setEditorState] = useState(EditorState.createEmpty());
+export default function QuestionDetail({ params }: { params: { id: string } }) {
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [newAnswer, setNewAnswer] = useState("");
+  const [liked, setLiked] = useState<boolean>(false);
+  const [comments, setComments] = useState<any[]>([]); // Initialize as an array
 
-
-   const question = {
+  const question = {
     id: 1,
     user: "Zubayer Bin Matin",
     title: "How to center a div?",
@@ -35,13 +42,12 @@ export default function QuestionDetail({params} :{params:{id: string}}) {
   ];
 
   const [answers, setAnswers] = useState(initialAnswers);
-  const [newAnswer, setNewAnswer] = useState("");
 
   const handleAnswerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newAnswerData = {
       id: answers.length + 1,
-      user: "You", // This should be replaced with the logged-in user's data
+      user: "You", // Replace with logged-in user's name
       content: newAnswer,
       votes: 0,
     };
@@ -49,70 +55,94 @@ export default function QuestionDetail({params} :{params:{id: string}}) {
     setNewAnswer("");
   };
 
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }, { color: 'white' }, { background: 'black' }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ align: [] }],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header', 'font', 'list', 'bullet', 'bold', 'italic', 'underline',
+    'strike', 'blockquote', 'align', 'color', 'background', 'link', 'image'
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex justify-center py-10">
-      <div className="w-full max-w-3xl">
+    <div className="min-h-screen  text-white flex justify-center  md:p-8">
+      <div className="flex">
+        <LeftSection />
         {/* Question Details */}
-        <div className="bg-gray-800 p-6 rounded-lg mb-6">
-          <h1 className="text-2xl font-bold mb-2">{question.title}</h1>
-          <div className="text-gray-400 mb-4">
-            <span>{question.user}</span> • 
-            <span> {question.views} views •</span>
-            <span> {question.votes} votes</span>
-          </div>
-          <p className="text-gray-300 mb-4">{question.content}</p>
-          <div className="flex space-x-4 text-gray-400">
-            <span className="flex items-center space-x-1">
-              <IconThumbUp className="h-4 w-4" /> <span>{question.votes} Votes</span>
-            </span>
-            <span className="flex items-center space-x-1">
-              <IconMessageCircle className="h-4 w-4" /> <span>{question.answers} Answers</span>
-            </span>
-            <span className="flex items-center space-x-1">
-              <IconEye className="h-4 w-4" /> <span>{question.views} Views</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Answers Section */}
-        <div className="bg-gray-800 p-6 rounded-lg mb-6">
-          <h2 className="text-xl font-bold mb-4">Answers</h2>
-          {answers.length > 0 ? (
-            answers.map((answer) => (
-              <div key={answer.id} className="mb-4 bg-gray-700 p-4 rounded-lg">
-                <div className="text-sm text-gray-400">{answer.user}</div>
-                <p className="text-gray-300">{answer.content}</p>
-                <div className="flex space-x-2 text-gray-400 mt-2">
-                  <span className="flex items-center space-x-1">
-                    <IconThumbUp className="h-4 w-4" /> <span>{answer.votes} Votes</span>
-                  </span>
-                </div>
+        <div className='space-y-4 w-full mx-10'>
+          <div className="bg-gray-800 p-6 rounded-lg">
+            <h1 className="text-3xl font-bold text-indigo-400 mb-4">{question.title}</h1>
+            <div className="text-gray-400 flex justify-between items-center mb-4">
+              <span className="text-lg">{question.user}</span>
+              <div className="space-x-4 flex">
+                <button
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg"
+                // onClick={handleLike}
+                >
+                  {liked ? <IconStarFilled size={20} color="gold" /> : <IconStar size={20} color='white' />}
+                  <span className='text-white'>{question.votes} Learni Star</span>
+                </button>
+                <span className="flex items-center space-x-1 text-white">
+                  <IconMessageCircle color='white' className="h-5 w-5" /> <span>{question.answers} Answers</span>
+                </span>
+                <span className="flex items-center space-x-1 text-white">
+                  <IconEye className="h-5 w-5" /> <span>{question.views} Views</span>
+                </span>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-400">No answers yet. Be the first to answer!</p>
-          )}
-        </div>
+            </div>
+            <p className="text-gray-300 text-lg mb-4">{question.content}</p>
+          </div>
 
-        {/* Answer Form */}
-        <div className="bg-gray-800 p-6 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Your Answer</h2>
-          <form onSubmit={handleAnswerSubmit}>
-            <textarea
-              className="w-full p-2 bg-gray-700 text-white rounded-lg mb-4"
-              rows={4}
-              placeholder="Write your answer here..."
-              value={newAnswer}
-              onChange={(e) => setNewAnswer(e.target.value)}
-            ></textarea>
-            <button
-              type="submit"
-              className="bg-indigo-600 px-4 py-2 rounded-lg text-white hover:bg-indigo-500"
-            >
-              Submit Answer
-            </button>
-          </form>
+          {/* Answers Section */}
+          <div className="bg-gray-800 p-6 rounded-lg">
+            <h2 className="text-2xl font-bold mb-4">Answers</h2>
+            {answers.length > 0 ? (
+              answers.map((answer) => (
+                <div key={answer.id} className="mb-4 bg-gray-700 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400">{answer.user}</div>
+                  <p className="text-gray-300 mt-2">{answer.content}</p>
+                  <div className="flex space-x-2 text-gray-400 mt-2">
+                    <span className="flex items-center space-x-1">
+                      <IconThumbUp className="h-4 w-4" /> <span>{answer.votes} Votes</span>
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400">No answers yet. Be the first to answer!</p>
+            )}
+          </div>
+
+          {/* Answer Form */}
+          <div className="border-2 border-[#432c83] p-6 rounded-lg">
+            <h2 className="text-2xl font-bold mb-4">Your Answer</h2>
+            <form onSubmit={handleAnswerSubmit}>
+              <ReactQuill
+                theme="snow"
+                value={newAnswer}
+                onChange={setNewAnswer}
+                modules={modules}
+                formats={formats}
+                className="mb-4 text-white rounded-lg quill-toolbar placeholder:text-white" // Add class here
+                placeholder="Write your answer here..."
+              />
+              <button
+                type="submit"
+                className="bg-indigo-600 px-4 py-2 rounded-lg text-white hover:bg-indigo-500"
+              >
+                Submit Answer
+              </button>
+            </form>
+          </div>
         </div>
+        <RightSection/>
       </div>
     </div>
   );
