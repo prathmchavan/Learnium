@@ -10,8 +10,8 @@ export const LearnixPage = () => {
     const parentRef = useRef<HTMLDivElement | null>(null);
   return (
         <div className=" flex justify-center">
-            <BackgroundGradient className="max-w-md w-[600px] h-[680px] flex justify-center items-center" containerClassName="w-auto">
-                <div className="w-full h-[680px] bg-black rounded-3xl overflow-hidden">
+            <BackgroundGradient className="max-w-md w-[300px] h-[550px] md:w-[600px] md:h-[680px] flex justify-center items-center" containerClassName="w-auto">
+                <div className="w-full h-[550px] md:h-[680px] bg-black rounded-3xl overflow-hidden">
                     <div
                         className="w-full h-full flex flex-col overflow-hidden"
                         ref={parentRef}
