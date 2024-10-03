@@ -6,7 +6,7 @@ import { HeroHighlight, Highlight } from "../ui/hero-highlight";
 
 export const Hero = () => {
     return (
-        <HeroHighlight className="m-0 p-0">
+        <HeroHighlight className="md:m-0 md:p-0 my-10 ">
             <div className="flex flex-col lg:flex-row items-center justify-between w-full">
                 <div className="lg:w-1/2 px-4">
                     <motion.h1
@@ -33,8 +33,8 @@ export const Hero = () => {
                         Learnium is revolutionizing education in Tier 2 and Tier 3 cities by providing smart, inclusive, and interactive learning experiences. Join us today and discover a world of knowledge!
                     </h1>
                 </div>
-                <div className="lg:w-1/2 flex justify-center mt-10 lg:mt-0">
-                    <GlobeDemo/>
+                <div className="lg:w-1/2 flex justify-center md:mt-10 lg:mt-0 md:block hidden">
+                    <GlobeDemo />
                 </div>
             </div>
         </HeroHighlight>

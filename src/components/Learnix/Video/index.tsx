@@ -64,7 +64,7 @@ export const Video = ({
                 ref={videoRef}
                 src={reel.video}
                 loop
-                className="absolute inset-0 w-full h-[680px] object-cover z-10"
+                className="absolute inset-0 w-full h-[550px] md:h-[680px] object-cover z-10"
                 onClick={() => {
                     if (videoRef.current) {
                         videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
