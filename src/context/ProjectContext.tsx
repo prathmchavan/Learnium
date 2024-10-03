@@ -54,17 +54,6 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     const getProject = async (id: string) => {
         try {
             const res = await axiosInst.get(`projects/${id}`);
-            // const project = res.data;
-            
-            // const ownerRes = await axiosInst.get(`user/${project.userId}`);
-            // const owner = ownerRes.data;
-    
-            // // Combine the project and owner data
-            // const data = {
-            //     ...project,
-            //     owner
-            // };
-    
             return res.data; // Return the combined data
         } catch (error: any) {
             console.error("Error fetching project or user data:", error);

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Global/Navbar";
+// import Navbar from "@/components/Global/Navbar";
 import Footer from "@/components/Global/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import {Providers} from "./providers";
+import NavbarComp from "@/components/Global/Navbar/temp";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,11 +27,9 @@ export default function RootLayout({
   </head>
       <body className={inter.className}>
         <Providers>
-
         <AuthProvider>
-
-        <Navbar/>
-       
+        {/* <Navbar/> */}
+        <NavbarComp/>
         {children}
         <Footer/>
         </AuthProvider>

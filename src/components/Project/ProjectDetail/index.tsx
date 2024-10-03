@@ -27,7 +27,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
     
     useEffect(() => {
         let isMounted = true;
-
         const fetchProject = async () => {
             try {
                 const fetchedProject = await getProject(params.id);
@@ -43,7 +42,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                 console.error("Error fetching project:", error);
             }
         };
-
         const fetchComment = async () => {
             try {
                 const res = await axiosInst.get(`comment?limit=100&offset=0`);
@@ -64,11 +62,10 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
         };
         fetchProject();
         fetchComment();
-
         return () => {
             isMounted = false; // Cleanup
         };
-    }, [params.id, getProject, project]);
+    }, [params.id, getProject]);
 
     const fetchUser = async (userId: string) => {
         try {
@@ -202,7 +199,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             console.error("Error adding comment:", error);
         }
     };
-
     const updateProjectCommentId = async (id: string) => {
         try {
             const updatedCommentIds = project.commentId
@@ -221,13 +217,11 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                 commentId: updatedCommentIds,
                 gitLink: project.gitLink,
             });
-
             console.log("Updated project with new comment:", res.data);
         } catch (error: any) {
             console.error("Error updating project commentId:", error);
         }
     };
-
     return (
         <div className="bg-gradient-to-l from-[#23124b] to-gray-900 text-white min-h-screen p-8">
             <div className="max-w-5xl mx-auto">

@@ -1,9 +1,11 @@
 "use client"
 import { Chip } from '@nextui-org/react';
-import {  IconChevronDown, IconMessageCircle, IconThumbUp, IconEye} from '@tabler/icons-react';
+import { IconChevronDown, IconMessageCircle, IconThumbUp, IconEye, IconArrowUpCircle, IconBallpen } from '@tabler/icons-react';
 import Link from 'next/link';
 import { LeftSection } from '../LeftSection';
 import { RightSection } from '../RightSection';
+import { DropDownComp } from '../DropDown';
+
 
 export default function QuestionsPage() {
   const questions = [
@@ -24,34 +26,59 @@ export default function QuestionsPage() {
     // Add more contributors as needed
   ];
 
+  const itemsMenu = [
+    { key: "questions", label: "My Questions", icon: <IconArrowUpCircle className="h-5 w-5" /> },
+    { key: "answers", label: "My Answers", icon: <IconMessageCircle className="h-5 w-5" /> },
+    { key: "post", label: "Post Question", icon: <IconBallpen className="h-5 w-5" /> }
+  ];
+
+  const itemsSort = [
+    { key: "questions", label: "My Questions", icon: <IconArrowUpCircle className="h-5 w-5" /> },
+    { key: "answers", label: "My Answers", icon: <IconMessageCircle className="h-5 w-5" /> },
+    { key: "post", label: "Post Question", icon: <IconBallpen className="h-5 w-5" /> }
+  ];
+
   return (
-    <div className="min-h-screen  text-white flex">
+    <div className="min-h-screen  text-white flex overflow-x-hidden">
       {/* Main Content */}
       <main className="flex-grow p-6">
-        <div className="flex items-center justify-center align-middle gap-10">
+        <div className="flex flex-col md:flex-row items-center justify-center md:gap-10 gap-5">
           <input
             type="text"
             placeholder="Search Here"
-            className="w-96 p-2 border-[#432c83] border-2 bg-black rounded-2xl text-white"
+            className="md:w-96 w-full p-2 border-[#432c83] border-2 bg-black rounded-2xl text-white"
           />
-          <button className="border-[#432c83] border-2 p-2 rounded-xl flex items-center">
-            Sort By
-            <IconChevronDown className="ml-2" />
-          </button>
+          <div className='flex flex-row gap-5'>
+
+            <DropDownComp 
+            title='Sort By' 
+            buttonVariant="shadow"
+            className="custom-dropdown"
+            items={itemsSort}/>
+
+            {/* Dropdown for mobile screens */}
+            <DropDownComp
+              title="Menu"
+              buttonVariant="shadow"
+              className="custom-dropdown"
+              items={itemsMenu}
+            />
+          </div>
         </div>
-        <div className='flex flex-row my-10'>
-          <LeftSection/>
+
+        <div className='flex flex-col md:flex-row md:my-10'>
+          <LeftSection />
           {/* Questions List */}
-          <div className=" space-y-4 w-full mx-10">
+          <div className=" md:space-y-4 md:w-full w-auto md:mx-10 my-5">
             {questions.map((question) => (
               <Link href={`/community/${question.id}`} key={question.id}>
                 <div key={question.id} className="bg-gradient-to-l from-[#381d77b0] to-[#4c1d77b0] p-4 rounded-lg">
                   <div className="flex justify-between">
                     <div className="flex flex-col">
-                      <h3 className="text-lg font-bold">{question.title}</h3>
+                      <h3 className="md:text-lg font-bold text-md">{question.title}</h3>
                       <div className='flex my-2 gap-2'>
                         {question.tags.map((t, index) => (
-                          <Chip color="success" variant="dot">
+                          <Chip color="success" variant="dot" size='sm'>
                             <h1 className='text-white'>{t}</h1>
                           </Chip>
                         ))}
@@ -61,20 +88,20 @@ export default function QuestionsPage() {
                   </div>
                   <div className="mt-2 text-gray-400 flex space-x-4">
                     <span className="flex items-center space-x-1">
-                      <IconThumbUp className="h-4 w-4" /> <span>{question.votes} Votes</span>
+                      <IconThumbUp className="h-4 w-4" /> <span>{question.votes}</span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <IconMessageCircle className="h-4 w-4" /> <span>{question.answers} Answers</span>
+                      <IconMessageCircle className="h-4 w-4" /> <span>{question.answers} </span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <IconEye className="h-4 w-4" /> <span>{question.views} Views</span>
+                      <IconEye className="h-4 w-4" /> <span>{question.views}</span>
                     </span>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
-        <RightSection/>
+          <RightSection />
         </div>
       </main>
     </div>
