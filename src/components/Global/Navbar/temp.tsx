@@ -34,8 +34,8 @@ export default function NavbarComp() {
     ];
 
     return (
-        <Navbar onMenuOpenChange={setIsMenuOpen} className="bg-black" >
-            <NavbarContent>
+        <Navbar onMenuOpenChange={setIsMenuOpen} className="bg-black" maxWidth="2xl" >
+            <NavbarContent >
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     className="sm:hidden"
