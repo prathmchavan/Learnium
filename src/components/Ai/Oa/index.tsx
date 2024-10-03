@@ -4,6 +4,7 @@ import DifficultySelector from '../DifficultySelector';
 import TestTimer from '../TestTimer';
 import EditorComponent from '@/components/CodeEditor/EditorComponent';
 import { useOaContext } from '@/context/OaContext';
+import { Spinner } from '@nextui-org/react';
 
 const Oa: React.FC = () => {
     const {
@@ -12,17 +13,22 @@ const Oa: React.FC = () => {
         handleDifficultySelect,
         startTest,
         submitTest,
-        questions // Now a single object or null
+        questions,
+        loading
     } = useOaContext();
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
-            {!testStarted ? (
+             {loading && (
+               <div className="text-center flex-col justify-center align-middle items-center flex"> <Spinner label="Working on it..." color="success" className='text-white'/>Working on it...</div>
+            )}
+            
+            {!testStarted && (
                 <>
-                    <h1 className="text-3xl font-bold mb-4">Select Difficulty Level</h1>
                     <DifficultySelector onSelect={handleDifficultySelect} />
                 </>
-            ) : (
+            ) } 
+            {testStarted && !loading &&(
                 <>
                     <TestTimer duration={1200} />
                     <div className="w-full max-w-lg text-white">
@@ -53,7 +59,7 @@ const Oa: React.FC = () => {
             {difficulty && !testStarted && (
                 <button
                     className="bg-green-500 text-white py-2 px-4 rounded mt-4"
-                    onClick={startTest}
+                    onClick={()=>{startTest(difficulty)}}
                 >
                     Start Test
                 </button>

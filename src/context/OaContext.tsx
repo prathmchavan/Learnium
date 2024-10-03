@@ -35,7 +35,7 @@ interface OaContextTypes {
     testStarted: boolean;
     difficulty: string | null
     handleDifficultySelect: (level: string) => void;
-    startTest: () => void;
+    startTest: (difficulty:string) => void;
     submitTest: () => void;
     code: string;
     languages: Runtime[];
@@ -47,7 +47,7 @@ interface OaContextTypes {
     setCode: (code: string) => void;
     result: Result | null;
     setResult: (result: Result) => void;
-
+    loading: boolean; 
 }
 
 const OaContext = createContext<OaContextTypes | undefined>(undefined);
@@ -59,6 +59,7 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     const [questions, setQuestions] = useState<Question | null>( null);
     const [testStarted, setTestStarted] = useState<boolean>(false);
     const [difficulty, setDifficulty] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     //code editor 
     const [code, setCode] = useState<string>('// Write your code here');
@@ -70,11 +71,11 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
     const handleDifficultySelect = (level: string) => {
         setDifficulty(level);
-        fetchQuestions(level);
+
     }
     const fetchQuestions = async (level: string) => {
         try {
-
+            setLoading(true);
             const response = await axios.post(`${ApiUrl_Gen}/ai/qoa`, { level });
             
 
@@ -84,16 +85,20 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             setQuestions(fetchedQuestions);
         } catch (error: any) {
             console.log("Error Fetching question:", error.message);
+        } finally {
+            setLoading(false); // Set loading to false when fetching ends
         }
     };
 
 
-    const startTest = () => {
+    const startTest = (difficulty: string) => {
         setTestStarted(true);
+        fetchQuestions(difficulty);
     };
 
     const submitTest = async () => {
-        try {
+        try { 
+            setLoading(true);
             const data = {
                 questions: questions,
                 answers: code,
@@ -108,6 +113,8 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             router.push('/ai/oa/result')
         } catch (error: any) {
             console.log("Error in result flow:", error.message);
+        } finally {
+            setLoading(false); // Set loading to false when fetching ends
         }
     };
 
@@ -168,7 +175,8 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             runCode,
             setCode,
             result,
-            setResult
+            setResult,
+            loading
         }}>
             {children}
         </OaContext.Provider>
