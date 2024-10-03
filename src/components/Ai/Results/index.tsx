@@ -1,6 +1,7 @@
 "use client"
 import { useAptiContext } from '@/context/AptiContext';
 import { useOaContext } from '@/context/OaContext';
+import { Spinner } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { div } from 'three/webgpu';
@@ -24,7 +25,7 @@ const Results: React.FC = () => {
 
 
     if (!reportData) {
-        return <div className="text-center">Loading results...</div>;
+        return <div className="text-center flex-col justify-center align-middle items-center flex"> <Spinner label="Working on it..." color="success" className='text-white'/>Working on it...</div>;
     }
 
     const { reportCard, answerSheet } = reportData;

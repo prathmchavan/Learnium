@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState  } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { ApiUrl_Gen } from '@/constant/secrets';
+import { enqueueSnackbar } from 'notistack';
 
 
 
@@ -38,9 +39,10 @@ interface AptiContextType {
     difficulty: string | null;
     questions: Question[];
     answers: { [key: number]: string };
+    loading: boolean; 
     testStarted: boolean;
     handleDifficultySelect: (level: string) => void;
-    startTest: () => void;
+    startTest: (difficulty: string) => void;
     handleAnswerSelect: (questionId: number, selectedOption: string) => void;
     // submitTest: () => void;
     fetchResults: () => void;
@@ -61,16 +63,17 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         reportCard: ReportCard;
         answerSheet: AnswerSheetItem[];
     } | null>(null);
-
+    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
     const handleDifficultySelect = async(level: string) => {
         setDifficulty(level);
-        await fetchQuestions(level);
+      
     };
 
     const fetchQuestions = async (level: string) => {
         try {
+            setLoading(true);
             console.log(level,"this is difficulty")
             
             const response = await axios.post(`${ApiUrl_Gen}/ai/q`, { level });
@@ -88,16 +91,20 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setQuestions(fetchedQuestions);
         } catch (error:any) {
             console.log("error at question generation",error )
-            // enqueueSnackbar({
-            //     message: error?.response?.data?.message || "Some error occurred, please try again",
-            //     variant: "error"
-            //   });
+            enqueueSnackbar({
+                message: error?.response?.data?.message || "Some error occurred, please try again",
+                variant: "error"
+              });
             throw new Error(error)
+            }
+            finally {
+                setLoading(false); // Set loading to false when fetching ends
             }
     };
 
-    const startTest = () => {
+    const startTest = async(difficulty :any) => {
         setTestStarted(true);
+        await fetchQuestions(difficulty);
     };
 
     const handleAnswerSelect = (questionId: number, selectedOption: string) => {
@@ -110,18 +117,17 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchResults = async () => {
         try {
+            setLoading(true);
             const data = JSON.stringify({ questions, answers });
             const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
-            // let res = await callResultFlow(data);
-            // res = res
-            //     .replace(/^```json|```$/g, '')
-            // const parsedRes = JSON.parse(res.data);
-
             setResult(res.data);
             router.push(`/ai/apti/result`);
 
         } catch (error) {
             console.error("Error in fetching results:", error);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -136,7 +142,8 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 startTest,
                 handleAnswerSelect,
                 fetchResults,
-                resu
+                resu,
+                loading,
             }}
         >
             {children}

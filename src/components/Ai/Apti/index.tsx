@@ -4,6 +4,7 @@ import DifficultySelector from '../DifficultySelector';
 import TestTimer from '../TestTimer';
 import QuestionCard from '../QuestionCard';
 import { useAptiContext } from '@/context/AptiContext';
+import { Spinner } from '@nextui-org/react';
 
 
 const Apti: React.FC = () => {
@@ -15,14 +16,20 @@ const Apti: React.FC = () => {
         startTest,
         handleAnswerSelect,
         fetchResults,
+        loading
     } = useAptiContext();
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen  bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]">
-            <h1 className="text-3xl font-bold mb-4">Select Difficulty Level</h1>
-            {!testStarted ? (
+        <div className="flex flex-col items-center justify-center min-h-screen ">
+            {loading && (
+               <div className="text-center flex-col justify-center align-middle items-center flex"> <Spinner label="Working on it..." color="success" className='text-white'/>Working on it...</div>
+            )}
+
+            {!testStarted && (
                 <DifficultySelector onSelect={handleDifficultySelect} />
-            ) : (
+            )}
+
+            {testStarted && !loading && (
                 <>
                     <TestTimer duration={1200} />
                     <div className="w-full max-w-lg">
@@ -45,7 +52,7 @@ const Apti: React.FC = () => {
             {difficulty && !testStarted && (
                 <button
                     className="bg-green-500 text-white py-2 px-4 rounded mt-4"
-                    onClick={startTest}
+                    onClick={() => startTest(difficulty)}
                 >
                     Start Test
                 </button>
