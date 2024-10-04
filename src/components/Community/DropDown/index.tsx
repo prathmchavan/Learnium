@@ -1,6 +1,5 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/react";
-import { IconArrowUpCircle, IconBallpen, IconMessageCircle } from "@tabler/icons-react";
 
 interface DropDownItem {
   key: string;
@@ -17,7 +16,7 @@ interface DropDownCompProps {
 
 export const DropDownComp = ({ title, className, buttonVariant = "shadow", items }: DropDownCompProps) => {
   return (
-    <div className={`block md:hidden my-2 ${className ? className : ""}`}>
+    <div className={`my-2 ${className ? className : ""}`}>
       <Dropdown className="bg-black">
         <DropdownTrigger>
           <Button variant={buttonVariant}>

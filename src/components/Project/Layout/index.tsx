@@ -8,7 +8,6 @@ export const ProjectLayout = ({ children }: { children: ReactNode }) => {
     return (
         <SnackbarProvider>
             <ProjectProvider>
-
                 {children}
             </ProjectProvider>
         </SnackbarProvider>
