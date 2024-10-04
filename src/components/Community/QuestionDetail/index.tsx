@@ -1,60 +1,34 @@
 "use client";
 import { IconMessageCircle, IconThumbUp, IconEye, IconStarFilled, IconStar, IconThumbUpFilled, IconArrowUpCircle, IconBallpen, IconArrowBack, IconArrowLeft } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditorState } from 'draft-js';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './quillstyles.css';
 import { LeftSection } from '../LeftSection';
-import { RightSection } from '../RightSection';
 import { DropDownComp } from '../DropDown';
 import { useRouter } from 'next/navigation';
+import { useCommunityContext } from '@/context/CommunityContext';
+import { Question } from '@/interface/communityTypes';
 
-export default function QuestionDetail({ params }: { params: { id: string } }) {
+const QuestionDetail = ({ params }: { params: { id: string } }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [newAnswer, setNewAnswer] = useState("");
   const [liked, setLiked] = useState<boolean>(false);
+  const [question, setQuestion] = useState<Question>();
   const [comments, setComments] = useState<any[]>([]); // Initialize as an array
+  const { getQuestion } = useCommunityContext();
   const router = useRouter();
-  const question = {
-    id: 1,
-    user: "Zubayer Bin Matin",
-    title: "How to center a div?",
-    tags: ["HTML", "CSS"],
-    content: "I'm trying to center a div both vertically and horizontally. How can I do that with CSS?",
-    votes: 2,
-    answers: 2,
-    views: 57,
-  };
 
-  const initialAnswers = [
-    {
-      id: 1,
-      user: "John Doe",
-      content: "You can use flexbox to center the div: `display: flex; justify-content: center; align-items: center;`.",
-      votes: 5,
-    },
-    {
-      id: 2,
-      user: "Jane Smith",
-      content: "Another method is using `margin: auto` if the width and height are fixed.",
-      votes: 3,
-    },
-  ];
-
-  const [answers, setAnswers] = useState(initialAnswers);
-
-  const handleAnswerSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newAnswerData = {
-      id: answers.length + 1,
-      user: "You", // Replace with logged-in user's name
-      content: newAnswer,
-      votes: 0,
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      const fetchedQuestion = await getQuestion(params.id);
+      if (fetchedQuestion !== undefined) {
+        setQuestion(fetchedQuestion);
+      }
     };
-    setAnswers([...answers, newAnswerData]);
-    setNewAnswer("");
-  };
+    fetchQuestion();
+  }, [params.id, getQuestion]);
 
   const modules = {
     toolbar: [
@@ -103,51 +77,32 @@ export default function QuestionDetail({ params }: { params: { id: string } }) {
         <div className="space-y-4 w-full mx-auto md:mx-10">
           <div className="bg-gray-800 p-4 md:p-6 rounded-lg">
             <h1 className="text-xl md:text-3xl font-bold text-indigo-400 mb-4">
-              {question.title}
+              {question?.title}
             </h1>
             <div className="text-gray-400 flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
-              <span className="text-sm">{question.user}</span>
+              {/* <span className="text-sm">{question?.user}</span> */}
               <div className="space-x-4 flex">
-                <button className="flex items-center space-x-2 md:px-4 py-2 rounded-lg">
+                <button className="flex items-center space-x-2 py-2 rounded-lg text-white">
                   {liked ? <IconStarFilled size={20} color="gold" /> : <IconStar size={20} color="white" />}
-                  <span className="text-white">{question.votes} </span>
+                  <h1>{question?.votes && question?.votes.length ? question?.votes.length : 0}</h1>
                 </button>
                 <span className="flex items-center space-x-1 text-white">
                   <IconMessageCircle color="white" className="h-5 w-5" />
-                  <span>{question.answers}</span>
+                  <h1>{question?.answersId && question?.answersId.length ? question?.answersId.length : 0}</h1>
                 </span>
                 <span className="flex items-center space-x-1 text-white">
-                  <IconEye className="h-5 w-5" /> <span>{question.views} </span>
+                  <IconEye className="h-5 w-5" />
+                  <h1>{question?.views && question?.views.length ? question?.views.length : 0}</h1>
                 </span>
               </div>
             </div>
-            <p className="text-gray-300 text-md mb-4">{question.content}</p>
-          </div>
-
-          {/* Answers Section */}
-          <div className="bg-gray-800 p-4 md:p-6 rounded-lg">
-            <h2 className="text-xl md:text-2xl font-bold mb-4">Answers</h2>
-            {answers.length > 0 ? (
-              answers.map((answer) => (
-                <div key={answer.id} className="mb-4 bg-gray-700 p-4 rounded-lg">
-                  <div className="text-sm text-gray-400">{answer.user}</div>
-                  <p className="text-gray-300 mt-2 text-md">{answer.content}</p>
-                  <div className="flex space-x-2 text-gray-400 mt-2">
-                    <span className="flex items-center space-x-1">
-                      <IconThumbUp className="h-4 w-4" /> <span>{answer.votes}</span>
-                    </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-400">No answers yet. Be the first to answer!</p>
-            )}
+            <p className="text-gray-300 text-md mb-4">{question?.content}</p>
           </div>
 
           {/* Answer Form */}
           <div className="border-2 border-[#432c83] p-4 md:p-6 rounded-lg">
             <h2 className="text-xl md:text-2xl font-bold mb-4">Your Answer</h2>
-            <form onSubmit={handleAnswerSubmit}>
+            <form >
               <ReactQuill
                 theme="snow"
                 value={newAnswer}
@@ -166,13 +121,10 @@ export default function QuestionDetail({ params }: { params: { id: string } }) {
             </form>
           </div>
         </div>
-
-        {/* Right Section for larger screens */}
-        <div className="hidden md:block">
-          <RightSection />
-        </div>
       </div>
     </div>
 
   );
 }
+
+export default QuestionDetail;

@@ -1,12 +1,8 @@
-import QuestionDetail from "@/components/Community/QuestionDetail";
+import QuestionDetail from "@/components/Community/QuestionDetail"
 
-const Page =({ params } : {params : any})=>{
+const Page =({params}:{params :{ id:string }})=>{
     return(
-        <>
-        <QuestionDetail 
-        params={params}
-        />
-        </>
+        <QuestionDetail params={params}/>
     )
 }
 
