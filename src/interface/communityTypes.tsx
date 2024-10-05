@@ -4,8 +4,8 @@ export interface CommunityContextTypes {
     createQuestion: (data: Question)=> Promise<void>;
     fetchQuestions: ()=>Promise<void>;
     getQuestion:(id:string)=>Promise<void>;
-    writeAnswer:(data:Answer)=>Promise<void>;
-    fetchAnswer: ()=>Promise<void>;
+    writeAnswer:(data:Answer)=>Promise<string>;
+    fetchAnswers: ()=>Promise<void>;
 }
 
 export interface Question {
