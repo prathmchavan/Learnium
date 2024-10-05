@@ -55,13 +55,14 @@ export const CommunityProvider = ({ children }: { children: ReactNode }) => {
     const writeAnswer = async (answerData: Answer) => {
         try {
             const res = await axiosInst.post(`answers`, answerData);
-            return res.data
+            // console.log("answer submitted",res.data)
+            return res.data.id
         } catch (error: any) {
             console.log("Error Occurred ", error.message)
         }
     }
 
-    const fetchAnswer = async () => {
+    const fetchAnswers = async () => {
         try {
             const res = await axiosInst.get(`answers?limit=10&offset=0`);
             console.log("this is all answer from server", res.data.data)
@@ -77,7 +78,7 @@ export const CommunityProvider = ({ children }: { children: ReactNode }) => {
             fetchQuestions,
             createQuestion,
             getQuestion,
-            fetchAnswer,
+            fetchAnswers,
             writeAnswer
         }}>
             {children}

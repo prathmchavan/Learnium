@@ -9,26 +9,34 @@ import { LeftSection } from '../LeftSection';
 import { DropDownComp } from '../DropDown';
 import { useRouter } from 'next/navigation';
 import { useCommunityContext } from '@/context/CommunityContext';
-import { Question } from '@/interface/communityTypes';
+import { Answer, Question } from '@/interface/communityTypes';
+import { getUser } from '@/hooks/get-user';
+import { enqueueSnackbar } from 'notistack';
+import { axiosInst } from '@/utils/axios';
 
 const QuestionDetail = ({ params }: { params: { id: string } }) => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [newAnswer, setNewAnswer] = useState("");
   const [liked, setLiked] = useState<boolean>(false);
   const [question, setQuestion] = useState<Question>();
-  const [comments, setComments] = useState<any[]>([]); // Initialize as an array
-  const { getQuestion  , writeAnswer} = useCommunityContext();
+  const [answers, setAnswers] = useState<Answer[]>([]); // Initialize as an array
+  const { getQuestion, writeAnswer, fetchAnswers } = useCommunityContext();
   const router = useRouter();
 
   useEffect(() => {
-    const fetchQuestion = async () => {
+    const fetchQuestionAndAnswers = async () => {
       const fetchedQuestion = await getQuestion(params.id);
       if (fetchedQuestion !== undefined) {
         setQuestion(fetchedQuestion);
+
+        const fetchedAnswers = await fetchAnswers();
+        if (fetchedAnswers !== undefined) {
+          setAnswers(fetchedAnswers);
+        }
       }
     };
-    fetchQuestion();
-  }, [params.id, getQuestion]);
+
+    fetchQuestionAndAnswers();
+  }, [params.id, getQuestion, fetchAnswers]); // Runs only when any of these change
 
   const modules = {
     toolbar: [
@@ -52,9 +60,104 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
     { key: "post", label: "Post Question", icon: <IconBallpen className="h-5 w-5" /> }
   ];
 
-  const handleSubmit =()=>{
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAnswer.trim()) {
+      alert("Answer cannot be empty!");
+      return;
+    }
+    try {
+      const userId = getUser();
+      // console.log("start")
+      if (userId === undefined || !userId || userId === null) {
+        enqueueSnackbar({ message: "Please login for submitting your answer", variant: "warning" });
+      }
+      if (userId && (typeof userId === 'string' || typeof userId === 'number')) {
+        // console.log("progress")
+        const answerData = {
+          content: newAnswer,
+          questionId: params.id,
+          ownerId: userId,
+        };
+        const res = await writeAnswer(answerData);
+        enqueueSnackbar({ message: "Answer submitted successfully ", variant: "success" });
+        await updateQuestion(res);
+        console.log("data",res)
+        setNewAnswer("");
+      }
+      // console.log("end")
+    } catch (error) {
+      console.error("Error submitting answer:", error);
+      alert("An error occurred while submitting your answer. Please try again.");
+    }
+  };
 
-  }
+  const updateQuestion = async (answerId: string) => {
+    try {
+      // Assuming question is an object and contains all necessary properties
+      if (!question) {
+        console.error("Question data is undefined");
+        return;
+      }
+      const updatedData = {
+        title: question.title,
+        content:question.content,
+        tags: question.tags,
+        votes: question.votes,
+        views: question.views,
+        ownerId: question.ownerId,
+        answersId: [...(question.answersId || []), answerId], 
+      };
+      // Send the PATCH request with the updated data
+      const res = await axiosInst.patch(`question/${params.id}`, updatedData);
+      // Optionally, you might want to handle the response
+      // if (res.status === 200) {
+        // console.log("Question updated successfully", res.data);
+      // }
+    } catch (error: any) {
+      console.log("Error occurred during update:", error.message);
+    }
+  };
+  
+  const handleLike = async () => {
+    const currentUser = getUser();
+    if (!currentUser) {
+        enqueueSnackbar({ message: "You are not logged in!", variant: "warning" });
+        return;
+    }
+    // Optimistically toggle liked state
+    const previousLikedState = liked;
+    const updatedLiked = !liked;
+    setLiked(updatedLiked);
+    // Prepare the updated upvotes array based on the current like status
+    const updatedUpvotes = updatedLiked
+        ? [...(Array.isArray(question?.votes) ? question.votes : []), currentUser] // Add user ID if liked
+        : (Array.isArray(question?.votes) ? question.votes.filter((id: string) => id !== currentUser) : []); // Remove user ID if unliked
+    try {
+        // Send the updated upvotes array to the server
+        await axiosInst.patch(`question/${params.id}`, {
+            title: question?.title,
+            content: question?.content,
+            tags: question?.tags,
+            votes: updatedUpvotes,
+            views: question?.views,
+            ownerId:question?.ownerId,
+            answersId: question?.answersId
+        });
+        // Update the project state with the new upvotes
+        setQuestion(prev => {
+            if (prev) {
+                return { ...prev, upvotes: updatedUpvotes };
+            }
+            return prev;
+        });
+    } catch (error) {
+        console.error("Error updating like status:", error);
+        // Revert UI state in case of an error
+        setLiked(previousLikedState);
+    }
+};
+
 
   const goback = () => {
     router.back();
@@ -86,21 +189,35 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
             <div className="text-gray-400 flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
               {/* <span className="text-sm">{question?.user}</span> */}
               <div className="space-x-4 flex">
-                <button className="flex items-center space-x-2 py-2 rounded-lg text-white">
-                  {liked ? <IconStarFilled size={20} color="gold" /> : <IconStar size={20} color="white" />}
-                  <h1>{question?.votes && question?.votes.length ? question?.votes.length : 0}</h1>
+                <button onClick={handleLike} className="flex items-center space-x-2 py-2 rounded-lg text-white">
+                {liked ? <IconStarFilled size={20} color="gold" /> : <IconStar size={20} />}
+                <h1>{ question?.votes?.length ? question?.votes.length : 0}</h1>
                 </button>
                 <span className="flex items-center space-x-1 text-white">
                   <IconMessageCircle color="white" className="h-5 w-5" />
-                  <h1>{question?.answersId && question?.answersId.length ? question?.answersId.length : 0}</h1>
+                  <h1>{question?.answersId?.length ? question?.answersId.length : 0}</h1>
                 </span>
                 <span className="flex items-center space-x-1 text-white">
                   <IconEye className="h-5 w-5" />
-                  <h1>{question?.views && question?.views.length ? question?.views.length : 0}</h1>
+                  <h1>{ question?.views?.length ? question?.views.length : 0}</h1>
                 </span>
               </div>
             </div>
             <p className="text-gray-300 text-md mb-4">{question?.content}</p>
+          </div>
+
+          <div className="space-y-4">
+            {answers
+              .filter((answer) => answer.questionId === params.id)
+              .map((answer) => (
+                <div key={answer._id} className="bg-gray-700 p-4 rounded-lg">
+                  {/* Render the content as HTML */}
+                  <div dangerouslySetInnerHTML={{ __html: answer.content }} />
+                  <div className="text-sm text-gray-400">
+                    Posted by {answer.ownerId}
+                  </div>
+                </div>
+              ))}
           </div>
 
           {/* Answer Form */}
