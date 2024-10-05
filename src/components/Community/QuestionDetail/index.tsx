@@ -17,7 +17,7 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
   const [liked, setLiked] = useState<boolean>(false);
   const [question, setQuestion] = useState<Question>();
   const [comments, setComments] = useState<any[]>([]); // Initialize as an array
-  const { getQuestion } = useCommunityContext();
+  const { getQuestion  , writeAnswer} = useCommunityContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -51,6 +51,10 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
     { key: "answers", label: "My Answers", icon: <IconMessageCircle className="h-5 w-5" /> },
     { key: "post", label: "Post Question", icon: <IconBallpen className="h-5 w-5" /> }
   ];
+
+  const handleSubmit =()=>{
+
+  }
 
   const goback = () => {
     router.back();
@@ -102,7 +106,7 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
           {/* Answer Form */}
           <div className="border-2 border-[#432c83] p-4 md:p-6 rounded-lg">
             <h2 className="text-xl md:text-2xl font-bold mb-4">Your Answer</h2>
-            <form >
+            <form onSubmit={handleSubmit} >
               <ReactQuill
                 theme="snow"
                 value={newAnswer}

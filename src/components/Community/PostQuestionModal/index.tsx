@@ -29,6 +29,7 @@ export function PostQuestionModal() {
             [name]: value,
         }));
     };
+    
 
     const handleTechInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTechInput(e.target.value);

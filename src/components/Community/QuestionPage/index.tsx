@@ -61,7 +61,6 @@ const QuestionsPage =()=> {
             />
           </div>
         </div>
-
         <div className='flex flex-col md:flex-row md:my-10'>
           <LeftSection />
           {/* Questions List */}

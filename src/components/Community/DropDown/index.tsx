@@ -1,5 +1,6 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/react";
+import Link from "next/link";
 
 interface DropDownItem {
   key: string;
@@ -26,7 +27,9 @@ export const DropDownComp = ({ title, className, buttonVariant = "shadow", items
         <DropdownMenu variant="shadow" aria-label="Dropdown menu with icons" className="bg-black" color="default">
           {items.map((item) => (
             <DropdownItem key={item.key} startContent={item.icon}>
+              {/* <Link href={`/${item.label}`}> */}
               {item.label}
+              {/* </Link> */}
             </DropdownItem>
           ))}
         </DropdownMenu>

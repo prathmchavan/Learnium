@@ -55,7 +55,7 @@ export function ProfileNav() {
         }
     ];
     return (
-        <div className="flex items-center justify-center h-[10rem] w-full">
+        <div className="flex items-center justify-center h-[10rem] w-full my-10">
             <FloatingDock
                 mobileClassName="translate-y-20" // only for demo, remove for production
                 items={links}

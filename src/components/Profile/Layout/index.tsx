@@ -13,8 +13,7 @@ export default function ProfileLayout({
 }: Readonly<{children:React.ReactNode;}>){
     return(
         <AuthProvider>
-        <div className="bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]">
-
+        <div className="">
         <ProfileNav/>
         {children}
         </div>
