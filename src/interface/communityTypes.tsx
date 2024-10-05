@@ -1,9 +1,11 @@
 
 export interface CommunityContextTypes {
     questions : Question[] ;
-    createQuestion: (data: any)=> Promise<void>;
+    createQuestion: (data: Question)=> Promise<void>;
     fetchQuestions: ()=>Promise<void>;
     getQuestion:(id:string)=>Promise<void>;
+    writeAnswer:(data:Answer)=>Promise<void>;
+    fetchAnswer: ()=>Promise<void>;
 }
 
 export interface Question {
@@ -15,4 +17,12 @@ export interface Question {
     views?:number[];
     ownerId?:string;
     answersId?:string[];
+}
+
+export interface Answer {
+    _id?: string;
+    content : string;
+    votes?:string[];
+    ownerId?:string;
+    questionId?: string;
 }
