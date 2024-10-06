@@ -18,9 +18,9 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
   const [newAnswer, setNewAnswer] = useState("");
   const [liked, setLiked] = useState<boolean>(false);
   const [question, setQuestion] = useState<Question>();
-  const [answers, setAnswers] = useState<Answer []>([]); // Initialize as an array
+  const [answers, setAnswers] = useState<Answer[]>([]); // Initialize as an array
   const { getQuestion, writeAnswer, fetchAnswers } = useCommunityContext();
-  const [questionOwner ,setQuestionOwner] = useState<any>();
+  const [questionOwner, setQuestionOwner] = useState<any>();
   const router = useRouter();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
           const owner = await fetchUserDetails(fetchedQuestion.ownerId);
           setQuestionOwner(owner);
         }
-    
+
         const fetchedAnswers = await fetchAnswers();
         if (fetchedAnswers !== undefined) {
           // Fetch user details for each answer
@@ -46,18 +46,18 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
         }
       }
     };
-  
+
     fetchQuestionAndAnswers();
   }, [params.id, getQuestion, fetchAnswers]);
-  
+
 
   const fetchUserDetails = async (userId: string) => {
     try {
-      const response = await axiosInst.get(`/user/${userId}`); 
-      return response.data; 
+      const response = await axiosInst.get(`/user/${userId}`);
+      return response.data;
     } catch (error) {
       console.error("Error fetching user details:", error);
-      return { name: "Unknown User" }; 
+      return { name: "Unknown User" };
     }
   };
 
@@ -144,9 +144,9 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
     }
     const previousLikedState = liked;
     const updatedLiked = !liked;
-    setLiked(updatedLiked); 
+    setLiked(updatedLiked);
     const updatedUpvotes = updatedLiked
-      ? [...(Array.isArray(question?.votes) ? question.votes : []), currentUser] 
+      ? [...(Array.isArray(question?.votes) ? question.votes : []), currentUser]
       : (Array.isArray(question?.votes) ? question.votes.filter((id: string) => id !== currentUser) : []);
     try {
       await axiosInst.patch(`question/${params.id}`, {
@@ -160,7 +160,7 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
       });
       setQuestion(prev => {
         if (prev) {
-          return { ...prev, votes: updatedUpvotes }; 
+          return { ...prev, votes: updatedUpvotes };
         }
         return prev;
       });

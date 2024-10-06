@@ -1,7 +1,9 @@
+import MyAnswersComp from "@/components/Community/MyAnswers";
+
 const Page =()=>{
     return(
         <div>
-            myanswers page
+            <MyAnswersComp/>
         </div>
     )
 }
