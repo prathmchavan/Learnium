@@ -3,9 +3,9 @@ export interface CommunityContextTypes {
     questions : Question[] ;
     createQuestion: (data: Question)=> Promise<void>;
     fetchQuestions: ()=>Promise<void>;
-    getQuestion:(id:string)=>Promise<void>;
+    getQuestion:(id:string)=>Promise<Question>;
     writeAnswer:(data:Answer)=>Promise<string>;
-    fetchAnswers: ()=>Promise<void>;
+    fetchAnswers: ()=>Promise<Answer []>;
 }
 
 export interface Question {
@@ -25,4 +25,5 @@ export interface Answer {
     votes?:string[];
     ownerId?:string;
     questionId?: string;
+    userName?:string;
 }

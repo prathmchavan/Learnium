@@ -18,8 +18,9 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
   const [newAnswer, setNewAnswer] = useState("");
   const [liked, setLiked] = useState<boolean>(false);
   const [question, setQuestion] = useState<Question>();
-  const [answers, setAnswers] = useState<Answer[]>([]); // Initialize as an array
+  const [answers, setAnswers] = useState<Answer []>([]); // Initialize as an array
   const { getQuestion, writeAnswer, fetchAnswers } = useCommunityContext();
+  const [questionOwner ,setQuestionOwner] = useState<any>();
   const router = useRouter();
 
   useEffect(() => {
@@ -27,16 +28,38 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
       const fetchedQuestion = await getQuestion(params.id);
       if (fetchedQuestion !== undefined) {
         setQuestion(fetchedQuestion);
-
+        if (fetchedQuestion.ownerId) {
+          const owner = await fetchUserDetails(fetchedQuestion.ownerId);
+          setQuestionOwner(owner);
+        }
+    
         const fetchedAnswers = await fetchAnswers();
         if (fetchedAnswers !== undefined) {
-          setAnswers(fetchedAnswers);
+          // Fetch user details for each answer
+          const answersWithUserDetails = await Promise.all(
+            fetchedAnswers.map(async (answer: any) => {
+              const user = await fetchUserDetails(answer.ownerId);
+              return { ...answer, userName: user.about.name }; // Assuming `user.about.name` holds the name
+            })
+          );
+          setAnswers(answersWithUserDetails);
         }
       }
     };
-
+  
     fetchQuestionAndAnswers();
-  }, [params.id, getQuestion, fetchAnswers]); // Runs only when any of these change
+  }, [params.id, getQuestion, fetchAnswers]);
+  
+
+  const fetchUserDetails = async (userId: string) => {
+    try {
+      const response = await axiosInst.get(`/user/${userId}`); 
+      return response.data; 
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      return { name: "Unknown User" }; 
+    }
+  };
 
   const modules = {
     toolbar: [
@@ -82,7 +105,7 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
         const res = await writeAnswer(answerData);
         enqueueSnackbar({ message: "Answer submitted successfully ", variant: "success" });
         await updateQuestion(res);
-        console.log("data",res)
+        console.log("data", res)
         setNewAnswer("");
       }
       // console.log("end")
@@ -94,74 +117,63 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
 
   const updateQuestion = async (answerId: string) => {
     try {
-      // Assuming question is an object and contains all necessary properties
       if (!question) {
         console.error("Question data is undefined");
         return;
       }
       const updatedData = {
         title: question.title,
-        content:question.content,
+        content: question.content,
         tags: question.tags,
         votes: question.votes,
         views: question.views,
         ownerId: question.ownerId,
-        answersId: [...(question.answersId || []), answerId], 
+        answersId: [...(question.answersId || []), answerId],
       };
-      // Send the PATCH request with the updated data
       const res = await axiosInst.patch(`question/${params.id}`, updatedData);
-      // Optionally, you might want to handle the response
-      // if (res.status === 200) {
-        // console.log("Question updated successfully", res.data);
-      // }
     } catch (error: any) {
       console.log("Error occurred during update:", error.message);
     }
   };
-  
+
   const handleLike = async () => {
     const currentUser = getUser();
     if (!currentUser) {
-        enqueueSnackbar({ message: "You are not logged in!", variant: "warning" });
-        return;
+      enqueueSnackbar({ message: "You are not logged in!", variant: "warning" });
+      return;
     }
-    // Optimistically toggle liked state
     const previousLikedState = liked;
     const updatedLiked = !liked;
-    setLiked(updatedLiked);
-    // Prepare the updated upvotes array based on the current like status
+    setLiked(updatedLiked); 
     const updatedUpvotes = updatedLiked
-        ? [...(Array.isArray(question?.votes) ? question.votes : []), currentUser] // Add user ID if liked
-        : (Array.isArray(question?.votes) ? question.votes.filter((id: string) => id !== currentUser) : []); // Remove user ID if unliked
+      ? [...(Array.isArray(question?.votes) ? question.votes : []), currentUser] 
+      : (Array.isArray(question?.votes) ? question.votes.filter((id: string) => id !== currentUser) : []);
     try {
-        // Send the updated upvotes array to the server
-        await axiosInst.patch(`question/${params.id}`, {
-            title: question?.title,
-            content: question?.content,
-            tags: question?.tags,
-            votes: updatedUpvotes,
-            views: question?.views,
-            ownerId:question?.ownerId,
-            answersId: question?.answersId
-        });
-        // Update the project state with the new upvotes
-        setQuestion(prev => {
-            if (prev) {
-                return { ...prev, upvotes: updatedUpvotes };
-            }
-            return prev;
-        });
+      await axiosInst.patch(`question/${params.id}`, {
+        title: question?.title,
+        content: question?.content,
+        tags: question?.tags,
+        votes: updatedUpvotes,
+        views: question?.views,
+        ownerId: question?.ownerId,
+        answersId: question?.answersId
+      });
+      setQuestion(prev => {
+        if (prev) {
+          return { ...prev, votes: updatedUpvotes }; 
+        }
+        return prev;
+      });
     } catch (error) {
-        console.error("Error updating like status:", error);
-        // Revert UI state in case of an error
-        setLiked(previousLikedState);
+      console.error("Error updating like status:", error);
+      setLiked(previousLikedState);
     }
-};
-
+  };
 
   const goback = () => {
     router.back();
   }
+
   return (
     <div className="min-h-screen text-white flex flex-col md:flex-row justify-center p-4 md:p-8">
       <div className="md:flex w-full">
@@ -172,7 +184,6 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
         {/* Dropdown for mobile view */}
         <div className="md:hidden mb-4 justify-between flex align-middle items-center">
           <IconArrowLeft onClick={goback} />
-
           <DropDownComp
             title="Menu"
             buttonVariant="shadow"
@@ -187,20 +198,20 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
               {question?.title}
             </h1>
             <div className="text-gray-400 flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
-              {/* <span className="text-sm">{question?.user}</span> */}
+              <span className="text-sm">Posted By {questionOwner?.about?.name}</span>
               <div className="space-x-4 flex">
                 <button onClick={handleLike} className="flex items-center space-x-2 py-2 rounded-lg text-white">
-                {liked ? <IconStarFilled size={20} color="gold" /> : <IconStar size={20} />}
-                <h1>{ question?.votes?.length ? question?.votes.length : 0}</h1>
+                  {liked ? <IconStarFilled size={20} color="gold" /> : <IconStar size={20} />}
+                  <h1>{question?.votes?.length ? question?.votes.length : 0}</h1>
                 </button>
                 <span className="flex items-center space-x-1 text-white">
                   <IconMessageCircle color="white" className="h-5 w-5" />
                   <h1>{question?.answersId?.length ? question?.answersId.length : 0}</h1>
                 </span>
-                <span className="flex items-center space-x-1 text-white">
+                {/* <span className="flex items-center space-x-1 text-white">
                   <IconEye className="h-5 w-5" />
-                  <h1>{ question?.views?.length ? question?.views.length : 0}</h1>
-                </span>
+                  <h1>{question?.views?.length ? question?.views.length : 0}</h1>
+                </span> */}
               </div>
             </div>
             <p className="text-gray-300 text-md mb-4">{question?.content}</p>
@@ -214,11 +225,13 @@ const QuestionDetail = ({ params }: { params: { id: string } }) => {
                   {/* Render the content as HTML */}
                   <div dangerouslySetInnerHTML={{ __html: answer.content }} />
                   <div className="text-sm text-gray-400">
-                    Posted by {answer.ownerId}
+                    {/* Display the userName instead of ownerId */}
+                    Posted by {answer.userName || "Unknown User"}
                   </div>
                 </div>
               ))}
           </div>
+
 
           {/* Answer Form */}
           <div className="border-2 border-[#432c83] p-4 md:p-6 rounded-lg">

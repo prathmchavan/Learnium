@@ -89,10 +89,10 @@ const QuestionsPage =()=> {
                       <IconMessageCircle className="h-4 w-4" />
                       <h1>{question.answersId && question.answersId.length ? question.answersId.length : 0}</h1>
                     </span>
-                    <span className="flex items-center space-x-1">
+                    {/* <span className="flex items-center space-x-1">
                       <IconEye className="h-4 w-4" />
                       <h1>{question.views &&question.views.length ? question.views.length : 0}</h1>
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </Link>
