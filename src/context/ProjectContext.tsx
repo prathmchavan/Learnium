@@ -9,7 +9,7 @@ interface ProjectContextTypes {
     projects: Project[]; 
     createProject: (data : any) => Promise<void>;
     fetchProject: () => Promise<void>;
-    getProject: (id:string)=> Promise<Project | void>
+    getProject: (id:string)=> Promise<Project>
     fetchProjectOwner: (id:string)=> Promise<Project | void>
 }
 

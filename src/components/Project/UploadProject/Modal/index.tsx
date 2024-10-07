@@ -11,6 +11,7 @@ import { ProjectForm } from "@/interface/projectForm";
 import { Input, Button, Chip ,Kbd} from "@nextui-org/react";
 import { useProjectContext } from "@/context/ProjectContext";
 import { getUser } from "@/hooks/get-user";
+import { enqueueSnackbar } from "notistack";
 
 export function UploadModal() {
     const [formData, setFormData] = useState<ProjectForm>({
@@ -25,8 +26,6 @@ export function UploadModal() {
     });
     const {createProject} = useProjectContext();
     const [techInput, setTechInput] = useState("");
-    const [files, setFiles] = useState<File[]>([]);
-    const expTime = 604800;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -42,12 +41,11 @@ export function UploadModal() {
 
     const handleTechInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === " " && techInput.trim() !== "") {
-            // Add chip when space is pressed and techInput is not empty
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 technologyUsed: [...(prevFormData.technologyUsed || []), techInput.trim()],
             }));
-            setTechInput(""); // Clear the input field
+            setTechInput("");
         }
     };
 
@@ -61,20 +59,17 @@ export function UploadModal() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const userId = getUser(); // Fetch userId using getUser hook
-            // Ensure userId is available before submission
+            const userId = getUser();
             if (userId && (typeof userId === 'string' || typeof userId === 'number')) {
                 const updatedFormData = {
                     ...formData,
                     bookmarksCount: [],
                     upvotes:[],
-                    userId: String(userId), // Add userId directly
+                    userId: String(userId), 
                 };
-                console.log(updatedFormData.userId, "this is userId");
-                // Call createProject with updated formData
+                // console.log(updatedFormData.userId, "this is userId");
                 await createProject(updatedFormData);
-                alert("Project submitted successfully");
-                // Reset formData after submission
+                enqueueSnackbar({message:"Project submitted successfully",variant:'success'})
                 setFormData({
                     title: "",
                     description: "",
@@ -85,6 +80,7 @@ export function UploadModal() {
                     userId: "",
                     gitLink: ""
                 });
+                window.location.reload();
             } else {
                 console.error("User ID not available. Please log in or try again.");
             }

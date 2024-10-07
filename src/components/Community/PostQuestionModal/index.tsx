@@ -170,7 +170,7 @@ export function PostQuestionModal() {
                                 </div>
                                 {/* Submit Button */}
                                 <Button type="submit" className="w-full bg-blue-500 text-white py-2 mt-4">
-                                    Submit Project
+                                    Submit Question
                                 </Button>
                             </form>
                         </div>

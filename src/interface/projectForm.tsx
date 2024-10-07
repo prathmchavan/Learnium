@@ -9,5 +9,6 @@ export interface ProjectForm {
     gitLink?: string;
     bookmarksCount?:string[];
     upvotes? : string[];
+    commentId?:string[];
   }
   
