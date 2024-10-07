@@ -34,18 +34,18 @@ const Apti: React.FC = () => {
             {testStarted && !loading && (
                 <div className='flex flex-row'>
                     <div className='flex md:flex-col items-center md:px-6 md:w-[700px]'>
-                        <RulesReguComp/>
+                        <RulesReguComp />
                     </div>
-                    <Divider className='bg-white h-[900px]' orientation='vertical'/>
+                    <Divider className='bg-white h-[900px]' orientation='vertical' />
                     <div className='flex flex-col items-left  w-full'>
                         <div className='flex  justify-between items-center space-x-28 px-10 '>
                             <div className=' flex-col flex gap-y-5 items-left'>
-                            <h1 className='text-3xl font-bold'>Aptitude Test </h1>
-                            <h1 className='text-lg font-semibold'> Level : {difficulty}</h1>
+                                <h1 className='text-3xl font-bold'>Aptitude Test </h1>
+                                <h1 className='text-lg font-semibold'> Level : {difficulty}</h1>
                             </div>
                             <TestTimer duration={1200} />
                         </div>
-                        <Divider className='bg-white' orientation='horizontal'/>
+                        <Divider className='bg-white' orientation='horizontal' />
                         <div className="w-full max-w-lg mt-4 px-10">
                             {questions.map((question) => (
                                 <QuestionCard
@@ -56,12 +56,12 @@ const Apti: React.FC = () => {
                             ))}
                         </div>
                         <div className='item-left flex px-10'>
-                        <button
-                            className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
-                            onClick={fetchResults}
-                        >
-                            Submit Test
-                        </button>
+                            <button
+                                className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+                                onClick={fetchResults}
+                            >
+                                Submit Test
+                            </button>
                         </div>
                     </div>
                 </div>
