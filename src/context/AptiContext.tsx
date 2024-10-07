@@ -90,11 +90,14 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.log(response)
             setQuestions(fetchedQuestions);
         } catch (error:any) {
+            if(error.status === 500)
+            {
+                enqueueSnackbar({
+                    message:  "Ai is under maintainance, please try again later",
+                    variant: "error"
+                  });
+            }
             console.log("error at question generation",error )
-            enqueueSnackbar({
-                message: error?.response?.data?.message || "Some error occurred, please try again",
-                variant: "error"
-              });
             throw new Error(error)
             }
             finally {

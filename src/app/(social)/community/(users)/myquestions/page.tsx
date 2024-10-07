@@ -1,8 +1,9 @@
+import MyQuestionComp from "@/components/Community/MyQuestions";
 
 const Page =()=>{
     return(
         <div>
-            my question page
+           <MyQuestionComp/>
         </div>
     )
 }

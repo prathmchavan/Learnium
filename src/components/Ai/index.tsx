@@ -60,7 +60,7 @@ export default function Ai() {
                     <div className="flex flex-col items-center gap-y-5">
                         <h1 className="text-center text-3xl md:text-4xl font-semibold">Aptitude Test</h1>
                         <p className="text-center italic text-sm md:text-base">
-                            The aptitude test evaluates your problem-solving, reasoning, and analytical skills, helping you identify key areas of improvement in cognitive abilities.
+                           The aptitude test is a timed assessment featuring <br/> multiple-choice questions that evaluate skills in<br/> areas like logical reasoning, problem-solving  and <br/>quantitative aptitude. The goal is to answer as many <br/>questions as possible within the given time
                         </p>
                         <Link href="/ai/apti" className="mx-auto">
                             <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
@@ -72,7 +72,7 @@ export default function Ai() {
                     <div className="flex flex-col items-center gap-y-5">
                         <h1 className="text-center text-3xl md:text-4xl font-semibold">OA Test</h1>
                         <p className="text-center italic text-sm md:text-base">
-                            The OA Test (Online Assessment Test) is a coding challenge where you solve programming questions using a specific coding language. It tests your ability to write correct and efficient code in a set time.
+                            The OA Test (Online Assessment Test) is a coding<br/> challenge where you solve programming<br/> questions using a specific coding language. It <br/>tests your ability to write correct and efficient<br/> code in a set time.
                         </p>
                         <Link href="/ai/oa" className="mx-auto">
                             <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">

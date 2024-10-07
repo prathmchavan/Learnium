@@ -11,6 +11,7 @@ import { Input, Button, Chip ,Kbd} from "@nextui-org/react";
 import { getUser } from "@/hooks/get-user";
 import { Question } from "@/interface/communityTypes";
 import { useCommunityContext } from "@/context/CommunityContext";
+import { enqueueSnackbar } from "notistack";
 
 
 export function PostQuestionModal() {
@@ -65,14 +66,16 @@ export function PostQuestionModal() {
                     ownerId: String(userId),
                     answersId:[],
                 };
-                console.log(updatedFormData, "this is userId");
+                // console.log(updatedFormData, "this is userId");
                 await createQuestion(updatedFormData);
-                alert("Project submitted successfully");
+                enqueueSnackbar({message:"Project submitted successfully" , variant:"success"})
+                // alert("Project submitted successfully");
                 setFormData({
                     title: "",
                     content: "",
                     tags: []
                 });
+                window.location.reload();
             } else {
                 console.error("User ID not available. Please log in or try again.");
             }
@@ -80,7 +83,7 @@ export function PostQuestionModal() {
             console.error("Error submitting project:", error);
         }
     };
-    
+
     return (
         <div className="py-5 flex items-center justify-center">
             <Modal>
