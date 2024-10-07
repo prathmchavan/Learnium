@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
     return null;
   }
   return (
-    <div className='flex bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c]'>
+    <div className='flex bg-gradient-to-r from-[#5513ee5c] via-[#000000] to-[#5513ee5c] w-full'>
       {/* <div className=' relative flex align-bottom justify-start'>
         <Image src={"/models/test.png"} alt="image" height={100} width={100} />
       </div> */}

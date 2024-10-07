@@ -23,8 +23,8 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
     const [saved, setSaved] = useState<boolean>(false);
     const [comments, setComments] = useState<any[]>([]); // Initialize as an array
     const [comment, setComment] = useState<string>();
-    const { getProject} = useProjectContext();
-    
+    const { getProject } = useProjectContext();
+
     useEffect(() => {
         let isMounted = true;
         const fetchProject = async () => {
@@ -223,7 +223,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
         }
     };
     return (
-        <div className="bg-gradient-to-l from-[#23124b] to-gray-900 text-white min-h-screen p-8">
+        <div className=" text-white min-h-screen p-8">
             <div className="max-w-5xl mx-auto">
                 <div className="flex justify-between items-center">
                     <h1 className="text-4xl font-bold">{project.title}</h1>
@@ -236,20 +236,20 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                     </button>
                 </div>
                 <div className="my-10">
-                <Chip
-                    variant="shadow"
-                    color="secondary"
-                    avatar={
-                        <Avatar
-                        name="JW"
-                        src=""
-                        />
-                    }
-                    className=""
+                    <Chip
+                        variant="shadow"
+                        color="secondary"
+                        avatar={
+                            <Avatar
+                                name="JW"
+                                src=""
+                            />
+                        }
+                        className=""
                     >
-                    {/* {project.owner?.about.name} */} Owner
-                </Chip>
-                    </div>
+                        {/* {project.owner?.about.name} */} Owner
+                    </Chip>
+                </div>
                 <Divider className="bg-white w-full my-10" orientation="horizontal" />
                 {/* <Image alt="test" src="/images/any.jpg" width={500} height={200} className="w-full rounded-lg" /> */}
                 <div className="flex justify-between items-center mt-8">
@@ -304,18 +304,21 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         Submit
                     </button>
                     <div className="my-6">
-                        {comments.map((cmt) => (
-                            <div key={cmt._id} className=" p-4 my-4 rounded-lg flex space-x-4 w-[400px]">
-                                <Avatar src={cmt.user?.about.profilePicture || ""} /> {/* Check if user exists before accessing avatar */}
-                                <div>
-                                    <div className="flex space-x-2">
-                                        <span className="font-semibold">{cmt.user?.about.name || "Unknown User"}</span>
+                        {comments && project.commentId && comments
+                            .filter((cmt) => project.commentId?.includes(cmt._id)) // Check if comment ID is in the array
+                            .map((cmt) => (
+                                <div key={cmt._id} className="p-4 my-4 rounded-lg flex space-x-4 w-[400px]">
+                                    <Avatar src={cmt.user?.about.profilePicture || ""} />
+                                    <div>
+                                        <div className="flex space-x-2">
+                                            <span className="font-semibold">{cmt.user?.about.name || "Unknown User"}</span>
+                                        </div>
+                                        <p className="text-gray-300">{cmt.comment}</p>
                                     </div>
-                                    <p className="text-gray-300">{cmt.comment}</p>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
+
 
                 </div>
             </div>
