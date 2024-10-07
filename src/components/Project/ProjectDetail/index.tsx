@@ -24,6 +24,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
     const [comments, setComments] = useState<any[]>([]); // Initialize as an array
     const [comment, setComment] = useState<string>();
     const { getProject } = useProjectContext();
+    const [projectOwner, setProjectOwner] = useState<any>();
 
     useEffect(() => {
         let isMounted = true;
@@ -37,6 +38,13 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         setLiked(true);
                         setSaved(true);
                     }
+                    if (fetchedProject.userId) {
+                        // console.log("i am here" , fetchedProject.userId)
+                        const owner = await fetchUser(fetchedProject.userId);
+                        // console.log(owner)
+                        setProjectOwner(owner);
+                    }
+                    // console.log("i am not here")
                 }
             } catch (error: any) {
                 console.error("Error fetching project:", error);
@@ -46,7 +54,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             try {
                 const res = await axiosInst.get(`comment?limit=100&offset=0`);
                 const commentsData = res.data.data;
-                // Fetch user for each comment
+                // console.log("goign for user")
                 const updatedComments = await Promise.all(
                     commentsData.map(async (comment: any) => {
                         const user = await fetchUser(comment.userId); // Fetch user details
@@ -63,14 +71,16 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
         fetchProject();
         fetchComment();
         return () => {
-            isMounted = false; // Cleanup
+            isMounted = false;
         };
     }, [params.id, getProject]);
 
     const fetchUser = async (userId: string) => {
         try {
+            // console.log(userId)
             const res = await axiosInst.get(`user/${userId}`);
-            return res.data; // Assume the API returns user data
+            // console.log("data:",res.data)
+            return res.data; 
         } catch (error: any) {
             console.error("Error fetching user:", error);
         }
@@ -241,13 +251,13 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         color="secondary"
                         avatar={
                             <Avatar
-                                name="JW"
-                                src=""
+                                name="User"
+                                src={projectOwner?.about?.profilePicture}
                             />
                         }
                         className=""
                     >
-                        {/* {project.owner?.about.name} */} Owner
+                        {projectOwner?.about?.name } 
                     </Chip>
                 </div>
                 <Divider className="bg-white w-full my-10" orientation="horizontal" />

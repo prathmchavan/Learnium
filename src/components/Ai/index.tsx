@@ -3,9 +3,14 @@ import { Accordion, AccordionItem, Divider, Link } from "@nextui-org/react";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import Image from "next/image";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { getUser } from "@/hooks/get-user";
+import { enqueueSnackbar } from "notistack";
 
 
 export default function Ai() {
+    const router = useRouter()
+
     const paragraph = `Learni.ai is designed to evaluate your aptitude and subject-specific knowledge through adaptive Ai exams. Whether you're preparing for a new challenge or sharpening your skills, our exams will help you understand your strengths and areas for improvement.`
 
     const testSectionRef = useRef<HTMLDivElement>(null);
@@ -15,6 +20,23 @@ export default function Ai() {
         }
     }
 
+const isLoggedIn = () => {
+    if(getUser())
+    {
+        return true
+    }
+    else{
+        return false; 
+    }
+};
+
+const handleTestAccess = (url:string) => {
+    if (!isLoggedIn()) {
+       enqueueSnackbar({message:"You're not logged in. Please log in to proceed",variant:"warning"})
+    } else {
+       router.push(url)
+    }
+};
     const itemClasses = {
         base: "",
         title: "font-normal text-sm md:text-medium text-white",
@@ -62,11 +84,11 @@ export default function Ai() {
                         <p className="text-center italic text-sm md:text-base">
                            The aptitude test is a timed assessment featuring <br/> multiple-choice questions that evaluate skills in<br/> areas like logical reasoning, problem-solving  and <br/>quantitative aptitude. The goal is to answer as many <br/>questions as possible within the given time
                         </p>
-                        <Link href="/ai/apti" className="mx-auto">
-                            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
+                       
+                            <button onClick={() => handleTestAccess("/ai/apti")} className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
                                 Take aptitude test
                             </button>
-                        </Link>
+               
                     </div>
                     <Divider orientation="vertical" className="bg-purple-800 w-0.5 h-16 md:h-56 md:block hidden" />
                     <div className="flex flex-col items-center gap-y-5">
@@ -74,11 +96,9 @@ export default function Ai() {
                         <p className="text-center italic text-sm md:text-base">
                             The OA Test (Online Assessment Test) is a coding<br/> challenge where you solve programming<br/> questions using a specific coding language. It <br/>tests your ability to write correct and efficient<br/> code in a set time.
                         </p>
-                        <Link href="/ai/oa" className="mx-auto">
-                            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
+                            <button onClick={() => handleTestAccess("/ai/oa")} className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-6 hover:bg-indigo-500">
                                 Take OA test
                             </button>
-                        </Link>
                     </div>
                 </div>
             </div>
