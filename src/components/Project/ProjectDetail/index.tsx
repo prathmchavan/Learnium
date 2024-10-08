@@ -95,16 +95,13 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             enqueueSnackbar({ message: "You are not logged in!", variant: "warning" });
             return;
         }
-        // Optimistically toggle liked state
         const previousLikedState = liked;
         const updatedLiked = !liked;
         setLiked(updatedLiked);
-        // Prepare the updated upvotes array based on the current like status
         const updatedUpvotes = updatedLiked
             ? [...(Array.isArray(project?.upvotes) ? project.upvotes : []), currentUser] // Add user ID if liked
             : (Array.isArray(project?.upvotes) ? project.upvotes.filter((id: string) => id !== currentUser) : []); // Remove user ID if unliked
         try {
-            // Send the updated upvotes array to the server
             await axiosInst.patch(`projects/${project?._id}`, {
                 title: project.title,
                 description: project.description,
@@ -118,7 +115,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                 commentId: project.commentId,
                 gitLink: project.gitLink,
             });
-            // Update the project state with the new upvotes
             setProject(prev => {
                 if (prev) {
                     return { ...prev, upvotes: updatedUpvotes };
@@ -127,7 +123,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             });
         } catch (error) {
             console.error("Error updating like status:", error);
-            // Revert UI state in case of an error
             setLiked(previousLikedState);
         }
     };
@@ -137,16 +132,13 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             enqueueSnackbar({ message: "You are not logged in!", variant: "warning" });
             return;
         }
-        // Optimistically toggle liked state
         const previousSavedState = saved;
         const updatedSaved = !saved;
         setSaved(updatedSaved);
-        // Prepare the updated upvotes array based on the current like status
         const updatedUpvotes = updatedSaved
             ? [...(Array.isArray(project?.bookmarksCount) ? project.bookmarksCount : []), currentUser] // Add user ID if liked
             : (Array.isArray(project?.bookmarksCount) ? project.bookmarksCount.filter((id: string) => id !== currentUser) : []); // Remove user ID if unliked
         try {
-            // Send the updated upvotes array to the server
             await axiosInst.patch(`projects/${project?._id}`, {
                 title: project.title,
                 description: project.description,
@@ -160,7 +152,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                 commentId: project.commentId,
                 gitLink: project.gitLink,
             });
-            // Update the project state with the new upvotes
             setProject(prev => {
                 if (prev) {
                     return { ...prev, bookmarksCount: updatedUpvotes };
@@ -193,15 +184,15 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
         }
     };
     const createComment = async () => {
-        if (!comment || !comment.trim()) return; // prevent adding empty comments
+        if (!comment || !comment.trim()) return; 
         try {
             const res = await axiosInst.post(`comment`, {
                 comment: comment,
                 userId: getUser(),
                 projectId: params.id,
             });
-            const newComment = res.data; // Get the new comment from response
-            const user = await fetchUser(newComment.userId); // Fetch user for the new comment
+            const newComment = res.data; 
+            const user = await fetchUser(newComment.userId); 
             setComments((prevComments: any[]) => [...prevComments, { ...newComment, user }]);
             setComment("");
             await updateProjectCommentId(newComment.id);
@@ -261,7 +252,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                     </Chip>
                 </div>
                 <Divider className="bg-gray-500 w-full my-10" orientation="horizontal" />
-                {/* <Image alt="test" src="/images/any.jpg" width={500} height={200} className="w-full rounded-lg" /> */}
                 <div className="flex justify-between items-center mt-8">
                     <div className="flex space-x-4">
                         <button onClick={handleSave}>
@@ -303,7 +293,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                             className="w-full p-3 bg-gray-900 rounded-lg text-gray-400"
                             placeholder="Write comment here..."
                             rows={3}
-                            value={comment} // controlled input
+                            value={comment}
                             onChange={(e) => setComment(e.target.value)}
                         />
                     </div>
@@ -317,7 +307,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         <h1 className="my-10 text-2xl font-semibold">Comments</h1>
                         <Divider className="bg-gray-500" />
                         {comments && project.commentId && comments
-                            .filter((cmt) => project.commentId?.includes(cmt._id)) // Check if comment ID is in the array
+                            .filter((cmt) => project.commentId?.includes(cmt._id))
                             .map((cmt) => (
                                 <div key={cmt._id} className="p-4 my-4 rounded-lg flex space-x-4 w-[400px]">
                                     <Avatar src={cmt.user?.about.profilePicture || ""} />
@@ -330,8 +320,6 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                                 </div>
                             ))}
                     </div>
-
-
                 </div>
             </div>
         </div>

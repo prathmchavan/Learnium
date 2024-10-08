@@ -2,7 +2,6 @@
 import { SparkelTitle } from "@/components/Global/SparkelTitle";
 import { useProjectContext } from "@/context/ProjectContext";
 import { IconBookmarkFilled, IconMessageCircleFilled, IconStarFilled } from "@tabler/icons-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import FilterSection from "../FilterSection";
@@ -23,13 +22,11 @@ const ProjectListComponent = () => {
     }, [filters, projects]);
     const applyFilters = () => {
         let filtered = projects;
-        // Filter by category
         if (filters.category.length > 0) {
             filtered = filtered.filter(project =>
                 filters.category.includes(project.category)
             );
         }
-        // Filter by technology
         if (filters.technology.length > 0) {
             filtered = filtered.filter(project =>
                 filters.technology.some(tech => project.technologyUsed.includes(tech))
@@ -37,8 +34,6 @@ const ProjectListComponent = () => {
         }
         setFilteredProjects(filtered);
     };
-
-
     return (
         <div>
             <SparkelTitle />
@@ -50,19 +45,7 @@ const ProjectListComponent = () => {
                     {filteredProjects.map((project, index) => (
                         <Link href={`/projects/${project._id}`} key={project._id}>
                             <div className="flex items-center space-x-4 p-4 bg-gradient-to-l from-[#381d77b0] to-gray-900 rounded-lg mb-4">
-                                {/* Rank */}
                                 <h1 className="text-2xl text-purple-600/90 font-bold">#{index + 1}</h1>
-                                {/* Image */}
-                                {/* <div className="w-24 h-16 relative">
-                                    <Image
-                                        src={''}
-                                        alt={project.thumbnailName || 'Image'}
-                                        layout="fill"
-                                        objectFit="cover"
-                                        className="rounded-lg"
-                                    />
-                                </div> */}
-                                {/* Title and Description */}
                                 <div className="flex-1">
                                     <h2 className="text-xl font-bold text-white">{project.title}</h2>
                                     <p className="text-gray-400">{project.description}</p>
@@ -75,7 +58,6 @@ const ProjectListComponent = () => {
                                             <IconBookmarkFilled />
                                             <h1>{project?.bookmarksCount?.length ? project.bookmarksCount.length : 0}</h1>
                                         </div>
-
                                     </div>
                                 </div>
                                 {/* Upvotes */}
