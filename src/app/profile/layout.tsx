@@ -13,7 +13,6 @@ export default function ProfilePageLayout({
     return(
         
         <ProfileLayout>
-
         {children}
         </ProfileLayout>
         

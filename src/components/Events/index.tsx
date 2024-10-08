@@ -58,7 +58,7 @@ export function EventComponent() {
         setSelectedFormat={setSelectedFormat}
         setSelectedCategory={setSelectedCategory}
       />
-      <div className="w-auto mx-auto px-8">
+      <div className="w-auto">
         <HoverEffect items={filteredEvents} />
       </div>
     </div>
