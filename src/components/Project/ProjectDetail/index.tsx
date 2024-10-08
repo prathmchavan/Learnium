@@ -21,7 +21,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
     const [project, setProject] = useState<Project | void>(undefined);
     const [liked, setLiked] = useState<boolean>(false);
     const [saved, setSaved] = useState<boolean>(false);
-    const [comments, setComments] = useState<any[]>([]); // Initialize as an array
+    const [comments, setComments] = useState<any[]>([]);
     const [comment, setComment] = useState<string>();
     const { getProject } = useProjectContext();
     const [projectOwner, setProjectOwner] = useState<any>();
