@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState  } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { ApiUrl_Gen } from '@/constant/secrets';
+import { ApiUrl_Gen, ApiUrl_Gendev } from '@/constant/secrets';
 import { enqueueSnackbar } from 'notistack';
 
 
@@ -10,6 +10,11 @@ import { enqueueSnackbar } from 'notistack';
 interface Option {
     id: string;
     text: string;
+}
+
+interface Feedback {
+    strengths: string;
+    improvements: string;
 }
 
 export interface Question {
@@ -24,7 +29,7 @@ interface ReportCard {
     correctAnswers: number;
     incorrectAnswers: number;
     score: number;
-    feedback: string;
+    feedback: Feedback;
 }
 
 interface AnswerSheetItem {
@@ -74,10 +79,8 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchQuestions = async (level: string) => {
         try {
             setLoading(true);
-            console.log(level,"this is difficulty")
-            
+            // console.log(level,"this is difficulty")
             const response = await axios.post(`${ApiUrl_Gen}/ai/q`, { level });
-
             // // Optional: Remove code block tags if present
             // response = response
             const fetchedQuestions: Question[] = response.data.map((item: any) => ({
@@ -122,10 +125,11 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const data = JSON.stringify({ questions, answers });
-            const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
+            // const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
+            const res = await  axios.post(`${ApiUrl_Gendev}/ai/result`, { data });
+            console.log("this is the data",res.data)
             setResult(res.data);
             router.push(`/ai/apti/result`);
-
         } catch (error) {
             console.error("Error in fetching results:", error);
         }
