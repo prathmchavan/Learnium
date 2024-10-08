@@ -23,11 +23,11 @@ const EditorComponent: React.FC = () => {
 
     return (
         <div className="flex flex-col px-10 justify-center align-middle w-full ">
-            <div className='text-black flex justify-between'>
+            <div className='flex justify-between'>
                 <select
                     value={selectedLanguage}
                     onChange={handleLanguageChange}
-                    className="mb-4 p-2 border rounded "
+                    className="mb-4 p-2 border-[#432c83] rounded text-white border-2 "
                 >
                     {languages.map((lang) => (
                         <option key={lang.language} value={lang.language}>
