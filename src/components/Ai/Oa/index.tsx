@@ -20,7 +20,7 @@ const Oa: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
             {loading && (
-                <div className="text-center flex-col justify-center align-middle items-center flex"> <Spinner label="Working on it..." color="success" className='text-white' />Working on it...</div>
+                <div className="text-center flex-col justify-center align-middle items-center flex"> <Spinner label="Working on it..." color="success" className='text-white' /></div>
             )}
 
             {!testStarted && (
