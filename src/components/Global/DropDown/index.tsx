@@ -33,11 +33,11 @@ export default function DropDown({ title, placeholder, options, onSelectionChang
   }, [selectedKeys, placeholder]);
 
   return (
-    <Dropdown className="bg-white text-black">
+    <Dropdown>
       <DropdownTrigger>
         <Button 
           variant="shadow" 
-          className={`capitalize ${selectedKeys === "all" || (selectedKeys instanceof Set && selectedKeys.size === 0) ? "text-white" : "text-white"}`}
+          className={`capitalize ${selectedKeys === "all" || (selectedKeys instanceof Set && selectedKeys.size === 0) ? "text-white" : "text-white"} border-2 border-[#432c83] bg-black`}
           color="secondary"
         >
           {selectedValue}
@@ -45,7 +45,7 @@ export default function DropDown({ title, placeholder, options, onSelectionChang
       </DropdownTrigger>
       <DropdownMenu 
         aria-label={`${title} selection`}
-        variant="flat"
+        variant="shadow"
         closeOnSelect={false}
         disallowEmptySelection={false}
         selectionMode="multiple"

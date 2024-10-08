@@ -125,9 +125,9 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const data = JSON.stringify({ questions, answers });
-            // const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
-            const res = await  axios.post(`${ApiUrl_Gendev}/ai/result`, { data });
-            console.log("this is the data",res.data)
+            const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
+            // const res = await  axios.post(`${ApiUrl_Gendev}/ai/result`, { data });
+            // console.log("this is the data",res.data)
             setResult(res.data);
             router.push(`/ai/apti/result`);
         } catch (error) {

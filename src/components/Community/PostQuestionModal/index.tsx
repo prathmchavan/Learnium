@@ -117,8 +117,9 @@ export function PostQuestionModal() {
                                         name="title"
                                         value={formData.title}
                                         onChange={handleInputChange}
-                                        className="w-full light"
+                                        className="w-full"
                                         color="success"
+                                        variant="faded"
                                         isClearable
                                         isRequired
                                         onClear={() => setFormData(prevState => ({...prevState, title: ''}))}
@@ -136,6 +137,7 @@ export function PostQuestionModal() {
                                         onChange={handleInputChange}
                                         className="w-full"
                                         color="success"
+                                        variant="faded"
                                         onClear={() => setFormData(prevState => ({...prevState, content: ''}))}
                                         isClearable
                                         isRequired
@@ -151,6 +153,7 @@ export function PostQuestionModal() {
                                         onChange={handleTechInputChange}
                                         onKeyUp={handleTechInputKeyPress}
                                         className="w-full"
+                                        variant="faded"
                                         color="success"
                                         description="Hit Space For Adding Technology"
                                         isRequired

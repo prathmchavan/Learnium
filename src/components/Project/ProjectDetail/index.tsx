@@ -80,7 +80,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
             // console.log(userId)
             const res = await axiosInst.get(`user/${userId}`);
             // console.log("data:",res.data)
-            return res.data; 
+            return res.data;
         } catch (error: any) {
             console.error("Error fetching user:", error);
         }
@@ -257,10 +257,10 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         }
                         className=""
                     >
-                        {projectOwner?.about?.name } 
+                        {projectOwner?.about?.name}
                     </Chip>
                 </div>
-                <Divider className="bg-white w-full my-10" orientation="horizontal" />
+                <Divider className="bg-gray-500 w-full my-10" orientation="horizontal" />
                 {/* <Image alt="test" src="/images/any.jpg" width={500} height={200} className="w-full rounded-lg" /> */}
                 <div className="flex justify-between items-center mt-8">
                     <div className="flex space-x-4">
@@ -295,7 +295,7 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         ))}
                     </ul>
                 </div>
-                <Divider className="bg-white w-full my-10" orientation="horizontal" />
+                <Divider className="bg-gray-500 w-full my-10" orientation="horizontal" />
                 <div className="mt-8">
                     <h2 className="text-2xl font-semibold">Comments</h2>
                     <div className="mt-4 bg-gray-800 p-4 rounded-lg">
@@ -314,6 +314,8 @@ const ProjectDetailComponent = ({ params }: { params: { id: string } }) => {
                         Submit
                     </button>
                     <div className="my-6">
+                        <h1 className="my-10 text-2xl font-semibold">Comments</h1>
+                        <Divider className="bg-gray-500" />
                         {comments && project.commentId && comments
                             .filter((cmt) => project.commentId?.includes(cmt._id)) // Check if comment ID is in the array
                             .map((cmt) => (

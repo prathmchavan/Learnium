@@ -1,5 +1,5 @@
 "use client";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
     Modal,
     ModalBody,
@@ -8,7 +8,7 @@ import {
     ModalTrigger,
 } from "../../../ui/animated-modal";
 import { ProjectForm } from "@/interface/projectForm";
-import { Input, Button, Chip ,Kbd} from "@nextui-org/react";
+import { Input, Button, Chip, Kbd } from "@nextui-org/react";
 import { useProjectContext } from "@/context/ProjectContext";
 import { getUser } from "@/hooks/get-user";
 import { enqueueSnackbar } from "notistack";
@@ -24,7 +24,7 @@ export function UploadModal() {
         userId: "",
         gitLink: ""
     });
-    const {createProject} = useProjectContext();
+    const { createProject } = useProjectContext();
     const [techInput, setTechInput] = useState("");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,12 +64,12 @@ export function UploadModal() {
                 const updatedFormData = {
                     ...formData,
                     bookmarksCount: [],
-                    upvotes:[],
-                    userId: String(userId), 
+                    upvotes: [],
+                    userId: String(userId),
                 };
                 // console.log(updatedFormData.userId, "this is userId");
                 await createProject(updatedFormData);
-                enqueueSnackbar({message:"Project submitted successfully",variant:'success'})
+                enqueueSnackbar({ message: "Project submitted successfully", variant: 'success' })
                 setFormData({
                     title: "",
                     description: "",
@@ -88,11 +88,11 @@ export function UploadModal() {
             console.error("Error submitting project:", error);
         }
     };
-    
+
     return (
         <div className="py-5 flex items-center justify-center">
             <Modal>
-                <ModalTrigger className="bg-white text-black flex justify-center group/modal-btn">
+                <ModalTrigger className="text-white border-2 border-[#432c83] rounded-xl flex justify-center group/modal-btn">
                     <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
                         Share Your Project!
                     </span>
@@ -122,11 +122,12 @@ export function UploadModal() {
                                         name="title"
                                         value={formData.title}
                                         onChange={handleInputChange}
-                                        className="w-full light"
+                                        className="w-full"
+                                        variant="faded"
                                         color="success"
                                         isClearable
                                         isRequired
-                                        onClear={() => setFormData(prevState => ({...prevState, title: ''}))}
+                                        onClear={() => setFormData(prevState => ({ ...prevState, title: '' }))}
                                     />
                                 </div>
                                 {/* Description */}
@@ -141,10 +142,11 @@ export function UploadModal() {
                                         onChange={handleInputChange}
                                         className="w-full"
                                         color="success"
-                                        onClear={() => setFormData(prevState => ({...prevState, description: ''}))}
+                                        variant="faded"
+                                        onClear={() => setFormData(prevState => ({ ...prevState, description: '' }))}
                                         isClearable
                                         isRequired
-                                />
+                                    />
                                 </div>
                                 {/* Technology Used */}
                                 <div>
@@ -157,6 +159,7 @@ export function UploadModal() {
                                         onKeyUp={handleTechInputKeyPress}
                                         className="w-full"
                                         color="success"
+                                        variant="faded"
                                         description="Hit Space For Adding Technology"
                                         isRequired
                                     />
@@ -184,10 +187,11 @@ export function UploadModal() {
                                         onChange={handleInputChange}
                                         className="w-full"
                                         color="success"
-                                        onClear={() => setFormData(prevState => ({...prevState, category: ''}))}
+                                        variant="faded"
+                                        onClear={() => setFormData(prevState => ({ ...prevState, category: '' }))}
                                         isClearable
                                     />
-                                </div> 
+                                </div>
                                 {/* Git Link */}
                                 <div>
                                     <Input
@@ -200,19 +204,18 @@ export function UploadModal() {
                                         onChange={handleInputChange}
                                         className="w-full"
                                         color="success"
-                                        onClear={() => setFormData(prevState => ({...prevState, gitLink: ''}))}
+                                        variant="faded"
+                                        onClear={() => setFormData(prevState => ({ ...prevState, gitLink: '' }))}
                                         isClearable
                                         isRequired
                                     />
                                 </div>
-                              
                                 {/* Submit Button */}
                                 <Button type="submit" className="w-full bg-blue-500 text-white py-2 mt-4">
                                     Submit Project
                                 </Button>
                             </form>
                         </div>
-                    
                     </ModalContent>
                 </ModalBody>
             </Modal>

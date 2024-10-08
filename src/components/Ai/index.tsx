@@ -40,7 +40,7 @@ const handleTestAccess = (url:string) => {
     const itemClasses = {
         base: "",
         title: "font-normal text-sm md:text-medium text-white",
-        trigger: "px-2 py-0 data-[hover=true]:bg-[#6439db] rounded-lg h-14 flex items-center",
+        trigger: "px-2 py-0 rounded-lg h-14 flex items-center",
         indicator: "text-medium",
         content: "text-small px-2 py-5",
     };

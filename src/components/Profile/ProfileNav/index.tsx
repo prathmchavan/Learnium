@@ -10,7 +10,8 @@ import {
     IconBook,
     IconSocial,
     IconBriefcase2,
-    IconPhone
+    IconPhone,
+    IconPresentation
 } from "@tabler/icons-react";
 
 export function ProfileNav() {
@@ -22,7 +23,6 @@ export function ProfileNav() {
             ),
             href: "/profile/about",
         },
-
         {
             title: "Education",
             icon: (
@@ -37,7 +37,6 @@ export function ProfileNav() {
             ),
             href: "/profile/experience",
         },
-        
         {
             title: "Social Links",
             icon: (
@@ -45,13 +44,19 @@ export function ProfileNav() {
             ),
             href: "/profile/social",
         },
-
         {
             title: "Contact",
             icon: (
                 <IconPhone className="h-full w-full text-neutral-500 dark:text-neutral-300" />
             ),
             href: "/profile/contact",
+        },
+        {
+            title: "Test Record",
+            icon: (
+                <IconPresentation className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+            ),
+            href: "/profile/testrec",
         }
     ];
     return (

@@ -29,6 +29,7 @@ const Results: React.FC = () => {
     }
 
     const { reportCard, answerSheet } = reporpata;
+    console.log(answerSheet)
 
     const isAptiResult = path === '/ai/apti/result';
     const isOaResult = path === '/ai/oa/result';

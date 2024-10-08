@@ -24,19 +24,18 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
         });
     };
     return (
-        <div className="flex flex-col mx-6 bg-gradient-to-l from-[#381d77b0] to-gray-900 px-8 py-2 rounded-xl my-6 justify-center align-middle gap-y-8">
+        <div className="flex flex-col gap-10 my-5">
             <Dropdown className="bg-gray-800">
                 <DropdownTrigger>
                     <Button
-                        variant="bordered"
-                        className="capitalize text-white"
+                        className="capitalize text-white border-2 border-[#432c83] bg-black"
                     >
                         Category: {selectedCategoryValue || 'Select Category'}
                     </Button>
                 </DropdownTrigger>
                 <DropdownMenu
                     aria-label="Category selection"
-                    variant="flat"
+                    variant="shadow"
                     closeOnSelect={false}
                     selectionMode="multiple"
                     selectedKeys={selectedCategory}
@@ -56,14 +55,14 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
                 <DropdownTrigger>
                     <Button
                         variant="bordered"
-                        className="capitalize text-white"
+                        className="capitalize text-white border-2 border-[#432c83] bg-black"
                     >
                         Technology: {selectedTechnologyValue || 'Select Technology'}
                     </Button>
                 </DropdownTrigger>
                 <DropdownMenu
                     aria-label="Technology selection"
-                    variant="flat"
+                    variant="shadow"
                     closeOnSelect={false}
                     selectionMode="multiple"
                     selectedKeys={selectedTechnology}
