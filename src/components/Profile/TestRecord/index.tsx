@@ -1,21 +1,43 @@
 "use client"
-import { Button, Table, Pagination, TableHeader, TableColumn, TableBody, TableCell, TableRow } from '@nextui-org/react';
+import { useTestContext } from '@/context/TestContext';
+import { AptiResultTypes, OaResultTypes } from '@/interface/testResultTypes';
+import { axiosInst } from '@/utils/axios';
+import { Button, Table, Pagination, TableHeader, TableColumn, TableBody, TableCell, TableRow, Tabs, Tab } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const TestRecord = () => {
     const router = useRouter();
-    const data = [
-        {_id:'1', date: '1/11/2050', type: 'Aptitude Test', difficulty: 'Basic', score: '100%' },
-        {_id:'2', date: '1/11/2050', type: 'OA Test', difficulty: 'Medium', score: '100%' },
-        {_id:'3', date: '1/11/2050', type: 'Aptitude Test', difficulty: 'Hard', score: '100%' },
-        {_id:'4',date: '1/11/2050', type: 'OA Test', difficulty: 'Basic', score: '100%' },
-        {_id:'5',date: '1/11/2050', type: 'Aptitude Test', difficulty: 'Medium', score: '100%' },
-        {_id:'6',date: '1/11/2050', type: 'OA Test', difficulty: 'Basic', score: '100%' },
-    ];
+    const [selected, setSelected] = useState<any>("apti");
+    const [aptiData ,setAptiData] = useState<AptiResultTypes[] >([]);
+    const [oaData, setOadata] = useState<OaResultTypes[]>([]);
+    const { setAptiTestData, setOATestData } = useTestContext();
+    useEffect(()=>{
+        const fetchAptidata = async()=>{
+            const res = await axiosInst.get(`ai/aptiresult?query=Aptitude&limit=10`)
+            console.log(res.data);
+            setAptiData(res.data)
+        }
 
-    const Details =(id:any)=>{
-        router.push(`/profile/testrec/${id}`)
+        const fetchOadata = async()=>{
+            const res = await axiosInst.get(`ai/oaresult?query=mcq&limit=10`)
+            console.log(res.data);
+            setOadata(res.data)
+        }
+        fetchAptidata();
+        fetchOadata();
+    },[])
+
+    const Details = (test: AptiResultTypes | OaResultTypes) => {
+        if(test.testType === "Aptitude Test" )
+            {
+            setAptiTestData(test);
+            router.push(`/profile/testrec/${test._id}`)
+        }
+        else{
+            setOATestData(test);
+            router.push(`/profile/testrec/${test._id}`)
+        }
     }
 
     return (
@@ -25,30 +47,63 @@ const TestRecord = () => {
                     Your all test record
                 </h1>
                 <div className="overflow-x-auto">
-                    <Table aria-label="Test Records" style={{ minWidth: '100%', background: '#1A1A1A' }}>
-                        <TableHeader>
-                            <TableColumn>Date</TableColumn>
-                            <TableColumn>Test type</TableColumn>
-                            <TableColumn>Test Difficulty</TableColumn>
-                            <TableColumn>Score</TableColumn>
-                            <TableColumn>AI Powered Statistics</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                            {data.map((item, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{item.date}</TableCell>
-                                    <TableCell>{item.type}</TableCell>
-                                    <TableCell>{item.difficulty}</TableCell>
-                                    <TableCell>{item.score}</TableCell>
-                                    <TableCell>
-                                        <Button onClick={()=>{Details(item._id)}} variant='ghost' color="secondary">
-                                            View now ✨
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <Tabs
+                        fullWidth
+                        size="md"
+                        selectedKey={selected}
+                        onSelectionChange={setSelected}
+                    >
+                        <Tab key="apti" title="Aptitude">
+                            <Table aria-label="Test Records" style={{ minWidth: '100%', background: '#1A1A1A' }}>
+                                <TableHeader>
+                                    <TableColumn>Date</TableColumn>
+                                    <TableColumn>Test type</TableColumn>
+                                    <TableColumn>Test Difficulty</TableColumn>
+                                    <TableColumn>Score</TableColumn>
+                                    <TableColumn>AI Powered Statistics</TableColumn>
+                                </TableHeader>
+                                <TableBody>
+                                    {aptiData.map((item: AptiResultTypes, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{item?.testDate}</TableCell>
+                                            <TableCell>{item?.testType}</TableCell>
+                                            <TableCell>{item?.difficulty}</TableCell>
+                                            <TableCell>{item?.score}</TableCell>
+                                            <TableCell>
+                                                <Button onClick={() => { Details(item) }} variant='ghost' color="secondary">
+                                                    View now ✨
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Tab>
+                        <Tab key={"Oa"} title="OA Test">
+                            <Table aria-label="Test Records" style={{ minWidth: '100%', background: '#1A1A1A' }}>
+                                <TableHeader>
+                                    <TableColumn>Date</TableColumn>
+                                    <TableColumn>Test type</TableColumn>
+                                    <TableColumn>Test Difficulty</TableColumn>
+                                    <TableColumn>AI Powered Statistics</TableColumn>
+                                </TableHeader>
+                                <TableBody>
+                                {oaData.map((item: AptiResultTypes, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{item?.testDate}</TableCell>
+                                            <TableCell>{item?.testType}</TableCell>
+                                            <TableCell>{item?.difficulty}</TableCell>
+                                            <TableCell>
+                                                <Button onClick={() => { Details(item) }} variant='ghost' color="secondary">
+                                                    View now ✨
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Tab>
+                    </Tabs>
                 </div>
                 <div className="flex justify-between items-center mt-4">
                     <Button variant='flat' color="secondary">

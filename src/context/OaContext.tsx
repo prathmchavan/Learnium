@@ -1,6 +1,7 @@
 "use client"
 
 import { ApiUrl_Gen } from "@/constant/secrets";
+import { axiosInst } from "@/utils/axios";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -104,11 +105,9 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
                 answers: code,
                 lag: selectedLanguage
             };
-
-            
-
             const res = await  axios.post(`${ApiUrl_Gen}/ai/resultoa`, { data });
-       
+            // console.log("this is the data for saving", res.data)
+            saveTest(res.data)
             setResult(res.data);
             router.push('/ai/oa/result')
         } catch (error: any) {
@@ -118,7 +117,25 @@ export const OaProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         }
     };
 
-    //code editor context
+    const saveTest = async (data: any) =>{
+        try {
+            const updatedData = {
+                testDate : new Date().toISOString().split('T')[0],
+                testType: "Oa Test",
+                difficulty: difficulty,
+                question: data.reportCard.answerSheet[0].question,
+                userAnswer:data.reportCard.answerSheet[0].userAnswer,
+                correctAnswer:data.reportCard.answerSheet[0].correctAnswer,
+                feedBack:data.reportCard.feedback
+            }
+            // console.log("data for saving",updatedData)
+            const res = await axiosInst.post(`ai/oaresult`,updatedData)
+            // console.log(res.data);
+        } catch ( error : any) {
+            console.log("Error occured", error.message)
+            
+        }
+    }
 
     const runCode = async () => {
         try {
