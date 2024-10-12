@@ -1,9 +1,10 @@
 "use client"
-import React, { createContext, useContext, useState  } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { ApiUrl_Gen, ApiUrl_Gendev } from '@/constant/secrets';
 import { enqueueSnackbar } from 'notistack';
+import { axiosInst } from '@/utils/axios';
 
 
 
@@ -44,7 +45,7 @@ interface AptiContextType {
     difficulty: string | null;
     questions: Question[];
     answers: { [key: number]: string };
-    loading: boolean; 
+    loading: boolean;
     testStarted: boolean;
     handleDifficultySelect: (level: string) => void;
     startTest: (difficulty: string) => void;
@@ -71,9 +72,9 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
-    const handleDifficultySelect = async(level: string) => {
+    const handleDifficultySelect = async (level: string) => {
         setDifficulty(level);
-      
+
     };
 
     const fetchQuestions = async (level: string) => {
@@ -89,26 +90,25 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 options: item.options,
                 correctAnswer: item.correctAnswer,
             }));
-            
+
             console.log(response)
             setQuestions(fetchedQuestions);
-        } catch (error:any) {
-            if(error.status === 500)
-            {
+        } catch (error: any) {
+            if (error.status === 500) {
                 enqueueSnackbar({
-                    message:  "Ai is under maintainance, please try again later",
+                    message: "Ai is under maintainance, please try again later",
                     variant: "error"
-                  });
+                });
             }
-            console.log("error at question generation",error )
+            console.log("error at question generation", error)
             throw new Error(error)
-            }
-            finally {
-                setLoading(false); // Set loading to false when fetching ends
-            }
+        }
+        finally {
+            setLoading(false); // Set loading to false when fetching ends
+        }
     };
 
-    const startTest = async(difficulty :any) => {
+    const startTest = async (difficulty: any) => {
         setTestStarted(true);
         await fetchQuestions(difficulty);
     };
@@ -125,18 +125,45 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const data = JSON.stringify({ questions, answers });
-            const res = await  axios.post(`${ApiUrl_Gen}/ai/result`, { data });
+            const res = await axios.post(`${ApiUrl_Gen}/ai/result`, { data });
             // const res = await  axios.post(`${ApiUrl_Gendev}/ai/result`, { data });
             // console.log("this is the data",res.data)
+            saveResult(res.data);
             setResult(res.data);
             router.push(`/ai/apti/result`);
         } catch (error) {
             console.error("Error in fetching results:", error);
+            enqueueSnackbar({message:'Cannot generate result at the moment you can close the window' ,variant:'error'})
         }
         finally {
             setLoading(false);
         }
     };
+
+    const saveResult = async (data: any) => {
+        try {
+            const updatedData = {
+                testDate: new Date().toISOString().split('T')[0],
+                testType: 'Aptitude Test',
+                difficulty: difficulty,
+                totalQuestions: data.reportCard?.totalQuestions || 0,
+                correctAnswers: data.reportCard?.correctAnswers || 0,
+                incorrectAnswers: data.reportCard?.incorrectAnswers || 0,
+                score: Math.round(data.reportCard?.score) || 0,
+                feedBack: {
+                    strengths: data.reportCard?.feedback?.strengths || "",
+                    improvements: data.reportCard?.feedback?.improvements || ""
+                },
+                answerSheet: [...data.answerSheet]
+            }
+            // console.log("this is the data for saving",data)
+            // console.log("this is updated data",updatedData)
+            const res = await axiosInst.post(`ai/aptiresult`,updatedData)
+            // console.log("data sent",res.data)
+        } catch (error: any) {
+            console.log(error.message)
+        }
+    }
 
     return (
         <AptiContext.Provider

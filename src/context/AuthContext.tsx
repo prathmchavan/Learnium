@@ -1,10 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser, signupUser } from "@/api/auth/post";
 import { getSelf } from "@/api/auth/get";
 import { getUser } from "@/hooks/get-user";
+import { enqueueSnackbar } from "notistack";
 useRouter
 
 // Define the shape of the context
@@ -49,25 +50,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const storedUser = localStorage.getItem("user");
             setUserToken(storedUser);
         };
-        
-        
-		const fetchSelf = async () => {
-			// setLoading(true);
-			try {
-				const Token = getUser();
-				if (!Token) {
-                    // console.log("i am here")
-					return;
-				}
-                // console.log(Token);
-				const self = await getSelf(Token  );
-				
-				setUser(self);
-			} catch (error) {
-				throw error;
-			} 
 
-		};
+
+        const fetchSelf = async () => {
+            // setLoading(true);
+            try {
+                const Token = getUser();
+                if (!Token) {
+                    // console.log("i am here")
+                    return;
+                }
+                // console.log(Token);
+                const self = await getSelf(Token);
+
+                setUser(self);
+            } catch (error) {
+                throw error;
+            }
+
+        };
         fetchSelf();
         fetchUser();
 
@@ -75,37 +76,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
 
-    const login = async (e: React.FormEvent) => {
+    const login = async (e: FormEvent) => {
         setIsLoading(true);
         e.preventDefault();
         try {
             const res = await loginUser(data.email, data.password);
-            localStorage.setItem("user",res._id);
-            window.location.replace("/");
+            await localStorage.setItem("user", res._id);
         } catch (error) {
             console.error("Login failed:", error);
         } finally {
             setIsLoading(false);
+            window.location.replace("/");
+            // enqueueSnackbar({message:"Login Successfull", variant:'success'})
         }
     };
 
-    const signup = async (e: React.FormEvent) => {
+    const signup = async (e:FormEvent) => {
         setIsLoading(true);
         e.preventDefault();
         try {
             const res = await signupUser(data.fullname, data.email, data.phone, data.password);
-            localStorage.setItem("user", JSON.stringify(res._id));
-            window.location.replace("/");
+            // console.log(res)
+            await localStorage.setItem("user", res.id);
         } catch (error) {
             console.error("Signup failed:", error);
         } finally {
             setIsLoading(false);
+            window.location.replace("/");
         }
     };
 
-    
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
         setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
     };
 
