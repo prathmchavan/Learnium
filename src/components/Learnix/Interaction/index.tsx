@@ -91,7 +91,7 @@ export const Interaction = ({ reelId, current, title, description, video }: { re
             const shareData = {
                 title: title ?? "Something mouth watering!",
                 text: `Have a look at this treat I found for you! ${description}`,
-                url: `https://learnix.coolify.top/Learnix/${reelId}`,
+                url: `https://learnix.coolify.top/learnix/${reelId}`,
             };
 
             if (navigator.share) {

@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { UploadModal } from "../UploadModal";
-import { enqueueSnackbar } from "notistack";
-import { getUser } from "@/hooks/get-user";
 import { IconArrowNarrowLeft, IconUpload } from "@tabler/icons-react";
 
 export const LearnixHeader = () => {

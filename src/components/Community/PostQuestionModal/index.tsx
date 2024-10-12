@@ -105,7 +105,7 @@ export function PostQuestionModal() {
                             Details! 💻
                         </h4>
                         <div className="max-w-2xl mx-auto p-8">
-                            <h1 className="text-3xl font-bold mb-6">Submit Your Project</h1>
+                            <h1 className="text-3xl font-bold mb-6 capitalize">Submit Your Question !</h1>
                             <form onSubmit={handleSubmit} className="space-y-10 mt-10">
                                 {/* Title */}
                                 <div className="flex gap-3 flex-col">

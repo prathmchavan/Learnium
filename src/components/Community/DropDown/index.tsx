@@ -23,7 +23,7 @@ export const DropDownComp = ({ title, className, buttonVariant = "shadow", items
             {title}
           </Button>
         </DropdownTrigger>
-        <DropdownMenu variant="shadow" aria-label="Dropdown menu with icons" className="bg-black" color="default">
+        <DropdownMenu variant="shadow" aria-label="Dropdown menu with icons" className="bg-gray-800 rounded-xl" color="default">
           {items.map((item) => (
             <DropdownItem key={item.key} startContent={item.icon}>
               {/* <Link href={`/${item.label}`}> */}
