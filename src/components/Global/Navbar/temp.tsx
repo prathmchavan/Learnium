@@ -115,11 +115,11 @@ export default function NavbarComp() {
                     </div>
                 )}
             </NavbarContent>
-            <NavbarMenu>
+            <NavbarMenu className="bg-white/5">
                 {menuItems.map((item, index) => (
                     <NavbarMenuItem key={`${item}-${index}`}>
                         <Link
-                            className="w-full text-[#432c83]"
+                            className="w-full text-[#cfbdff]"
                             href={`${item.linkname}`}
                             size="lg"
                         >
