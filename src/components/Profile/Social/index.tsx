@@ -51,7 +51,7 @@ const SocialComponent = () => {
             {userToken && (
 
                 <div className="flex justify-center ">
-                    <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName=" w-auto">
+                    <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 w-[300px] md:w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName=" w-auto">
 
                     <h2 className="font-bold text-xl text-neutral-200">Social Section</h2>
 
@@ -59,15 +59,15 @@ const SocialComponent = () => {
                             {/* name and bio section */}
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="linkedin">LinkedIn</Label>
-                                <Input id="linkedin" name="linkedin" placeholder={user?.links.linkedin} type="text" className=" placeholder:text-white" onChange={handleChange} />
+                                <Input id="linkedin" name="linkedin" placeholder={user?.links?.linkedin} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="github">Github</Label>
-                                <Input id="github" name="github" placeholder={user?.links.github} type="text" className=" placeholder:text-white" onChange={handleChange} />
+                                <Input id="github" name="github" placeholder={user?.links?.github} type="text" className=" placeholder:text-white" onChange={handleChange} />
                             </LabelInputContainer>
                             <LabelInputContainer className="mb-4">
                                 <Label htmlFor="website">Website</Label>
-                                <Input id="website" name="website" placeholder={user?.links.website} type="text" className=" placeholder:text-white"  onChange={handleChange}/>
+                                <Input id="website" name="website" placeholder={user?.links?.website} type="text" className=" placeholder:text-white"  onChange={handleChange}/>
                             </LabelInputContainer>
                             
                            

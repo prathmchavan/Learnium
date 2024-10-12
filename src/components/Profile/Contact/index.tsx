@@ -49,7 +49,7 @@ const ContactComponent = () => {
         <>
             {userToken && (
                 <div className="flex justify-center">
-                    <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName="w-auto">
+                    <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 w-[300px] md:w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName="w-auto">
                         <h2 className="font-bold text-xl text-neutral-200">Contact Section</h2>
 
                         <form className="my-8" onSubmit={handleSubmit}>
