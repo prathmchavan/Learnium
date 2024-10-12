@@ -9,6 +9,7 @@ import { Divider } from "@nextui-org/divider";
 import { FileUpload } from "@/components/ui/file-upload";
 import { axiosInst } from "@/utils/axios";
 import { ApiUrl, EnviromentId, ProjectId } from "@/constant/secrets";
+import { enqueueSnackbar } from "notistack";
 
 interface Experience {
     position: string;
@@ -43,8 +44,8 @@ const ExperienceComponent = () => {
     useEffect(() => {
         if (user) {
             setExperienceList(user.experience || []);
-            setSkills(user.professional.skills || []);
-            setRole(user.professional.role || "");
+            setSkills(user.professional?.skills || []);
+            setRole(user.professional?.role || "");
         }
     }, [user]);
 
@@ -54,10 +55,7 @@ const ExperienceComponent = () => {
             const updatedExperienceList = [...experienceList, data];
             const res = await axiosInst.put(`/user/${userToken}`, {
                 experience: updatedExperienceList,
-              
             });
-
-            // Update state with response data if needed
             setExperienceList(updatedExperienceList);
             alert("Profile updated successfully!");
         } catch (error: any) {
@@ -69,17 +67,12 @@ const ExperienceComponent = () => {
     const handleSkillpSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-         
             const res = await axiosInst.put(`/user/${userToken}`, {
-              
                 professional: {
                     role,
                     skills
                 }
             });
-
-            // Update state with response data if needed
-           
             alert("skills updated successfully!");
         } catch (error: any) {
             console.error("Error updating profile:", error.message);
@@ -100,7 +93,7 @@ const ExperienceComponent = () => {
             const skillInput = (e.target as HTMLInputElement).value.trim();
             if (skillInput) {
                 setSkills(prevSkills => [...prevSkills, skillInput]);
-                (e.target as HTMLInputElement).value = ''; // Clear input field
+                (e.target as HTMLInputElement).value = '';
             }
         }
     };
@@ -124,43 +117,29 @@ const ExperienceComponent = () => {
                     size: files[0].size,
                 }),
             });
-
             if (!response.ok) {
                 throw new Error("Failed to generate presigned URL");
             }
-
             const { url, fields } = await response.json();
-
-            // Step 2: Use the URL and fields to upload the file
             const formData = new FormData();
             Object.entries(fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
             });
             formData.append('file', files[0]);
-
             const uploadResponse = await fetch(url, {
                 method: 'POST',
                 body: formData,
             });
-
-            // console.log("this is upload response", uploadResponse);
-
             if (!uploadResponse.ok) {
                 throw new Error("Failed to upload file");
             }
-
-            //step 3.  file name storing in db
             console.log("file name before backend req", files[0].name)
-
-         
             // console.log("backend res after updating the filename", user?.about.filename)
-
             fetchResume(files[0].name);
-
-            alert("Avatar uploaded successfully!");
-            
+            // alert("Avatar uploaded successfully!");
+            enqueueSnackbar({ message: 'Avatar uploaded successfully!', variant: 'success' })
         } catch (error) {
-            
+            console.log(error)
         }
     };
 
@@ -174,21 +153,16 @@ const ExperienceComponent = () => {
                     environmentId: EnviromentId,
                 },
             });
-
             const data = await response.text();
-            const cleanUrl = data.replace(/^"(.*)"$/, '$1'); // Removes surrounding double quotes if any
-
-            // console.log("from inside", data);
-
-            const res = await axiosInst.patch(`/user/${userToken}`,{
+            const cleanUrl = data.replace(/^"(.*)"$/, '$1');
+            const res = await axiosInst.patch(`/user/${userToken}`, {
                 professional: {
                     role,
                     skills,
                     resume: cleanUrl,
-                    filename: `${filename}`  // Updated to 'profilePicture' instead of 'filename'
+                    filename: `${filename}`
                 }
             })
-         
             window.location.reload();
             // console.log(res)
             return cleanUrl;
@@ -200,7 +174,6 @@ const ExperienceComponent = () => {
 
     const handleDeleteExperience = async (index: number) => {
         const updatedExperienceList = experienceList.filter((_, i) => i !== index);
-
         try {
             await axiosInst.put(`/user/${userToken}`, {
                 experience: updatedExperienceList,
@@ -209,7 +182,6 @@ const ExperienceComponent = () => {
                     skills
                 }
             });
-
             setExperienceList(updatedExperienceList);
             alert("Experience deleted successfully!");
         } catch (error: any) {
@@ -222,7 +194,7 @@ const ExperienceComponent = () => {
         <>
             {userToken && (
                 <div className="flex justify-center">
-                    <BackgroundGradient className="rounded-[22px] p-4 sm:p-10 bg-zinc-900 w-[800px] md:rounded-2xl md:p-8 shadow-input" containerClassName="w-auto">
+                    <BackgroundGradient className="rounded-[22px] p-4 sm:p-10 bg-zinc-900 w-[300px] md:w-[800px] md:rounded-2xl md:p-8 shadow-input" containerClassName="w-auto">
 
                         <h2 className="font-bold text-xl text-neutral-200">Roles & Skills</h2>
                         <form className="my-8" onSubmit={handleSkillpSubmit}>
@@ -248,7 +220,7 @@ const ExperienceComponent = () => {
 
                             <div className="my-5">
                                 <FileUpload onChange={handleFileUpload} />
-                                <h3>Your Resume: {user?.professional.filename}</h3>
+                                <h3>Your Resume: {user?.professional?.filename}</h3>
                             </div>
 
                             <button className="bg-gradient-to-br from-zinc-900 to-zinc-900 block w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] relative group" type="submit">
@@ -265,11 +237,11 @@ const ExperienceComponent = () => {
                             <div className="my-8">
                                 {experienceList.map((exp, index) => (
                                     <div key={index} className="mb-4 p-4 bg-gray-800 rounded-lg">
-                                        <h3 className="text-lg font-bold text-white">{exp.position}</h3>
-                                        <p className="text-white">Company: {exp.company}</p>
-                                        <p className="text-white">Start Date: {exp.startDate}</p>
-                                        <p className="text-white">End Date: {exp.endDate}</p>
-                                        <p className="text-white">Description: {exp.description}</p>
+                                        <h3 className="text-lg font-bold text-white">{exp?.position}</h3>
+                                        <p className="text-white">Company: {exp?.company}</p>
+                                        <p className="text-white">Start Date: {exp?.startDate}</p>
+                                        <p className="text-white">End Date: {exp?.endDate}</p>
+                                        <p className="text-white">Description: {exp?.description}</p>
                                         <button onClick={() => handleDeleteExperience(index)} className="text-red-500">Delete</button>
                                     </div>
                                 ))}

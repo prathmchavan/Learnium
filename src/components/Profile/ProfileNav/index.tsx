@@ -1,11 +1,6 @@
 import React from "react";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import {
-    IconBrandX,
-    IconExchange,
-    IconHome,
-    IconNewSection,
-    IconTerminal2,
     IconUser,
     IconBook,
     IconSocial,
@@ -60,9 +55,9 @@ export function ProfileNav() {
         }
     ];
     return (
-        <div className="flex items-center justify-center h-[10rem] w-full my-10">
+        <div className="flex md:items-center md:justify-center md;h-[10rem] md:w-full md:my-10">
             <FloatingDock
-                mobileClassName="translate-y-20" // only for demo, remove for production
+                mobileClassName="my-5" 
                 items={links}
             />
         </div>
