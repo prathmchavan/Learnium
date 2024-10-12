@@ -6,9 +6,10 @@ interface PermissionModalProps {
     isSelected: boolean;
     setIsSelected: (value: boolean) => void;
     handleProceed: () => void;
+    selectedTest: string | null
 }
 
-const PermissionModal = ({ isOpen, onOpenChange, isSelected, setIsSelected, handleProceed }: PermissionModalProps) => {
+const PermissionModal = ({ isOpen, onOpenChange, isSelected, setIsSelected, handleProceed, selectedTest }: PermissionModalProps) => {
     return (
         <Modal
             isOpen={isOpen}
@@ -17,31 +18,50 @@ const PermissionModal = ({ isOpen, onOpenChange, isSelected, setIsSelected, hand
         >
             <ModalContent>
                 {(onClose) => (
-                    <div className="flex flex-col h-full max-h-[80vh] no-scrollbar overflow-y-scroll">
+                    <div className="flex flex-col h-full max-h-[80vh] no-scrollbar overflow-y-scroll border-2 border-[#6242b8] rounded-xl">
                         <ModalHeader className="flex flex-col gap-1">Exam Declaration
                         </ModalHeader>
-                        <ModalBody className="flex-grow">
+                        <ModalBody className="flex-grow ">
                             <div className="px-5">
                                 <h1 className="text-lg font-semibold mb-4">
                                     Before you begin the test, please take a moment to review the following rules and important details:
                                 </h1>
-                                <ul className="my-5 list-disc flex flex-col gap-3">
-                                    <li>Time Limit: The exam is timed, with 20 minutes to complete all questions.</li>
-                                    <li>Question Format: The test consists of:</li>
-                                    <li>Multiple-Choice Questions (MCQs) with single and multiple answers.</li>
-                                    <li>No negative marking, so feel free to answer every question.</li>
-                                </ul>
-                                <h1 className="text-lg font-semibold mb-4">Rules</h1>
-                                <ul className="list-decimal flex flex-col gap-3">
-                                    <li>
-                                        Questions are generated automatically, and while we strive for accuracy, occasional errors may occur. Learnium is not responsible for any mistakes.
-                                    </li>
-                                    <li>
-                                        No external material is allowed during the test. If any form of cheating is detected, the user will be suspended from the platform for 24 hours.
-                                    </li>
-                                    <li>Ensure a stable internet connection, as disruptions may affect your test experience.</li>
-                                    <li>No test retakes are allowed if the exam time has expired.</li>
-                                </ul>
+                                {selectedTest === "apti" && (
+                                    <><ul className="my-5 list-disc flex flex-col gap-3">
+                                        <li>Time Limit: The exam is timed, with 20 minutes to complete all questions.</li>
+                                        <li>Question Format: The test consists of:</li>
+                                        <li>Multiple-Choice Questions (MCQs) with single and multiple answers.</li>
+                                        <li>No negative marking, so feel free to answer every question.</li>
+                                    </ul><h1 className="text-lg font-semibold mb-4">Rules</h1><ul className="list-decimal flex flex-col gap-3">
+                                            <li>
+                                                Questions are generated automatically, and while we strive for accuracy, occasional errors may occur. Learnium is not responsible for any mistakes.
+                                            </li>
+                                            <li>
+                                                No external material is allowed during the test. If any form of cheating is detected, the user will be suspended from the platform for 24 hours.
+                                            </li>
+                                            <li>Ensure a stable internet connection, as disruptions may affect your test experience.</li>
+                                            <li>No test retakes are allowed if the exam time has expired.</li>
+                                        </ul></>
+                                )}
+                                {selectedTest === "oa" && (
+                                    <>
+                                        <ul className="my-5 list-disc flex flex-col gap-3">
+                                            <li>Test Duration: 20 minutes</li>
+                                            <li>Type of Questions: Coding challenge(s)</li>
+                                            <li>Submission Format: Solve the given problem by writing and submitting code in the language of your choice.</li>
+                                            <li>No Negative Marking: No penalty for incorrect answers or failed test cases.</li>
+                                        </ul>
+                                        <h1 className="text-lg font-semibold mb-4">Rules & Regulations</h1>
+                                        <ul className="list-decimal flex flex-col gap-3">
+                                            <li>
+                                                AI-Generated Problems: The coding challenges are generated by AI. While efforts have been made to ensure accuracy, there may be rare instances of incorrect or ambiguous problems. Learnium is not responsible for any such issues.</li>
+                                            <li>No Use of External Resources: The use of unauthorized external materials, such as notes, code snippets from the internet, or external help, is strictly prohibited.</li>
+                                            <li>Plagiarism: Copying code from other sources or individuals will result in immediate disqualification, and you will be prohibited from taking the test for the next 24 hours.</li>
+                                            <li>Code Submission: Ensure that your code is properly submitted before the timer ends. Once the test time is over, no further submissions will be accepted.</li>
+                                            <li>Monitoring: The test is monitored for suspicious activity. Any attempt to bypass security measures will result in disqualification.</li>
+                                        </ul>
+                                    </>
+                                )}
                             </div>
                         </ModalBody>
                         <div className="px-5 py-3">

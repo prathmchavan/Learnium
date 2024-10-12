@@ -129,6 +129,8 @@ export default function Ai() {
                 isSelected={isSelected}
                 setIsSelected={setIsSelected}
                 handleProceed={handleProceed} 
+                selectedTest={selectedTest}
+                
             />
             <div className="flex justify-center items-center min-h-screen">
                 <div className="flex flex-col justify-center items-center md:my-24 border-2 border-[#6439db] w-full md:w-[500px] rounded-2xl md:p-8">
