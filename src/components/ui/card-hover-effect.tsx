@@ -59,7 +59,7 @@ export const HoverEffect = ({
                         className="bg-white bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-5"
                         hovered={hoveredIndex === idx}
                     >
-                        <CardImage src={item.image} />
+                        <CardImage src={item.image || '/images/event.jpg'} />
                         <CardTitle hovered={hoveredIndex === idx}>
                             {item.title}
                         </CardTitle>

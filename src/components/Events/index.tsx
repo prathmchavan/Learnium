@@ -25,7 +25,6 @@ export function EventComponent() {
     fetchEvents();
   }, []);
 
-  // Fetch events from the backend
   const fetchEvents = async () => {
     try {
       const params = {
@@ -40,7 +39,6 @@ export function EventComponent() {
     }
   };
 
-  // Filter events based on selected filters
   const filteredEvents = useMemo(() => {
     return events.filter(event => {
       const matchesType = selectedType.size === 0 || selectedType.has(event.eventType);
