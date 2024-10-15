@@ -81,7 +81,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             // console.log(level,"this is difficulty")
-            const response = await axios.post(`${ApiUrl_Gen}/ai/q`, { level });
+            const response = await axios.post(`${ApiUrl_Gen}/ai/aptiquestion`, { level });
             // // Optional: Remove code block tags if present
             // response = response
             const fetchedQuestions: Question[] = response.data.map((item: any) => ({
@@ -125,7 +125,7 @@ export const AptiProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const data = JSON.stringify({ questions, answers });
-            const res = await axios.post(`${ApiUrl_Gen}/ai/result`, { data });
+            const res = await axios.post(`${ApiUrl_Gen}/ai/aptiresult`, { data });
             // const res = await  axios.post(`${ApiUrl_Gendev}/ai/result`, { data });
             // console.log("this is the data",res.data)
             saveResult(res.data);
