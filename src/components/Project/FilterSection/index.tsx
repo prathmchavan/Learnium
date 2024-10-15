@@ -24,7 +24,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
         });
     };
     return (
-        <div className="flex flex-col gap-10 my-5">
+        <div className="flex flex-col gap-10 md:my-5 ">
             <Dropdown className="bg-gray-800">
                 <DropdownTrigger>
                     <Button
