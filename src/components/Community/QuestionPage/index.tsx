@@ -40,18 +40,18 @@ const QuestionsPage =()=> {
             placeholder="Search Here"
             className="md:w-96 w-full p-2 border-[#432c83] border-2 bg-black rounded-2xl text-white"
           />
-          <DropDownComp
+          {/* <DropDownComp
             title='Sort By'
             buttonVariant="shadow"
             className="custom-dropdown md:block hidden"
             items={itemsSort}
-          />
+          /> */}
           <div className='flex flex-row gap-5'>
-            <DropDownComp
+            {/* <DropDownComp
               title='Sort By'
               buttonVariant="shadow"
               className="custom-dropdown md:hidden block"
-              items={itemsSort} />
+              items={itemsSort} /> */}
             {/* Dropdown for mobile screens */}
             <DropDownComp
               title="Menu"

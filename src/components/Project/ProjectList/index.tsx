@@ -37,9 +37,12 @@ const ProjectListComponent = () => {
     return (
         <div>
             <SparkelTitle />
-            <div className="flex">
-                <div className="flex w-56 mx-6">
+            <div className="flex md:flex-row flex-col">
+                <div className="md:flex md:w-56 md:mx-6 mx-auto">
                 <FilterSection onFilterChange={setFilters} />
+                </div>
+                <div className="md:hidden flex flex-col">
+                <UploadCard />
                 </div>
                 <div className="max-w-8xl mx-auto p-4">
                     {filteredProjects.map((project, index) => (
@@ -71,7 +74,9 @@ const ProjectListComponent = () => {
                         </Link>
                     ))}
                 </div>
+                <div className="md:block hidden">
                 <UploadCard />
+                </div>
             </div>
         </div>
     )

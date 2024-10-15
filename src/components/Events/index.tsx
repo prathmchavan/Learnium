@@ -49,7 +49,7 @@ export function EventComponent() {
   }, [events, selectedType, selectedFormat, selectedCategory]);
 
   return (
-    <div className="p-16">
+    <div className="md:p-16">
       <EventNav
         data={events}
         setSelectedType={setSelectedType}

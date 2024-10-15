@@ -34,7 +34,7 @@ const EventNav = ({
   const memoizedSetSelectedCategory = useCallback(setSelectedCategory, []);
 
   return (
-    <div className='flex gap-16'>
+    <div className='flex flex-col md:flex-row gap-5 mx-5 md:gap-16'>
       <DropDown
         title='Event Type'
         placeholder='Select Event Type'

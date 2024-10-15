@@ -35,7 +35,7 @@ export function Form() {
 
       {isSignup && !isLoading && (
         <div className="flex justify-center ">
-          <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName=" w-auto">
+          <BackgroundGradient className="rounded-[22px] max-w-md p-4 sm:p-10 bg-zinc-900 md:w-[500px] md:rounded-2xl md:p-8 shadow-input" containerClassName=" w-auto">
             <h2 className="font-bold text-xl text-neutral-200">Welcome to Learnium</h2>
             <p className="text-sm max-w-sm mt-2 text-neutral-300">
               Already Have One{" "}

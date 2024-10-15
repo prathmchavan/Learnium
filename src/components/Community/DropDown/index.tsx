@@ -17,13 +17,13 @@ interface DropDownCompProps {
 export const DropDownComp = ({ title, className, buttonVariant = "shadow", items }: DropDownCompProps) => {
   return (
     <div className={`my-2 ${className ? className : ""}`}>
-      <Dropdown className="bg-black">
+      <Dropdown className="">
         <DropdownTrigger>
           <Button variant={buttonVariant}>
             {title}
           </Button>
         </DropdownTrigger>
-        <DropdownMenu variant="shadow" aria-label="Dropdown menu with icons" className="bg-gray-800 rounded-xl" color="default">
+        <DropdownMenu variant="shadow" aria-label="Dropdown menu with icons" className="rounded-xl" color="default">
           {items.map((item) => (
             <DropdownItem key={item.key} startContent={item.icon}>
               {/* <Link href={`/${item.label}`}> */}

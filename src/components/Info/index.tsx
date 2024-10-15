@@ -68,7 +68,7 @@ export function Info() {
             </div>
             {/* Lamp Container Section */}
             <LampContainer className=" md:pt-60 pt-32 mt-32">
-                <div className="my-32 md:mt-80">
+                <div className="my-32">
                     <h1 className="text-2xl md:text-4xl text-center text-[#F6F6F6] font-bold pt-40">
                         Discover, Engage, and Grow with Learnium
                     </h1>
